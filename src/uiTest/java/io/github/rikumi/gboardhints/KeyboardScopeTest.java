@@ -266,4 +266,23 @@ public final class KeyboardScopeTest {
         for (char key : new char[]{'u','i','v'}) assertEquals(1f, letters.get(key - 'a').getAlpha(), 0f);
     }
 
+    @Test public void nativeDrawCannotRestoreHiddenLettersAndDisablingRestoresOriginalAlpha() {
+        TextView label = letters.get(0);
+        label.setAlpha(1f); // Gboard's first draw callback reapplies its native style.
+        controller.enforceKeyState(keys.get(0));
+        assertEquals(0f, label.getAlpha(), 0f);
+        ReflectionHelpers.setField(controller, "blankEnabled", false);
+        controller.refreshLater(); idle();
+        controller.enforceKeyState(keys.get(0));
+        assertEquals(1f, label.getAlpha(), 0f);
+    }
+    @Test public void pendingFirstFrameRenderIsAppliedBeforeChildrenDraw() {
+        ReflectionHelpers.setField(controller, "blankEnabled", false);
+        controller.refreshLater(); idle();
+        ReflectionHelpers.setField(controller, "blankEnabled", true);
+        controller.refreshLater();
+        keys.get(0).getViewTreeObserver().dispatchOnPreDraw();
+        assertEquals(0f, letters.get(0).getAlpha(), 0f);
+    }
+
 }

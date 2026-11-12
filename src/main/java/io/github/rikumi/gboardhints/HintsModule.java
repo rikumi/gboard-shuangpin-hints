@@ -43,6 +43,11 @@ public final class HintsModule implements IXposedHookLoadPackage {
                 bindings++;
             }
         }
+        try {
+            XposedBridge.hookMethod(implementation(keys, "onDraw", android.graphics.Canvas.class), new XC_MethodHook() {
+                @Override protected void afterHookedMethod(MethodHookParam p) { controller.enforceKeyState((View)p.thisObject); }
+            });
+        } catch (NoSuchMethodException | RuntimeException e) { logFailure("key draw enforcement", e); }
         XposedBridge.hookMethod(implementation(serviceType, "onCreate"), new XC_MethodHook() {
             @Override protected void afterHookedMethod(MethodHookParam p) { controller.attach((InputMethodService)p.thisObject); }
         });

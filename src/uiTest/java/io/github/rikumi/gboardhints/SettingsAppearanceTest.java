@@ -29,11 +29,11 @@ public final class SettingsAppearanceTest {
         try {
             SettingsActivity activity = controller.get();
             verifyTheme(activity, false);
-            assertFalse(activity.getSharedPreferences("config", 0).contains("scheme"));
+            assertFalse(ConfigStore.prefs(activity).contains("scheme"));
             MaterialSwitch blank = activity.findViewById(R.id.blank_switch);
             assertTrue(blank.isChecked());
             blank.performClick();
-            assertFalse(activity.getSharedPreferences("config", 0).getBoolean("blank_keys", true));
+            assertFalse(ConfigStore.prefs(activity).getBoolean("blank_keys", true));
             assertTrue(((MaterialSwitch)activity.findViewById(R.id.enabled_switch)).isChecked());
             assertEquals(10, switches(activity.findViewById(R.id.settings_root)));
             for (int id : new int[]{R.id.initials_only_switch, R.id.single_vowels_switch, R.id.hide_compound_initials_switch, R.id.hide_number_hints_switch, R.id.inline_uppercase_switch, R.id.hide_gboard_launcher_switch}) {

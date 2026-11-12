@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:54.778Z" time="0.062">
+  <properties />
+  <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.024" />
+  <testcase name="unlockingReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.009" />
+  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.028" />
+  <system-out />
+  <system-err>Intent = Intent { act=android.intent.action.USER_UNLOCKED }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.HintController$2@62d1c64], context=[android.app.ContextImpl@515964a8], intentFilter=[android.content.IntentFilter@58dfec83]]]
+</system-err>
+</testsuite>

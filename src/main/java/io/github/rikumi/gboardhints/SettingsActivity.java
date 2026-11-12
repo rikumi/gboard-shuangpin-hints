@@ -33,7 +33,7 @@ public final class SettingsActivity extends AppCompatActivity {
             view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
             return windowInsets;
         });
-        SharedPreferences prefs = getSharedPreferences("config", 0);
+        SharedPreferences prefs = ConfigStore.prefs(this);
         if (prefs.contains("scheme")) prefs.edit().remove("scheme").apply();
         if (!prefs.contains("blank_keys")) prefs.edit().putBoolean("blank_keys", prefs.getInt("blank", 0) != 0).apply();
         prefs.registerOnSharedPreferenceChangeListener(onChange);
@@ -83,7 +83,7 @@ public final class SettingsActivity extends AppCompatActivity {
         toggle.setOnCheckedChangeListener((button, checked) -> prefs.edit().putBoolean(key, checked).apply());
     }
     @Override protected void onDestroy() {
-        getSharedPreferences("config", 0).unregisterOnSharedPreferenceChangeListener(onChange);
+        ConfigStore.prefs(this).unregisterOnSharedPreferenceChangeListener(onChange);
         super.onDestroy();
     }
 }

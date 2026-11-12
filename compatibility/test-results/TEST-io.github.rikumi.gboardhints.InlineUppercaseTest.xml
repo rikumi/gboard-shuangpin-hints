@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.InlineUppercaseTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:18.845Z" time="0.059">
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.InlineUppercaseTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:56.553Z" time="0.058">
   <properties />
   <testcase name="symbolPageSwitcherAndLongPressRemainNativeEvenInShiftPosition" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.005" />
-  <testcase name="dispatchDiscoveryUsesDecodeApostropheRegardlessOfObfuscatedId" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.003" />
-  <testcase name="toggleIsOneShotAndOnlyActiveForChineseOutsidePasswordFields" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.006" />
+  <testcase name="dispatchDiscoveryUsesDecodeApostropheRegardlessOfObfuscatedId" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.004" />
+  <testcase name="toggleIsOneShotAndOnlyActiveForChineseOutsidePasswordFields" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.003" />
   <testcase name="nonChineseAndNonPressEventsNeverArmOrChangeLetters" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.003" />
-  <testcase name="decoderFallbackConsumesSeparatorAndUppercasesOnlyNextDecodeLetter" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.004" />
-  <testcase name="keyPresentationRestoresNativeLabelsAndDescriptionOnDisableOrReuse" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.011" />
+  <testcase name="decoderFallbackConsumesSeparatorAndUppercasesOnlyNextDecodeLetter" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.005" />
+  <testcase name="keyPresentationRestoresNativeLabelsAndDescriptionOnDisableOrReuse" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.013" />
   <testcase name="uppercaseReplacesOnlyNextLetterWithDecodeAndDoesNotCommit" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.004" />
-  <testcase name="controllerReplacesRealisticIconKeyWithObfuscatedDefinitionId" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.017" />
-  <testcase name="primaryDecoderAndProtectedInputEntryAreRecognizedIndependentlyOfLifecycleFlag" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.005" />
+  <testcase name="controllerReplacesRealisticIconKeyWithObfuscatedDefinitionId" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.016" />
+  <testcase name="primaryDecoderAndProtectedInputEntryAreRecognizedIndependentlyOfLifecycleFlag" classname="io.github.rikumi.gboardhints.InlineUppercaseTest" time="0.004" />
   <system-out />
   <system-err />
 </testsuite>

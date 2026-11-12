@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.EnginePreeditTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:17.275Z" time="0.012">
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.EnginePreeditTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:55.199Z" time="0.01">
   <properties />
   <testcase name="directCacheClearIsDetectedWithoutAnyUpdateOrReaderCallback" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.001" />
   <testcase name="modernDecoderReadsUnconvertedCacheInsteadOfDisplayText" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
-  <testcase name="allUnicodeWhitespaceSeparatesTheInternalFinalSegment" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.006" />
+  <testcase name="allUnicodeWhitespaceSeparatesTheInternalFinalSegment" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.004" />
   <testcase name="lastSeparatedSegmentDeterminesInitialWithoutParityRule" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="filteringShowsOnlyFinalsAndKeepsUeAliasUsableAfterN" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="internalPreeditFiltersEvenWhenEditorOnlyReceivesChinese" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
-  <testcase name="missingEditorComposingRegionDoesNotEraseEngineInitial" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
+  <testcase name="missingEditorComposingRegionDoesNotEraseEngineInitial" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.001" />
   <testcase name="spaceSeparatedPhraseUsesLastNonemptySegmentWithDisplayPadding" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="deletingFinalRestoresInitialAndPhraseInputFollowsLatestSyllable" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="recognizedCompoundInitialAndConvertedPrefixRemainUsable" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
-  <testcase name="independentRawParsingIgnoresCorrectedSegmentation" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.001" />
+  <testcase name="independentRawParsingIgnoresCorrectedSegmentation" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="olderDecoderUsesItsPreeditGetter" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />
   <testcase name="allValidSchemePairsConsumeExactlyTwoKeysBeforeNextInitial" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.004" />
   <testcase name="greedyPairsUseValidityInsteadOfCorrectionOrParity" classname="io.github.rikumi.gboardhints.EnginePreeditTest" time="0.0" />

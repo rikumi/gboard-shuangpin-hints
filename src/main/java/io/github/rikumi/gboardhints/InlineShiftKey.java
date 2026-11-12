@@ -33,6 +33,9 @@ final class InlineShiftKey {
         }
         icon.update(key, color, armed);
     }
+    void enforceHidden() {
+        for (View label : hidden.keySet()) if (label != null && label.getAlpha() != 0f) label.setAlpha(0f);
+    }
     void restore() {
         View key = owner.get();
         if (key != null) { key.getOverlay().remove(icon); key.setContentDescription(description); }

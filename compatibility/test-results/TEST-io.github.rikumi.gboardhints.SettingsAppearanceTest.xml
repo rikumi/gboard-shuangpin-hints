@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:19.581Z" time="1.926">
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:57.288Z" time="1.906">
   <properties />
-  <testcase name="monetDayUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="1.566" />
-  <testcase name="monetNightUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.059" />
-  <testcase name="material3DayThemeAndSingleBlankToggle" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.217" />
-  <testcase name="material3FollowsSystemNightMode" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.053" />
+  <testcase name="monetDayUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="1.549" />
+  <testcase name="monetNightUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.061" />
+  <testcase name="material3DayThemeAndSingleBlankToggle" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.204" />
+  <testcase name="material3FollowsSystemNightMode" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.062" />
   <system-out />
   <system-err />
 </testsuite>

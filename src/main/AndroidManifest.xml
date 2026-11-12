@@ -20,6 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <provider android:name=".ConfigProvider" android:authorities="io.github.rikumi.gboardhints.config" android:exported="true" android:grantUriPermissions="false" />
+        <provider android:name=".ConfigProvider" android:directBootAware="true" android:authorities="io.github.rikumi.gboardhints.config" android:exported="true" android:grantUriPermissions="false" />
     </application>
 </manifest>

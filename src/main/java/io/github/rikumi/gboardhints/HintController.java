@@ -18,7 +18,11 @@ final class HintController {
     private final Handler main = new Handler(Looper.getMainLooper());
     private final Map<View, KeyState> keys = new WeakHashMap<>();
     private InputMethodService service;
-    private BroadcastReceiver controlReceiver;
+    private BroadcastReceiver controlReceiver, unlockReceiver;
+    private boolean observerRegistered;
+    private int startupAttempt;
+    private static final long[] CONFIG_RETRY_DELAYS = {100, 400, 1000, 2000, 4000, 8000};
+    private final Runnable configRetry = () -> refreshConfiguration(false);
     private boolean enabled = true, dynamic = true, visible, pinyinActive, password;
     private int size = 10;
     private volatile boolean chineseActive, inlineUppercaseEnabled, inlineArmed, inlineDecoderKnown;
@@ -45,17 +49,25 @@ final class HintController {
     private boolean scheduled;
     private final Runnable renderTask = () -> { scheduled = false; render(); };
     private final ContentObserver observer = new ContentObserver(main) {
-        @Override public void onChange(boolean self) { loadConfig(); refreshLater(); }
+        @Override public void onChange(boolean self) { refreshConfiguration(true); }
     };
     void attach(InputMethodService ime) {
         if (service == ime) return;
         if (service != null) detach();
         service = ime;
-        loadConfig();
+        refreshConfiguration(true);
         try { controlReceiver = GboardControl.register(ime, () -> android.os.Process.killProcess(android.os.Process.myPid())); }
         catch (RuntimeException e) { HintsModule.logFailure("restart receiver", e); }
-        try { ime.getContentResolver().registerContentObserver(ConfigProvider.URI, false, observer); }
-        catch (RuntimeException e) { HintsModule.logFailure("preferences observer", e); }
+        if (Build.VERSION.SDK_INT >= 24) {
+            unlockReceiver = new BroadcastReceiver() {
+                @Override public void onReceive(Context context, Intent intent) { refreshConfiguration(true); }
+            };
+            try {
+                IntentFilter filter = new IntentFilter(Intent.ACTION_USER_UNLOCKED);
+                if (Build.VERSION.SDK_INT >= 33) ime.registerReceiver(unlockReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+                else ime.registerReceiver(unlockReceiver, filter);
+            } catch (RuntimeException e) { unlockReceiver = null; HintsModule.logFailure("unlock observer", e); }
+        }
         // This exact key is also observed when Gboard reads per-profile preferences.
         android.content.SharedPreferences preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(ime);
         if (preferences.contains("pinyin_scheme")) schemeRead(preferences.getString("pinyin_scheme", ""));
@@ -63,7 +75,10 @@ final class HintController {
     void detach() {
         if (service != null && controlReceiver != null) service.unregisterReceiver(controlReceiver);
         controlReceiver = null;
-        if (service != null) service.getContentResolver().unregisterContentObserver(observer);
+        if (service != null && observerRegistered) service.getContentResolver().unregisterContentObserver(observer);
+        if (service != null && unlockReceiver != null) service.unregisterReceiver(unlockReceiver);
+        observerRegistered = false; unlockReceiver = null;
+        main.removeCallbacks(configRetry);
         engineUpdates.incrementAndGet();
         service = null; visible = false; pinyinActive = false; chineseActive = false; inlineArmed = false; compositionState.reset();
         render();
@@ -72,7 +87,7 @@ final class HintController {
     }
     void start(EditorInfo info) {
         engineUpdates.incrementAndGet();
-        loadConfig(); visible = true; inlineArmed = false; compositionState.reset();
+        refreshConfiguration(true); visible = true; inlineArmed = false; compositionState.reset();
         password = isPassword(info == null ? 0 : info.inputType);
         refreshLater();
     }
@@ -135,10 +150,21 @@ final class HintController {
     void observe(View view, Field metadata) {
         if (keys.containsKey(view)) return;
         keys.put(view, new KeyState(metadata));
+        android.view.ViewTreeObserver.OnPreDrawListener preDraw = () -> {
+            if (scheduled) { main.removeCallbacks(renderTask); scheduled = false; render(); }
+            enforceKeyState(view);
+            return true;
+        };
+        if (view.isAttachedToWindow()) view.getViewTreeObserver().addOnPreDrawListener(preDraw);
         view.addOnLayoutChangeListener((v, l, t, r, b, oldL, oldT, oldR, oldB) -> refreshLater());
         view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override public void onViewAttachedToWindow(View v) { refreshLater(); }
+            @Override public void onViewAttachedToWindow(View v) {
+                v.getViewTreeObserver().removeOnPreDrawListener(preDraw);
+                v.getViewTreeObserver().addOnPreDrawListener(preDraw);
+                refreshLater();
+            }
             @Override public void onViewDetachedFromWindow(View v) {
+                v.getViewTreeObserver().removeOnPreDrawListener(preDraw);
                 KeyState state = keys.get(v);
                 if (state != null) {
                     state.labels.restore(); state.shift.restore();
@@ -152,8 +178,24 @@ final class HintController {
         if (Looper.myLooper() != main.getLooper()) { main.post(this::refreshLater); return; }
         if (!scheduled) { scheduled = true; main.post(renderTask); }
     }
-    private void loadConfig() {
+    private void refreshConfiguration(boolean reset) {
         if (service == null) return;
+        if (reset) { startupAttempt = 0; main.removeCallbacks(configRetry); }
+        if (!observerRegistered) try {
+            service.getContentResolver().registerContentObserver(ConfigProvider.URI, false, observer);
+            observerRegistered = true;
+        } catch (RuntimeException e) { HintsModule.logFailure("preferences observer", e); }
+        boolean ready = loadConfig();
+        refreshLater();
+        if ((!ready || !observerRegistered) && startupAttempt < CONFIG_RETRY_DELAYS.length)
+            main.postDelayed(configRetry, CONFIG_RETRY_DELAYS[startupAttempt++]);
+    }
+    void enforceKeyState(View view) {
+        KeyState state = keys.get(view);
+        if (state != null) { state.labels.enforceHidden(); state.shift.enforceHidden(); }
+    }
+    private boolean loadConfig() {
+        if (service == null) return false;
         try (Cursor cursor = service.getContentResolver().query(ConfigProvider.URI, null, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 enabled = cursor.getInt(0) != 0;
@@ -166,9 +208,11 @@ final class HintController {
                 inlineUppercaseEnabled = cursor.getColumnCount() > 9 && cursor.getInt(9) != 0;
                 if (!inlineUppercaseEnabled) inlineArmed = false;
                 if (cursor.getColumnCount() > 10) try { GboardLauncherIcon.setHidden(service, cursor.getInt(10) != 0); }
-                catch (RuntimeException e) { HintsModule.logFailure("Gboard launcher visibility", e); }
+                catch (RuntimeException e) { HintsModule.logFailure("Gboard launcher visibility", e); return false; }
+                return true;
             }
         } catch (RuntimeException e) { HintsModule.logFailure("preferences", e); }
+        return false;
     }
     private void render() {
         String scheme = automatic;

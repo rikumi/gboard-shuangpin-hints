@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:17.379Z" time="0.005">
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:55.268Z" time="0.004">
   <properties />
   <testcase name="zeroInitialPhaseUsesOnlyLastSeparatorSegment" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="initialPhaseOnlyKeepsCompoundInitialsAcrossSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="zeroInitialCentralLettersFollowLiteralSyllableContinuation" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="singleVowelsAreMatchedAndShownOnlyDuringFinalPhase" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="hideCompoundInitialsOverridesAllHintPhasesAndSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.004" />
-  <testcase name="zeroInitialVowelsKeepOnlyMatchingLongFinalHints" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.001" />
+  <testcase name="zeroInitialVowelsKeepOnlyMatchingLongFinalHints" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="separatorAndCompletedSyllableSelectCorrectPhase" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <system-out />
   <system-err />

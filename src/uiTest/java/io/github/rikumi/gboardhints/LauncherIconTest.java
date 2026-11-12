@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public final class LauncherIconTest {
     @After public void restore() {
         Context app = RuntimeEnvironment.getApplication();
-        app.getSharedPreferences("config", 0).edit().remove("hide_launcher").commit();
+        ConfigStore.prefs(app).edit().remove("hide_launcher").commit();
         LauncherIcon.setHidden(app, false);
     }
     @Test public void switchHidesOnlyAliasAndCanRestoreIt() {
@@ -34,7 +34,7 @@ public final class LauncherIconTest {
             assertFalse(toggle.isChecked()); toggle.performClick();
             assertEquals(PackageManager.COMPONENT_ENABLED_STATE_DISABLED, pm.getComponentEnabledSetting(LauncherIcon.component(activity)));
             assertEquals(mainState, pm.getComponentEnabledSetting(main));
-            assertTrue(activity.getSharedPreferences("config", 0).getBoolean("hide_launcher", false));
+            assertTrue(ConfigStore.prefs(activity).getBoolean("hide_launcher", false));
             assertFalse(activity.isFinishing()); toggle.performClick();
             assertEquals(PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, pm.getComponentEnabledSetting(LauncherIcon.component(activity)));
         } finally { controller.pause().stop().destroy(); }

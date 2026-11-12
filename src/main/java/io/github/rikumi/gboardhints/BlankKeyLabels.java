@@ -42,6 +42,9 @@ final class BlankKeyLabels {
         }
     }
     void restore() { apply(null, false, (char)0); }
+    void enforceHidden() {
+        for (TextView label : hidden.keySet()) if (label != null && label.getAlpha() != 0f) label.setAlpha(0f);
+    }
     private static void collectNumberHints(View key, Set<TextView> out) {
         Set<TextView> labels = Collections.newSetFromMap(new IdentityHashMap<>());
         collect(key, labels);

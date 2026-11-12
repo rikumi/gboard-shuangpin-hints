@@ -15,7 +15,7 @@ public final class ConfigProvider extends ContentProvider {
     @Override public boolean onCreate() { return true; }
     @Override public Cursor query(Uri uri, String[] projection, String selection, String[] args, String order) {
         if (!URI.equals(uri)) throw new IllegalArgumentException("Unknown URI");
-        android.content.SharedPreferences p = getContext().getSharedPreferences("config", 0);
+        android.content.SharedPreferences p = ConfigStore.prefs(getContext());
         MatrixCursor result = new MatrixCursor(new String[]{"enabled", "scheme", "size", "dynamic", "blank", "initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher"});
         result.addRow(new Object[]{p.getBoolean("enabled", true) ? 1 : 0,
                 "auto", p.getInt("size", 10), p.getBoolean("dynamic", true) ? 1 : 0,
