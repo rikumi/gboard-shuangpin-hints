@@ -12,13 +12,19 @@ final class GboardLauncherIcon {
         if (!TARGET.equals(gboard.getPackageName())) throw new IllegalArgumentException("Gboard context required");
         apply(gboard.getPackageManager(), ConfigStore.preferences(gboard, "io.github.rikumi.gboardhints.launcher"), hidden);
     }
+    private static int componentFlags() {
+        int flags = PackageManager.MATCH_DISABLED_COMPONENTS;
+        if (android.os.Build.VERSION.SDK_INT >= 24)
+            flags |= PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+        return flags;
+    }
     static void apply(PackageManager pm, SharedPreferences saved, boolean hidden) {
         if (!hidden) {
             for (Map.Entry<String, ?> entry : saved.getAll().entrySet()) {
                 ComponentName component = ComponentName.unflattenFromString(entry.getKey());
                 if (component == null || !TARGET.equals(component.getPackageName()) || !(entry.getValue() instanceof Integer)) continue;
                 try {
-                    pm.getActivityInfo(component, PackageManager.MATCH_DISABLED_COMPONENTS);
+                    pm.getActivityInfo(component, componentFlags());
                     int original = (Integer)entry.getValue();
                     if (pm.getComponentEnabledSetting(component) != original)
                         pm.setComponentEnabledSetting(component, original, PackageManager.DONT_KILL_APP);
@@ -28,7 +34,7 @@ final class GboardLauncherIcon {
             return;
         }
         Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setPackage(TARGET);
-        java.util.List<ResolveInfo> entries = pm.queryIntentActivities(launcher, PackageManager.MATCH_DISABLED_COMPONENTS);
+        java.util.List<ResolveInfo> entries = pm.queryIntentActivities(launcher, componentFlags());
         boolean found = false;
         for (ResolveInfo match : entries) {
             ActivityInfo activity = match.activityInfo;
