@@ -55,7 +55,6 @@ final class HintController {
         if (service == ime) return;
         if (service != null) detach();
         service = ime;
-        refreshConfiguration(true);
         try { controlReceiver = GboardControl.register(ime, () -> android.os.Process.killProcess(android.os.Process.myPid())); }
         catch (RuntimeException e) { HintsModule.logFailure("restart receiver", e); }
         if (Build.VERSION.SDK_INT >= 24) {
@@ -68,6 +67,9 @@ final class HintController {
                 else ime.registerReceiver(unlockReceiver, filter);
             } catch (RuntimeException e) { unlockReceiver = null; HintsModule.logFailure("unlock observer", e); }
         }
+        // Register unlock before reading: unlocking between the first query and
+        // receiver registration must not leave a migrated configuration unread.
+        refreshConfiguration(true);
         // This exact key is also observed when Gboard reads per-profile preferences.
         android.content.SharedPreferences preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(ime);
         if (preferences.contains("pinyin_scheme")) schemeRead(preferences.getString("pinyin_scheme", ""));

@@ -21,13 +21,16 @@ import static org.junit.Assert.*;
 @Config(sdk = 28)
 public final class ColdStartTest {
     public static final class ColdProvider extends ContentProvider {
-        int attempts; boolean available;
+        int attempts; boolean available, hideLauncher = true;
+        Runnable onFirstQuery;
         @Override public boolean onCreate() { return true; }
         @Override public Cursor query(Uri u, String[] p, String s, String[] a, String o) {
             attempts++;
-            if (!available) return null;
+            boolean ready = available;
+            if (attempts == 1 && onFirstQuery != null) onFirstQuery.run();
+            if (!ready) return null;
             MatrixCursor result = new MatrixCursor(new String[]{"enabled", "scheme", "size", "dynamic", "blank", "initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher"});
-            result.addRow(new Object[]{1, "auto", 10, 1, 1, 0, 0, 0, 0, 0, 1});
+            result.addRow(new Object[]{1, "auto", 10, 1, 1, 0, 0, 0, 0, 0, hideLauncher ? 1 : 0});
             return result;
         }
         @Override public String getType(Uri u) { return null; }
@@ -75,17 +78,20 @@ public final class ColdStartTest {
         shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(30));
         assertEquals(1, provider.attempts);
     }
-    @Test public void unlockingReloadsPreferencesImmediately() {
+    @Test public void unlockingDuringFirstQueryReloadsPreferencesImmediately() {
         Context app = RuntimeEnvironment.getApplication();
         ColdProvider provider = Robolectric.buildContentProvider(ColdProvider.class).create().get();
         ShadowContentResolver.registerProviderInternal(ConfigProvider.URI.getAuthority(), provider);
+        provider.hideLauncher = false;
+        provider.onFirstQuery = () -> {
+            provider.available = true;
+            app.sendBroadcast(new Intent(Intent.ACTION_USER_UNLOCKED));
+        };
         HintController controller = new HintController(); controller.attach(new Ime(app));
         try {
-            assertEquals(1, provider.attempts);
-            app.sendBroadcast(new Intent(Intent.ACTION_USER_UNLOCKED));
             shadowOf(Looper.getMainLooper()).idle();
-            assertEquals("Unlock bypasses the delayed retry", 2, provider.attempts);
+            assertEquals("Unlock during the first query cannot be lost", 2, provider.attempts);
+            assertTrue(ReflectionHelpers.getField(controller, "blankEnabled"));
         } finally { controller.detach(); }
     }
-
 }
