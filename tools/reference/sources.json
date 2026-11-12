@@ -1,0 +1,12 @@
+[
+  {
+    "file": "pinyindata.cpp",
+    "sha256": "d045da589a267cdfe5c19e7577d024fb2434c77a19aafbc481e71bbe001a57a1",
+    "url": "https://raw.githubusercontent.com/fcitx/libime/master/src/libime/pinyin/pinyindata.cpp"
+  },
+  {
+    "file": "shuangpindata.h",
+    "sha256": "fd5de31afaeefb1cbe3a04008786d6d3c6a3001360ea00e9e72d83ae5b38dd4d",
+    "url": "https://raw.githubusercontent.com/fcitx/libime/master/src/libime/pinyin/shuangpindata.h"
+  }
+]

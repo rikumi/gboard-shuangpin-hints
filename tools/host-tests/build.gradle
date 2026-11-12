@@ -1,0 +1,36 @@
+plugins { id 'java' }
+def moduleRoot = projectDir.parentFile.parentFile
+def sdkPath = System.getenv('ANDROID_HOME') ?: "${System.getProperty('user.home')}/Library/Android/sdk"
+def androidJar = file("${sdkPath}/platforms/android-35/android.jar")
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    google()
+}
+sourceSets.main.java.srcDirs = [new File(moduleRoot, 'src/main/java')]
+sourceSets.main.java.exclude '**/SettingsActivity.java'
+sourceSets.test.java.srcDir new File(moduleRoot, 'src/test/java')
+dependencies {
+    compileOnly files(androidJar, new File(moduleRoot, 'libs/xposed-api-82.jar'))
+    testImplementation files(androidJar)
+    testImplementation files(new File(moduleRoot, 'libs/xposed-api-82.jar'))
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
+}
+test {
+    systemProperty 'java.io.tmpdir', System.getProperty('java.io.tmpdir')
+    systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+    testLogging { events 'passed', 'failed', 'skipped'; exceptionFormat 'full' }
+    doFirst {
+        def artifacts = configurations.testRuntimeClasspath.files.collect { artifact ->
+            if (!artifact.name.endsWith('.aar')) return artifact
+            def destination = new File(layout.buildDirectory.get().asFile, "aars/${artifact.name}/classes.jar")
+            destination.parentFile.mkdirs()
+            def archive = new java.util.zip.ZipFile(artifact)
+            try { destination.bytes = archive.getInputStream(archive.getEntry('classes.jar')).bytes }
+            finally { archive.close() }
+            return destination
+        }
+        classpath = files(sourceSets.test.output, sourceSets.main.output, artifacts)
+    }
+}

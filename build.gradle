@@ -1,0 +1,46 @@
+plugins { id 'com.android.application' version '9.1.0' }
+def release = new groovy.json.JsonSlurper().parse(file('version.json'))
+
+android {
+    namespace 'io.github.rikumi.gboardhints'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'io.github.rikumi.gboardhints'
+        minSdk 23
+        targetSdk 35
+        versionCode release.code as int
+        versionName release.name
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    if (file('.signing/debug.keystore').exists()) {
+        signingConfigs {
+            localDebug {
+                storeFile file('.signing/debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
+        buildTypes { debug { signingConfig signingConfigs.localDebug } }
+    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            systemProperty 'java.io.tmpdir', System.getProperty('java.io.tmpdir')
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+        }
+    }
+    sourceSets.test.java.srcDir 'src/uiTest/java'
+    sourceSets.test.java.srcDir 'tools/host-tests/src/test/java'
+    sourceSets { main { manifest.srcFile 'src/main/AndroidManifest.xml' } }
+}
+dependencies {
+    compileOnly 'de.robv.android.xposed:api:82'
+    implementation 'com.google.android.material:material:1.12.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
+    testImplementation 'de.robv.android.xposed:api:82'
+}

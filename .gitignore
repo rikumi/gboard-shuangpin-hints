@@ -1,0 +1,14 @@
+/build/
+/.gradle/
+/local.properties
+/libs/*.jar
+*.keystore
+/.signing/
+/tools/host-tests/build/
+/tools/host-tests/.gradle/
+
+__pycache__/
+*.pyc
+.DS_Store
+/research/
+/artifacts/

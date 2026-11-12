@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.DefaultFontTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:17.253Z" time="0.02">
+  <properties />
+  <testcase name="hintUsesDefaultTypefaceWithoutModifyingNativeText" classname="io.github.rikumi.gboardhints.DefaultFontTest" time="0.007" />
+  <testcase name="moduleDoesNotBundleAnyFontAssets" classname="io.github.rikumi.gboardhints.DefaultFontTest" time="0.012" />
+  <system-out />
+  <system-err />
+</testsuite>

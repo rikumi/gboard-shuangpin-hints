@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gboard 双拼提示</string>
+    <string name="setup_help">在 LSPosed 中启用模块并勾选 Gboard，强制停止后重新打开。请先在 Gboard 中选择双拼方案。</string>
+    <string name="hints_title">显示双拼提示</string>
+    <string name="dynamic_title">根据声母显示可用韵母</string>
+    <string name="hide_compound_initials_title">隐藏复声母</string>
+    <string name="hide_compound_initials_summary">在所有提示状态下隐藏 zh、ch、sh。</string>
+    <string name="initials_only_title">每字初始时只显示声母</string>
+    <string name="initials_only_summary">初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V</string>
+    <string name="single_vowels_title">根据声母显示单韵母</string>
+    <string name="single_vowels_summary">配合声母匹配：匹配的单韵母显示在键中央，其余大字母隐藏；无刻模式下同样生效。</string>
+    <string name="size_title">提示字号</string>
+    <string name="size_label">提示字号：%1$d sp</string>
+    <string name="hide_number_hints_title">隐藏 Gboard 数字提示</string>
+    <string name="hide_number_hints_summary">在所有输入方案中隐藏第一行按键右上角的数字提示。</string>
+    <string name="inline_uppercase_title">分词键改为行内大写</string>
+    <string name="inline_uppercase_summary">在中文输入方案中将分词键改为大写键。点击后仅将下一字母大写，保留在预编辑串中，可按回车提交整串英文。</string>
+    <string name="blank_title">无刻模式</string>
+    <string name="hide_launcher_title">隐藏模块启动器图标</string>
+    <string name="hide_gboard_launcher_title">隐藏 Gboard 启动器图标</string>
+    <string name="hide_gboard_launcher_summary">需系统启动器支持</string>
+    <string name="hide_launcher_summary">需要第三方系统支持。隐藏后可从 LSPosed 打开模块设置。</string>
+    <string name="restart_title">重启 Gboard</string>
+    <string name="restart_success">重启请求已发送，重新唤起键盘后加载模块。</string>
+    <string name="restart_unavailable">尚未连接模块。首次启用或更新后，请先强行停止 Gboard，再唤起键盘。</string>
+    <string name="blank_summary">仅在双拼键盘隐藏字母及数字、符号角标，保留功能键。双拼提示由上方开关独立控制。</string>
+</resources>

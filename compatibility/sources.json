@@ -1,0 +1,17 @@
+{
+  "samples": [
+    {
+      "file": "gboard9.apk",
+      "url": "https://pool.apk.aptoide.com/appupdater/com-google-android-inputmethod-latin-40178118-77445145-9767f0e515f76310727183d9e48c0426.apk"
+    },
+    {
+      "file": "gboard15-complete.apk",
+      "url": "https://pool.apk.aptoide.com/salvo66/com-google-android-inputmethod-latin-171306566-71056700-82e50196d3473af91ee0a659d2208322.apk"
+    },
+    {
+      "file": "gboard16.apk",
+      "url": "https://github.com/SuperSaveGroup/GBoardAPK/releases/download/16.6.3.855170483/Gboard.-.the.Google.Keyboard_16.6.3.855170483-release-arm64-v8a_APKPure.apk"
+    }
+  ],
+  "note": "Downloaded APKs were analyzed locally and are not redistributed with the module. SHA-256 digests and signing-root verification are recorded in apk-analysis.json."
+}

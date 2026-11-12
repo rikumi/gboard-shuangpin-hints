@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.KeyboardScopeTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:18:18.909Z" time="0.4">
+  <properties />
+  <testcase name="otherChineseDecodersDoNotKeepShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.046" />
+  <testcase name="globalNumberHintsHideAcrossEnglishFullPinyinAndNonLatinKeyboards" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.033" />
+  <testcase name="nativeCenterFontStaysUnchangedAcrossShuangpinAndEnglish" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.026" />
+  <testcase name="englishImeActivationRestoresAllLabelsAndRemovesHints" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.021" />
+  <testcase name="symbolsPageRetainsItsOriginalLabels" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.023" />
+  <testcase name="hidingCompoundInitialsRemovesBothTopAndBottomAndRestoresOnDisable" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.035" />
+  <testcase name="singleVowelFilterWorksWithAndWithoutBlankingAndRestores" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.027" />
+  <testcase name="initialsOnlyUpdatesAfterCompletedSyllableAndFinalFilterCanBeDisabled" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.019" />
+  <testcase name="spacedMultiSyllablePreeditKeepsFinalFilterAndNativeFontSize" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.019" />
+  <testcase name="queuedWorkerSnapshotCannotRestoreADeletedInitial" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.019" />
+  <testcase name="fullPinyinDisablesShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="idleInitialOnlyModeHidesUivAndRestoresThemDuringFinalPhase" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.022" />
+  <testcase name="microsoftSemicolonKeepsItsNativeSizeWhenHintsAreDrawn" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.018" />
+  <testcase name="formattedInternalPhraseFiltersThenClearImmediatelyRestoresInitialMode" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.021" />
+  <testcase name="matchingNativeKeysKeepOriginalTypefaceColorCaseAndCornerBlanking" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.017" />
+  <testcase name="zeroInitialLettersRenderAndRestoreWithBothBlankModes" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.017" />
+  <testcase name="returningToShuangpinRestoresIndependentBlankSwitch" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.015" />
+  <system-out />
+  <system-err />
+</testsuite>

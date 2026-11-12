@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="?attr/colorSurface" android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+        app:title="@string/app_name" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="24dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/setup_help" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" android:layout_marginBottom="16dp" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/enabled_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/hints_title" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/dynamic_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/dynamic_title" android:layout_marginTop="8dp" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_compound_initials_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/hide_compound_initials_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/hide_compound_initials_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/initials_only_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/initials_only_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/initials_only_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/single_vowels_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/single_vowels_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/single_vowels_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/size_label" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:layout_marginTop="16dp" />
+            <com.google.android.material.slider.Slider
+                android:id="@+id/size_slider" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:contentDescription="@string/size_title" android:valueFrom="7" android:valueTo="17" android:stepSize="1" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:layout_marginBottom="8dp" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_number_hints_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle"
+                android:minHeight="64dp" android:text="@string/hide_number_hints_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/hide_number_hints_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/inline_uppercase_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle"
+                android:minHeight="64dp" android:text="@string/inline_uppercase_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/inline_uppercase_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/blank_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/blank_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/blank_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:layout_marginBottom="8dp" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_launcher_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:minHeight="64dp" android:text="@string/hide_launcher_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/hide_launcher_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/hide_gboard_launcher_switch" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle"
+                android:minHeight="64dp" android:text="@string/hide_gboard_launcher_title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/hide_gboard_launcher_summary" android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/restart_button" android:textAppearance="@style/TextAppearance.GboardHints.FeatureTitle" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:text="@string/restart_title" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
