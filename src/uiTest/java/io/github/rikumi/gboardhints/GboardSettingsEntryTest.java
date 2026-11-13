@@ -32,25 +32,31 @@ public class GboardSettingsEntryTest {
     public static class NativeList extends NativePreference { public NativeList(Context ctx) { super(ctx); } }
     public static class NativeGroup extends NativePreference {
         public final List<NativePreference> b = new ArrayList<>();
+        private int nextOrder;
         public NativeGroup(Context ctx) { super(ctx); }
-        public void al(NativePreference child) { if (!b.contains(child)) { b.add(child); Collections.sort(b); } }
+        public void al(NativePreference child) {
+            if (!b.contains(child)) {
+                if (child.p == Integer.MAX_VALUE) child.p = nextOrder++;
+                b.add(child); Collections.sort(b);
+            }
+        }
         public void am(NativePreference child) { b.remove(child); }
     }
     private GboardSettingsEntryAdapter adapter() throws Exception {
         return new GboardSettingsEntryAdapter(NativePreference.class, NativeGroup.class, NativeList.class);
     }
     private NativeList scheme(Context ctx) {
-        NativeList scheme = new NativeList(ctx); scheme.r = "pinyin_scheme"; scheme.q = "双拼方案"; scheme.p = 5; return scheme;
+        NativeList scheme = new NativeList(ctx); scheme.r = "pinyin_scheme"; scheme.q = "双拼方案"; return scheme;
     }
     @Test public void entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds() throws Exception {
         Context ctx = RuntimeEnvironment.getApplication(); NativeGroup group = new NativeGroup(ctx);
         GboardSettingsEntryAdapter adapter = adapter(); NativeList scheme = scheme(ctx);
-        NativePreference first = new NativePreference(ctx); first.p = 0; first.q = "first"; group.al(first);
+        NativePreference first = new NativePreference(ctx); first.q = "first"; group.al(first);
         group.al(scheme);
         Method add = NativeGroup.class.getMethod("al", NativePreference.class);
         adapter.afterOperation(group, add, scheme);
         assertEquals(3, group.b.size()); assertEquals(GboardSettingsEntryAdapter.TITLE, group.b.get(2).q);
-        NativePreference next = new NativePreference(ctx); next.p = 6; next.q = "next"; group.al(next);
+        NativePreference next = new NativePreference(ctx); next.q = "next"; group.al(next);
         adapter.afterOperation(group, add, next);
         Collections.sort(group.b); adapter.reorder(group);
         assertEquals(scheme, group.b.get(1)); assertEquals(GboardSettingsEntryAdapter.KEY, group.b.get(2).r);
@@ -82,4 +88,20 @@ public class GboardSettingsEntryTest {
         adapter().afterOperation(group, NativeGroup.class.getMethod("al", NativePreference.class), other);
         assertEquals(1, group.b.size());
     }
+    @Test public void nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme() throws Exception {
+        Context ctx = RuntimeEnvironment.getApplication(); NativeGroup group = new NativeGroup(ctx);
+        NativeList scheme = scheme(ctx); group.al(scheme);
+        GboardSettingsEntryAdapter adapter = adapter();
+        Method add = NativeGroup.class.getMethod("al", NativePreference.class);
+        adapter.afterOperation(group, add, scheme);
+        NativePreference following = new NativePreference(ctx); following.q = "中英文"; group.al(following);
+        List<NativePreference> adapterRows = new ArrayList<>(group.b);
+        Collections.sort(adapterRows);
+        assertEquals(scheme, adapterRows.get(0));
+        assertEquals(GboardSettingsEntryAdapter.KEY, adapterRows.get(1).r);
+        assertEquals(following, adapterRows.get(2));
+        assertTrue(adapterRows.get(1).p > scheme.p);
+        assertTrue(following.p > adapterRows.get(1).p);
+    }
+
 }

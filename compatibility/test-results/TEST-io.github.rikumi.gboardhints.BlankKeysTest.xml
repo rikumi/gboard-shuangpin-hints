@@ -1,16 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.BlankKeysTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:12.071Z" time="1.083">
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.BlankKeysTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:53.040Z" time="1.344">
   <properties />
-  <testcase name="numberHintHidingLeavesNumericKeysAndNonCornerDigitsVisible" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.862" />
-  <testcase name="reusedNumericAndFunctionKeysRestoreTheirLabels" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.021" />
+  <testcase name="numberHintHidingLeavesNumericKeysAndNonCornerDigitsVisible" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.96" />
+  <testcase name="reusedNumericAndFunctionKeysRestoreTheirLabels" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.039" />
   <testcase name="metadataPrimaryWinsOverSecondaryLetter" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.018" />
   <testcase name="allHintPolicyChecksPass" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.04" />
-  <testcase name="blankHidesUpperCornerDigits" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.017" />
-  <testcase name="turningOffRestoresWithoutChangingBoundsOrText" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.022" />
-  <testcase name="repeatedUpdatesRestoreOriginalAlpha" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.012" />
-  <testcase name="blankKeepsTextAndAccessibility" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.018" />
-  <testcase name="numberToggleAndBlankModeShareRestorationWithoutAlphaConflicts" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.012" />
-  <testcase name="numberHintHidingPreservesNativePrimaryAndNonNumericHints" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.019" />
+  <testcase name="blankHidesUpperCornerDigits" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.021" />
+  <testcase name="turningOffRestoresWithoutChangingBoundsOrText" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.023" />
+  <testcase name="repeatedUpdatesRestoreOriginalAlpha" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.029" />
+  <testcase name="blankKeepsTextAndAccessibility" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.026" />
+  <testcase name="numberToggleAndBlankModeShareRestorationWithoutAlphaConflicts" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.116" />
+  <testcase name="numberHintHidingPreservesNativePrimaryAndNonNumericHints" classname="io.github.rikumi.gboardhints.BlankKeysTest" time="0.035" />
   <system-out>PASS: 871 hint policy checks
 </system-out>
   <system-err />

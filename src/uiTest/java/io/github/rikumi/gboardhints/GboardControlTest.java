@@ -73,4 +73,21 @@ public final class GboardControlTest {
         shadowOf(Looper.getMainLooper()).idle();
         assertEquals(0, success[0]); assertEquals(1, unavailable[0]);
     }
+    @Test public void keyboardRequestUsesTheSameSignatureGuardAndNeverRestartsGboard() {
+        int[] switches = {0}, restarts = {0}, result = {Activity.RESULT_CANCELED};
+        BroadcastReceiver receiver = GboardControl.register(app, () -> restarts[0]++, () -> { switches[0]++; return true; });
+        try {
+            Intent intent = new Intent(GboardControl.KEYBOARD_ACTION);
+            app.sendBroadcast(intent);
+            shadowOf(Looper.getMainLooper()).idle();
+            assertEquals(0, switches[0]);
+            app.sendOrderedBroadcast(intent, null, new BroadcastReceiver() {
+                @Override public void onReceive(Context context, Intent intent) { result[0] = getResultCode(); }
+            }, null, Activity.RESULT_CANCELED, null, null);
+            shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofMillis(500));
+            assertEquals(Activity.RESULT_OK, result[0]);
+            assertEquals(1, switches[0]); assertEquals(0, restarts[0]);
+        } finally { app.unregisterReceiver(receiver); }
+    }
+
 }

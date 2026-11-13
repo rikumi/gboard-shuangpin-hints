@@ -2,15 +2,10 @@
 <resources>
   <string name="app_name">Gboard 双拼提示</string>
   <string name="hints_title">显示双拼提示</string>
-  <string name="dynamic_title">根据声母显示可用韵母</string>
-  <string name="hide_compound_initials_title">隐藏复声母</string>
-  <string name="initials_only_title">只显示声母提示</string>
-  <string name="initials_only_summary">初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V</string>
-  <string name="single_vowels_title">根据声母显示单韵母</string>
+  <string name="dynamic_title">动态显示可用韵母</string>
   <string name="size_title">提示字号</string>
   <string name="size_label">提示字号：%1$d sp</string>
   <string name="hide_number_hints_title">隐藏 Gboard 数字提示</string>
-  <string name="inline_uppercase_title">分词键改为行内大写</string>
   <string name="blank_title">无刻模式</string>
   <string name="hide_launcher_title">隐藏模块启动器图标</string>
   <string name="hide_gboard_launcher_title">隐藏 Gboard 启动器图标</string>
@@ -21,6 +16,15 @@
   <string name="default_state">默认状态下</string>
   <string name="finals_state">等待韵母状态下</string>
   <string name="global_settings">全局设置</string>
-  <string name="show_key_letters">显示按键字母</string>
+  <string name="hide_key_letters">隐藏按键字母</string>
   <string name="initials_below_title">声母显示在下方</string>
+  <string name="hint_range_title">双拼提示显示范围</string>
+  <string name="hint_range_all">全部显示</string>
+  <string name="hint_range_initials">只显示声母</string>
+  <string name="hint_range_hide_initials">只隐藏声母</string>
+  <string name="letters_available">只显示可用韵母</string>
+  <string name="letters_hidden">全部隐藏</string>
+  <string name="key_letter_size_title">修改按键字母字号</string>
+  <string name="letters_hide_vowels_on_initials">隐藏声母键上的韵母</string>
+  <string name="keyboard_test_title">键盘自测</string>
 </resources>

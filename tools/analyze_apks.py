@@ -169,53 +169,6 @@ def analyze(apk, sdk):
     ime_activations = [m for m in ime['methods'] if m['return'] == 'V' and m['args'][:2] == ['Landroid/view/inputmethod/EditorInfo;', 'Z'] and not m['access'] & 8]
     assert len(ime_activations) == 1
     assert classes['Lcom/google/android/apps/inputmethod/libs/latin5/LatinIme;']['parent'] == ime['name']
-    based = classes['Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;']
-    def inherited_dispatch(type_name, candidate):
-        info = classes.get(type_name)
-        if not info: return False
-        for iface in info['interfaces']:
-            if any(m['name'] == candidate['name'] and m['args'] == candidate['args'] and m['return'] == 'Z'
-                   for m in classes.get(iface, {}).get('methods', [])): return True
-        return inherited_dispatch(info['parent'], candidate)
-    dispatches = [m for m in based['methods'] if m['return'] == 'Z' and len(m['args']) == 1
-                  and inherited_dispatch(based['parent'], m)]
-    assert len(dispatches) == 1, dispatches
-    event = classes[dispatches[0]['args'][0]]
-    action_arrays = []
-    for field in event['fields']:
-        if not field['type'].startswith('[L'): continue
-        action = classes.get(field['type'][1:], {})
-        constructors = [m for m in action.get('methods', []) if m['name'] == '<init>' and len(m['args']) == 3
-                        and m['args'][0] == 'I' and m['args'][2] == 'Ljava/lang/Object;']
-        if constructors: action_arrays.append((field, action, constructors))
-    assert len(action_arrays) == 1
-    action_field, action, constructors = action_arrays[0]
-    intention = classes[constructors[0]['args'][1]]
-    assert 'DECODE' in intention['enumNames']
-    assert len([f for f in action['fields'] if f['type'] == 'I' and f['access'] & 1 and not f['access'] & 8]) == 1
-    phases = [f for f in event['fields'] if 'PRESS' in classes.get(f['type'], {}).get('enumNames', [])]
-    assert len(phases) == 1
-    assert any(f['type'] == metadata[0]['type'] for f in event['fields'])
-    assert 'id/key_pos_shift' in resources
-    primary_paths = []
-    for owner in based['fields']:
-        for field in classes.get(owner['type'], {}).get('fields', []):
-            if not field['access'] & 8 and (field['type'].endswith('/BaseDecodeProcessor;')
-                    or field['type'] == 'Ljava/lang/Object;' or field['type'].startswith('[L')
-                    or field['type'].startswith('L') and field['type'] in classes):
-                primary_paths.append({'manager': owner, 'candidate': field, 'selection': 'runtime BaseDecodeProcessor instance; direct field preferred'})
-    assert primary_paths, 'No primary decoder path'
-    protected_handlers = []
-    parent = 'Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;'
-    while parent in classes:
-        info = classes[parent]
-        protected_handlers.extend(m for m in info['methods'] if m['return'] == 'Z'
-                                  and m['args'] == [event['name']] and m['access'] & 4 and not m['access'] & (8 | 1024))
-        parent = info['parent']
-    assert protected_handlers, 'No Chinese decoder fallback event entry'
-    inline_uppercase = {'dispatch': dispatches[0], 'actions': action_field, 'constructor': constructors[0],
-                        'phase': phases[0], 'intention': 'DECODE', 'primaryDecoderPaths': primary_paths, 'decoderEventHandlers': protected_handlers, 'identification': 'PRESS + DECODE apostrophe; no position ID required',
-                        'nativeSeparatorLayouts': separator_layouts(apk, sdk, resources)}
     assert 'pinyin_scheme' in strings, 'Missing scheme preference'
     schemes = [s for s in ('shuangpin_flypy', 'shuangpin_ziranma', 'shuangpin_ms', 'shuangpin_abc', 'shuangpin_ziguang', 'shuangpin_jiajia') if s in strings]
     assert len(schemes) == 6, schemes
@@ -240,7 +193,7 @@ def analyze(apk, sdk):
             'metadataField': metadata[0], 'bindingMethods': bindings, 'activationMethods': callbacks,
             'hmmBasePresent': True,
             'enginePreedit': {'updates': preedit_updates, 'readers': preedit_readers, 'clearNotifications': preedit_clear_notifications, 'cache': preedit_caches, 'fallbackGetter': preedit_getters if not preedit_caches else [], 'emptyTextResetMethods': preedit_resets},
-            'imeActivation': ime_activations, 'inlineUppercase': inline_uppercase,
+            'imeActivation': ime_activations,
             'lifecycleOwners': lifecycle, 'schemes': schemes,
             'settingsEntry': settings_entry,
         'launcherActivity': re.search(r"launchable-activity: name='([^']+)'", badging).group(1), 'verification': 'static APK structure only; device test pending'}

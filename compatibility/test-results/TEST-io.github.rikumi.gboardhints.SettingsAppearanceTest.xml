@@ -1,14 +1,22 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:03.558Z" time="8.501">
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:42.475Z" time="10.539">
   <properties />
-  <testcase name="onlyDeveloperRequestedSubtitlesArePresent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="3.806" />
-  <testcase name="stateGroupsContainIndependentLettersAndTheFourGlobalControls" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.127" />
-  <testcase name="dayModeUsesLightSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.162" />
-  <testcase name="restartRequiresSelectingTheSingleMenuItem" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.391" />
-  <testcase name="couiSwitchesPreserveSettingsAndPublishProviderUpdates" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.384" />
-  <testcase name="hidingModuleLauncherKeepsSettingsActivityEnabledAndRestoresAlias" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.121" />
-  <testcase name="systemNightModeUsesDarkSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="3.166" />
-  <testcase name="nightPaletteIsPureBlackWithWhiteAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.1" />
+  <testcase name="keyboardTestButtonIsLeftOfRestartAndOpensAFocusedEditor" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="4.395" />
+  <testcase name="letterSizeSwitchExpandsAndLeftSideOnlyTogglesItsSlider" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.285" />
+  <testcase name="hidingTheKeyboardRemovesTheSelfTestEditorAndReopeningStartsFresh" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.189" />
+  <testcase name="onlyDeveloperRequestedSubtitlesArePresent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.066" />
+  <testcase name="restartButtonIsVisibleInLightMode" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.24" />
+  <testcase name="defaultLetterMenuPublishesAllThreeModesIndependentlyOfHintRange" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.33" />
+  <testcase name="stateGroupsContainIndependentLettersAndTheThreeGlobalControls" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.047" />
+  <testcase name="dayModeUsesLightSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.041" />
+  <testcase name="restartRequiresSelectingTheSingleMenuItem" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.092" />
+  <testcase name="couiSwitchesPreserveSettingsAndPublishProviderUpdates" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.114" />
+  <testcase name="hidingModuleLauncherKeepsSettingsActivityEnabledAndRestoresAlias" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.057" />
+  <testcase name="hintRangeControlsLowerInitialPlacementAndRemembersAllModeChoice" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.2" />
+  <testcase name="waitingLetterMenuHasThreeModesAndPublishesTheirNativePolicies" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.171" />
+  <testcase name="systemNightModeUsesDarkSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="3.413" />
+  <testcase name="nightPaletteIsPureBlackWithWhiteAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.152" />
+  <testcase name="restartButtonIsVisibleInDarkMode" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.491" />
   <system-out />
   <system-err />
 </testsuite>

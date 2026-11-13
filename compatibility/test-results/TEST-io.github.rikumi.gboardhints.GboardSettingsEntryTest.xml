@@ -1,10 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.970Z" time="0.033">
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:55.391Z" time="0.052">
   <properties />
-  <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.01" />
-  <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.007" />
-  <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.008" />
-  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.007" />
+  <testcase name="nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
+  <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.012" />
+  <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.01" />
+  <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
+  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
   <system-out />
   <system-err />
 </testsuite>

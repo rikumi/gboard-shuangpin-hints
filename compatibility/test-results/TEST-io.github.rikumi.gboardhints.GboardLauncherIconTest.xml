@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.GboardLauncherIconTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.935Z" time="0.032">
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.GboardLauncherIconTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:55.357Z" time="0.032">
   <properties />
-  <testcase name="hidesAndRestoresOnlyLaunchersWithoutDisablingImeOrSettings" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.015" />
-  <testcase name="moduleRemovalOfHidingRestoresExplicitEnabledState" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.009" />
-  <testcase name="disabledDefaultOptionPreservesGboardsOwnExistingHiddenState" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.007" />
+  <testcase name="hidesAndRestoresOnlyLaunchersWithoutDisablingImeOrSettings" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.02" />
+  <testcase name="moduleRemovalOfHidingRestoresExplicitEnabledState" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.005" />
+  <testcase name="disabledDefaultOptionPreservesGboardsOwnExistingHiddenState" classname="io.github.rikumi.gboardhints.GboardLauncherIconTest" time="0.005" />
   <system-out />
   <system-err />
 </testsuite>

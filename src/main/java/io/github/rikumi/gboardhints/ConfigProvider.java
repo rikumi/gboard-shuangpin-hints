@@ -16,13 +16,14 @@ public final class ConfigProvider extends ContentProvider {
     @Override public Cursor query(Uri uri, String[] projection, String selection, String[] args, String order) {
         if (!URI.equals(uri)) throw new IllegalArgumentException("Unknown URI");
         android.content.SharedPreferences p = ConfigStore.prefs(getContext());
-        MatrixCursor result = new MatrixCursor(new String[]{"enabled", "scheme", "size", "dynamic", "blank", "initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher", "default_letters", "finals_letters", "initials_below"});
+        MatrixCursor result = new MatrixCursor(new String[]{"enabled", "scheme", "size", "dynamic", "blank", "initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher", "default_letters", "finals_letters", "initials_below", "key_letter_size_enabled", "key_letter_size", "default_visibility"});
         result.addRow(new Object[]{p.getBoolean("enabled", true) ? 1 : 0,
                 "auto", p.getInt("size", 10), p.getBoolean("dynamic", true) ? 1 : 0,
                 p.getBoolean("blank_keys", p.getInt("blank", 0) != 0) ? 1 : 0,
-                p.getBoolean("initials_only", false) ? 1 : 0, p.getBoolean("single_vowels", false) ? 1 : 0,
-                p.getBoolean("hide_compound_initials", false) ? 1 : 0, p.getBoolean("hide_number_hints", false) ? 1 : 0, p.getBoolean("inline_uppercase", false) ? 1 : 0, p.getBoolean("hide_gboard_launcher", false) ? 1 : 0,
-                StateOptions.defaultLetters(p) ? 1 : 0, StateOptions.finalsLetters(p) ? 1 : 0, StateOptions.initialsBelow(p) ? 1 : 0});
+                StateOptions.initialsOnly(p) ? 1 : 0, StateOptions.singleVowels(p) ? 1 : 0,
+                StateOptions.hideInitials(p) ? 1 : 0, p.getBoolean("hide_number_hints", false) ? 1 : 0, 0 /* retired column, retained for older injected modules */, p.getBoolean("hide_gboard_launcher", false) ? 1 : 0,
+                StateOptions.defaultLetters(p) ? 1 : 0, StateOptions.finalsLetters(p) ? 1 : 0, StateOptions.initialsBelow(p) ? 1 : 0,
+                p.getBoolean("key_letter_size_enabled", false) ? 1 : 0, p.getInt("key_letter_size", PrimaryLetterSize.DEFAULT_SP), StateOptions.defaultVisibility(p)});
         return result;
     }
     @Override public String getType(Uri uri) { return "vnd.android.cursor.item/vnd.gboardhints.preferences"; }

@@ -69,18 +69,8 @@ final class GboardSettingsEntryAdapter {
             key.set(entry, KEY); title.set(entry, TITLE);
             intent.set(entry, new Intent().setComponent(new ComponentName("io.github.rikumi.gboardhints",
                     "io.github.rikumi.gboardhints.SettingsActivity")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            // A fresh Preference's order is the unique integer defaulted to MAX_VALUE.
-            Field order = null;
-            for (Field field : preference.getDeclaredFields()) {
-                if (Modifier.isStatic(field.getModifiers()) || field.getType() != int.class) continue;
-                field.setAccessible(true);
-                if (field.getInt(entry) == Integer.MAX_VALUE) {
-                    if (order != null) throw new NoSuchFieldException("Ambiguous preference order");
-                    order = field;
-                }
-            }
-            if (order == null) throw new NoSuchFieldException("Preference order");
-            order.setInt(entry, order.getInt(item));
+            // Let the group allocate its next order slot and advance its counter.
+            // Reusing the anchor's order lets later adapter sorting move us above it.
             operation.invoke(owner, entry);
         }
         reorder(owner);

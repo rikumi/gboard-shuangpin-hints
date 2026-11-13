@@ -1,9 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.StateOptionsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:15.103Z" time="0.022">
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.rikumi.gboardhints.StateOptionsTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:57.668Z" time="0.164">
   <properties />
-  <testcase name="oldBlankWithMatchingSingleVowelsKeepsTheNativeVowelFilter" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.007" />
-  <testcase name="lockedProviderReadsCannotFreezeDefaultsBeforeLegacyMigration" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.006" />
-  <testcase name="legacyBlankAndInitialsOnlyMigrateWithoutLosingSelections" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.009" />
+  <testcase name="waitingLetterMenuMigratesLegacyVisibilityAndSingleVowelFlags" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.013" />
+  <testcase name="waitingLetterMenuChangesKeepDefaultLetterSelectionIndependent" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.008" />
+  <testcase name="oldBlankWithMatchingSingleVowelsKeepsTheNativeVowelFilter" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.006" />
+  <testcase name="defaultLetterMenuMigratesOldHiddenAndInitialOnlyModes" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.007" />
+  <testcase name="forcedLowerPlacementDoesNotOverwriteAllModePreference" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.013" />
+  <testcase name="defaultLetterChoicesRemainIndependentOfHintsAndWaitingLetterModes" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.008" />
+  <testcase name="rangeMigrationCombinesLegacySwitchesAndDefaultsAllPlacementOff" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.045" />
+  <testcase name="lockedProviderReadsCannotFreezeDefaultsBeforeLegacyMigration" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.021" />
+  <testcase name="legacyBlankAndInitialsOnlyMigrateWithoutLosingSelections" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.01" />
+  <testcase name="explicitLegacyAllModeLowerPlacementIsRetained" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.026" />
   <system-out />
   <system-err />
 </testsuite>

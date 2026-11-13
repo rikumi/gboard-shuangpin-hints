@@ -320,4 +320,82 @@ public final class KeyboardScopeTest {
         assertEquals(0f, letters.get('v' - 'a').getAlpha(), 0f);
     }
 
+    @Test public void forcedLowerInitialsAlsoApplyWhenWaitingHintsAreNotFiltered() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "dynamic", false);
+        ReflectionHelpers.setField(controller, "initialsOnly", true);
+        ReflectionHelpers.setField(controller, "initialsBelow", true);
+        controller.engineComposition("n"); idle();
+        Map<View, ?> states = ReflectionHelpers.getField(controller, "keys");
+        Object state = states.get(keys.get('v' - 'a'));
+        Object drawable = ReflectionHelpers.getField(state, "hint");
+        HintEngine.KeyHint text = ReflectionHelpers.getField(drawable, "hint");
+        assertEquals("", text.top);
+        assertTrue(text.bottom.startsWith("zh"));
+    }
+
+    @Test public void availableNativeVowelsFilterIndependentlyOfDynamicHintsAndHintMasterSwitch() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "dynamic", false);
+        ReflectionHelpers.setField(controller, "finalsLetters", true);
+        ReflectionHelpers.setField(controller, "singleVowels", true);
+        for (boolean hints : new boolean[]{true, false}) {
+            ReflectionHelpers.setField(controller, "enabled", hints);
+            controller.engineComposition("m"); idle();
+            assertEquals(1f, letters.get(0).getAlpha(), 0f);
+            assertEquals(0f, letters.get('v' - 'a').getAlpha(), 0f);
+            controller.engineComposition("a"); idle();
+            assertEquals(1f, letters.get('i' - 'a').getAlpha(), 0f);
+            assertEquals(0f, letters.get('a' - 'a').getAlpha(), 0f);
+        }
+    }
+    @Test public void letterFontSizeIsGlobalAndRestoresWhenDisabledOrKeyboardFinishes() {
+        ReflectionHelpers.setField(controller, "keyLetterSizeEnabled", true);
+        ReflectionHelpers.setField(controller, "keyLetterSize", 32);
+        controller.imeActivated(); idle();
+        for (TextView letter : letters) assertEquals(32f, letter.getTextSize(), .01f);
+        ReflectionHelpers.setField(controller, "keyLetterSizeEnabled", false); controller.refreshLater(); idle();
+        for (TextView letter : letters) assertEquals(24f, letter.getTextSize(), .01f);
+        ReflectionHelpers.setField(controller, "keyLetterSizeEnabled", true); controller.refreshLater(); idle();
+        controller.finish(); idle();
+        for (TextView letter : letters) assertEquals(24f, letter.getTextSize(), .01f);
+    }
+
+    @Test public void defaultLetterModesUseSchemeMappingsAndRestoreOnStateOrLanguageChange() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "defaultVisibilityConfigured", true);
+        ReflectionHelpers.setField(controller, "finalsLetters", true);
+        ReflectionHelpers.setField(controller, "initialsOnly", true);
+        String[] nativeSchemes = {"shuangpin_flypy", "shuangpin_abc", "shuangpin_ziguang"};
+        String[] schemes = {"XIAOHE", "ABC", "Ziguang"};
+        for (int n = 0; n < nativeSchemes.length; n++) {
+            controller.schemeRead(nativeSchemes[n]); controller.decoderStarted(true);
+            for (int mode = StateOptions.DEFAULT_ALL; mode <= StateOptions.DEFAULT_HIDDEN; mode++) {
+                ReflectionHelpers.setField(controller, "defaultVisibility", mode);
+                controller.engineComposition(""); idle();
+                for (char key = 'a'; key <= 'z'; key++) {
+                    boolean hidden = mode == StateOptions.DEFAULT_HIDDEN || mode == StateOptions.DEFAULT_HIDE_VOWELS
+                            && "aeoiuv".indexOf(key) >= 0 && SchemeData.initial(schemes[n], key) != null;
+                    assertEquals(schemes[n] + ":" + mode + ":" + key, hidden ? 0f : 1f, letters.get(key - 'a').getAlpha(), 0f);
+                }
+                controller.engineComposition("n"); idle();
+                for (TextView letter : letters) assertEquals(1f, letter.getAlpha(), 0f);
+            }
+        }
+        controller.imeActivated(); idle();
+        for (TextView letter : letters) assertEquals(1f, letter.getAlpha(), 0f);
+    }
+    @Test public void defaultSelectiveNativeLetterHidingDoesNotRequireHintOverlays() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "defaultVisibilityConfigured", true);
+        ReflectionHelpers.setField(controller, "defaultVisibility", StateOptions.DEFAULT_HIDE_VOWELS);
+        ReflectionHelpers.setField(controller, "enabled", false);
+        controller.engineComposition(""); idle();
+        for (char key : new char[]{'u', 'i', 'v'}) assertEquals(0f, letters.get(key - 'a').getAlpha(), 0f);
+        assertEquals(1f, letters.get(0).getAlpha(), 0f);
+        assertFalse(hint('k'));
+        controller.schemeRead("pinyin"); controller.decoderStarted(true); idle();
+        for (TextView letter : letters) assertEquals(1f, letter.getAlpha(), 0f);
+    }
+
 }

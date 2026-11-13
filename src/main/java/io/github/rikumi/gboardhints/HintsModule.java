@@ -26,6 +26,12 @@ public final class HintsModule implements IXposedHookLoadPackage {
         if (serviceType == null) serviceType = InputMethodService.class;
         Class<?> keys = XposedHelpers.findClassIfExists(AdaptiveKeyAdapter.KEY_CLASS, param.classLoader);
         if (keys == null) { XposedBridge.log("GboardHints: unsupported key view; no hooks installed"); return; }
+        XposedHelpers.findAndHookMethod(android.widget.TextView.class, "setTextSize", int.class, float.class, new XC_MethodHook() {
+            @Override protected void beforeHookedMethod(MethodHookParam p) {
+                Float size = PrimaryLetterSize.nativeRequest((android.widget.TextView)p.thisObject, (Integer)p.args[0], (Float)p.args[1]);
+                if (size != null) { p.args[0] = android.util.TypedValue.COMPLEX_UNIT_SP; p.args[1] = size; }
+            }
+        });
         Field metadata = AdaptiveKeyAdapter.metadataField(keys);
         XposedBridge.hookAllConstructors(keys, new XC_MethodHook() {
             @Override protected void afterHookedMethod(MethodHookParam p) {
@@ -95,9 +101,6 @@ public final class HintsModule implements IXposedHookLoadPackage {
                 "com.google.android.apps.inputmethod.libs.hmm.AbstractHmmDecodeProcessor", param.classLoader);
         Class<?> chinese = XposedHelpers.findClassIfExists(
                 "com.google.android.apps.inputmethod.libs.chinese.ime.hmm.AbstractHmmChineseDecodeProcessor", param.classLoader);
-        InlineUppercaseHooks inline = new InlineUppercaseHooks(param.classLoader, controller, chinese, processor);
-        controller.inlineSupported(inline.supported());
-        controller.inlineAdapter(inline.adapter);
         // LatinIme has a separate decoder hierarchy. Clear the previous mode on
         // common IME activation; an actual Pinyin decoder can then opt back in.
         Class<?> ime = XposedHelpers.findClassIfExists("com.google.android.libraries.inputmethod.ime.AbstractIme", param.classLoader);
@@ -118,9 +121,7 @@ public final class HintsModule implements IXposedHookLoadPackage {
                     XposedBridge.hookMethod(method, new XC_MethodHook() {
                         @Override protected void afterHookedMethod(MethodHookParam p) {
                             if (processor.isInstance(p.thisObject) || hmm != null && hmm.isInstance(p.thisObject)) {
-                                boolean isChinese = chinese != null && chinese.isInstance(p.thisObject);
-                                if (isChinese) inline.watchDecoder(p.thisObject);
-                                controller.decoderStarted(processor.isInstance(p.thisObject), isChinese);
+                                controller.decoderStarted(processor.isInstance(p.thisObject));
                             }
                         }
                     });
