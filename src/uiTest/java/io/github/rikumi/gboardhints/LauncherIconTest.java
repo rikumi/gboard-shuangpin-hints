@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import com.google.android.material.materialswitch.MaterialSwitch;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,22 +21,6 @@ public final class LauncherIconTest {
         Context app = RuntimeEnvironment.getApplication();
         ConfigStore.prefs(app).edit().remove("hide_launcher").commit();
         LauncherIcon.setHidden(app, false);
-    }
-    @Test public void switchHidesOnlyAliasAndCanRestoreIt() {
-        org.robolectric.android.controller.ActivityController<SettingsActivity> controller =
-                Robolectric.buildActivity(SettingsActivity.class).setup().visible();
-        try {
-            SettingsActivity activity = controller.get(); PackageManager pm = activity.getPackageManager();
-            ComponentName main = new ComponentName(activity, SettingsActivity.class);
-            int mainState = pm.getComponentEnabledSetting(main);
-            MaterialSwitch toggle = activity.findViewById(R.id.hide_launcher_switch);
-            assertFalse(toggle.isChecked()); toggle.performClick();
-            assertEquals(PackageManager.COMPONENT_ENABLED_STATE_DISABLED, pm.getComponentEnabledSetting(LauncherIcon.component(activity)));
-            assertEquals(mainState, pm.getComponentEnabledSetting(main));
-            assertTrue(ConfigStore.prefs(activity).getBoolean("hide_launcher", false));
-            assertFalse(activity.isFinishing()); toggle.performClick();
-            assertEquals(PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, pm.getComponentEnabledSetting(LauncherIcon.component(activity)));
-        } finally { controller.pause().stop().destroy(); }
     }
     @Test public void moduleSettingsEntryRemainsResolvableAfterHidingLauncher() {
         Context app = RuntimeEnvironment.getApplication(); LauncherIcon.setHidden(app, true);

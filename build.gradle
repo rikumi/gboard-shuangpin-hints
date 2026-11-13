@@ -1,30 +1,55 @@
-plugins { id 'com.android.application' version '9.1.0' }
-def release = new groovy.json.JsonSlurper().parse(file('version.json'))
+buildscript { dependencies { classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10' } }
+plugins {
+    id 'com.android.application' version '9.1.0'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.4.10'
+}
+def moduleVersion = new groovy.json.JsonSlurper().parse(file('version.json'))
+def moduleVersionCode = (providers.gradleProperty('releaseVersionCode').orNull ?: moduleVersion.code).toString().toInteger()
+def moduleVersionName = providers.gradleProperty('releaseVersionName').orNull ?: moduleVersion.name
 
 android {
     namespace 'io.github.rikumi.gboardhints'
-    compileSdk 35
+    compileSdk 37
     defaultConfig {
         applicationId 'io.github.rikumi.gboardhints'
         minSdk 23
         targetSdk 35
-        versionCode release.code as int
-        versionName release.name
+        versionCode moduleVersionCode
+        versionName moduleVersionName
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    if (file('.signing/debug.keystore').exists()) {
+    def signingFile = System.getenv('ANDROID_SIGNING_CONFIG')
+    def persistent = signingFile ? new groovy.json.JsonSlurper().parse(file(signingFile)) :
+        [storeFile: file('.signing/debug.keystore').absolutePath, storePassword: 'android', keyAlias: 'androiddebugkey', keyPassword: 'android']
+    if (file(persistent.storeFile).isFile()) {
         signingConfigs {
-            localDebug {
-                storeFile file('.signing/debug.keystore')
-                storePassword 'android'
-                keyAlias 'androiddebugkey'
-                keyPassword 'android'
+            stable {
+                storeFile file(persistent.storeFile)
+                storePassword persistent.storePassword
+                keyAlias persistent.keyAlias
+                keyPassword persistent.keyPassword
             }
         }
-        buildTypes { debug { signingConfig signingConfigs.localDebug } }
+        buildTypes {
+            debug { signingConfig signingConfigs.stable }
+            release { signingConfig signingConfigs.stable }
+        }
+    } else {
+        gradle.taskGraph.whenReady { graph ->
+            if (graph.allTasks.any { it.name in ['assembleRelease', 'packageRelease'] })
+                throw new GradleException('A persistent signing key is required for release builds.')
+        }
+    }
+    buildFeatures { compose true }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     testOptions {
         unitTests.includeAndroidResources = true
@@ -39,8 +64,12 @@ android {
 }
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.navigationevent:navigationevent-compose:1.1.2'
+    implementation 'io.github.suqi8.coui.kmp:coui-ui-android:1.1.0'
+    implementation 'io.github.suqi8.coui.kmp:coui-preference-android:1.1.0'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.compose.ui:ui-test-junit4:1.12.0'
     testImplementation 'org.robolectric:robolectric:4.16.1'
     testImplementation 'de.robv.android.xposed:api:82'
 }

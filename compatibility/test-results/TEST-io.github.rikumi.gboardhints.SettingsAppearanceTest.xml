@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:57.288Z" time="1.906">
+<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:10:38.620Z" time="4.839">
   <properties />
-  <testcase name="monetDayUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="1.549" />
-  <testcase name="monetNightUsesSystemAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.061" />
-  <testcase name="material3DayThemeAndSingleBlankToggle" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.204" />
-  <testcase name="material3FollowsSystemNightMode" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.062" />
+  <testcase name="onlyDeveloperRequestedSubtitlesArePresent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="2.222" />
+  <testcase name="dayModeUsesLightSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.054" />
+  <testcase name="restartRequiresSelectingTheSingleMenuItem" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.177" />
+  <testcase name="couiSwitchesPreserveSettingsAndPublishProviderUpdates" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.114" />
+  <testcase name="hidingModuleLauncherKeepsSettingsActivityEnabledAndRestoresAlias" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.043" />
+  <testcase name="systemNightModeUsesDarkSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="2.068" />
   <system-out />
   <system-err />
 </testsuite>

@@ -1,17 +1,27 @@
-name: Android build
+name: Build and release
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish a release
+        type: boolean
+        default: true
 permissions:
   contents: read
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
         with:
           distribution: temurin
@@ -22,15 +32,71 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-35" "build-tools;36.0.0"
+        run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
       - name: Build and test
-        run: ./gradlew assembleDebug testDebugUnitTest --console=plain
-      - name: Upload APK and test reports
+        run: |
+          python3 tools/test_release_tools.py
+          ./gradlew assembleDebug testDebugUnitTest --console=plain
+      - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: android-build
+          name: test-results
           path: |
-            build/outputs/apk/debug/*.apk
             build/reports/tests/testDebugUnitTest/
             build/test-results/testDebugUnitTest/
+  release:
+    needs: test
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
+      - name: Compute next version
+        id: version
+        run: python3 tools/release_version.py
+      - name: Restore persistent signing key
+        env:
+          ANDROID_SIGNING_BUNDLE: ${{ secrets.ANDROID_SIGNING_BUNDLE }}
+        run: python3 tools/restore_signing.py
+      - name: Build release with unused components removed
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.version }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: ./gradlew assembleRelease -PreleaseVersionName="$VERSION_NAME" -PreleaseVersionCode="$VERSION_CODE" --console=plain
+      - name: Download Gboard and LSPatch, embed module, sign and verify
+        run: python3 tools/patch_gboard.py --module build/outputs/apk/release/GboardShuangpinHints-release.apk --output dist
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-apks
+          if-no-files-found: error
+          path: dist/*
+      - name: Publish release for this push
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$RELEASE_TAG" dist/*.apk dist/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$RELEASE_TAG" --generate-notes \
+            --notes 'Includes the release module and Gboard 16.6.3 with the same module embedded using [JingMatrix/LSPatch v1.2](https://github.com/JingMatrix/LSPatch/tree/v1.2).'
+      - name: Remove signing material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/gboard-hints-signing"

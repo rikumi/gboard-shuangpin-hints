@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.LauncherIconTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:57.046Z" time="0.241">
+<testsuite name="io.github.rikumi.gboardhints.LauncherIconTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:10:45.189Z" time="0.009">
   <properties />
-  <testcase name="switchHidesOnlyAliasAndCanRestoreIt" classname="io.github.rikumi.gboardhints.LauncherIconTest" time="0.231" />
-  <testcase name="moduleSettingsEntryRemainsResolvableAfterHidingLauncher" classname="io.github.rikumi.gboardhints.LauncherIconTest" time="0.007" />
+  <testcase name="moduleSettingsEntryRemainsResolvableAfterHidingLauncher" classname="io.github.rikumi.gboardhints.LauncherIconTest" time="0.008" />
   <system-out />
   <system-err />
 </testsuite>

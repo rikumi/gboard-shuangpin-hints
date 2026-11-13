@@ -1,0 +1,13 @@
+{
+  "gboard": {
+    "version": "16.6.3.855170483",
+    "url": "https://github.com/SuperSaveGroup/GBoardAPK/releases/download/16.6.3.855170483/Gboard.-.the.Google.Keyboard_16.6.3.855170483-release-arm64-v8a_APKPure.apk",
+    "sha256": "04f6eb301f558141cd8afa8848f7cc51264f0991ba3ec83c2b5cf91ba9cb97ce"
+  },
+  "lspatch": {
+    "version": "1.2",
+    "url": "https://github.com/JingMatrix/LSPatch/releases/download/v1.2/lspatch-v1.2-487-release.jar",
+    "sha256": "d238fdc414d121b7fa454d8b4ccf420df3a8c97d563761861ff92bd9c5da2165"
+  },
+  "moduleCertificateSha256": "310e5527e8dc860d690715f74d2772dbbbb41bb6a29cdbc9c070e945feed323c"
+}
