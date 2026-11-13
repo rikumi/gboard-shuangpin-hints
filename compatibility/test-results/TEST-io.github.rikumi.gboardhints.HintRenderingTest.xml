@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.HintRenderingTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:55.469Z" time="0.225">
-  <properties />
-  <testcase name="initialAndFinalOccupySeparateTopAndBottomRows" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.041" />
-  <testcase name="centerEligibilityNeverDrawsAReplacementGlyph" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.018" />
-  <testcase name="hintStaysInsideFaceInsteadOfTouchTargetBottom" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.022" />
-  <testcase name="borderlessTallTouchTargetUsesTheCenterLegendAsAnchor" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.025" />
-  <testcase name="configuredSizeChangesHeightWhileEachKeyFitsItsOwnWidth" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.028" />
-  <testcase name="labelPaddingExcludesExtraSpaceBelowTheKey" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.023" />
-  <testcase name="longFinalShrinksIndependentlyOfShortInitial" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.013" />
-  <testcase name="backgroundInsetsExcludeTheTouchTargetGap" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.013" />
-  <testcase name="changingOneRowDoesNotCompressTheOtherRow" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.018" />
-  <testcase name="translatedAndScaledFaceKeepsHintsWithinItsBounds" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.023" />
-  <system-out />
-  <system-err />
-</testsuite>
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.HintRenderingTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.684Z" hostname="local-validation" time="0.099">
+  <testcase name="initialAndFinalOccupySeparateTopAndBottomRows" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.02" />
+  <testcase name="centerEligibilityNeverDrawsAReplacementGlyph" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.009" />
+  <testcase name="hintStaysInsideFaceInsteadOfTouchTargetBottom" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.009" />
+  <testcase name="borderlessTallTouchTargetUsesTheCenterLegendAsAnchor" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.009" />
+  <testcase name="configuredSizeChangesHeightWhileEachKeyFitsItsOwnWidth" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.011" />
+  <testcase name="labelPaddingExcludesExtraSpaceBelowTheKey" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.008" />
+  <testcase name="longFinalShrinksIndependentlyOfShortInitial" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.008" />
+  <testcase name="backgroundInsetsExcludeTheTouchTargetGap" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.008" />
+  <testcase name="changingOneRowDoesNotCompressTheOtherRow" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.007" />
+  <testcase name="translatedAndScaledFaceKeepsHintsWithinItsBounds" classname="io.github.rikumi.gboardhints.HintRenderingTest" time="0.008" />
+  </testsuite>

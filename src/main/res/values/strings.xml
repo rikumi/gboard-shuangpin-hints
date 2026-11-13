@@ -2,10 +2,10 @@
 <resources>
   <string name="app_name">Gboard 双拼提示</string>
   <string name="hints_title">显示双拼提示</string>
-  <string name="dynamic_title">动态显示可用韵母</string>
-  <string name="size_title">提示字号</string>
+  <string name="dynamic_title">双拼提示动态显示可用韵母</string>
+  <string name="size_title">修改提示字号</string>
   <string name="size_label">提示字号：%1$d sp</string>
-  <string name="hide_number_hints_title">隐藏 Gboard 数字提示</string>
+  <string name="hide_number_hints_title">隐藏按键数字提示</string>
   <string name="blank_title">无刻模式</string>
   <string name="hide_launcher_title">隐藏模块启动器图标</string>
   <string name="hide_gboard_launcher_title">隐藏 Gboard 启动器图标</string>
@@ -15,8 +15,8 @@
   <string name="restart_unavailable">未连接 Gboard</string>
   <string name="default_state">默认状态下</string>
   <string name="finals_state">等待韵母状态下</string>
-  <string name="global_settings">全局设置</string>
-  <string name="hide_key_letters">隐藏按键字母</string>
+  <string name="global_settings">实用功能</string>
+  <string name="hide_key_letters">隐藏按键主字母</string>
   <string name="initials_below_title">声母显示在下方</string>
   <string name="hint_range_title">双拼提示显示范围</string>
   <string name="hint_range_all">全部显示</string>
@@ -24,7 +24,11 @@
   <string name="hint_range_hide_initials">只隐藏声母</string>
   <string name="letters_available">只显示可用韵母</string>
   <string name="letters_hidden">全部隐藏</string>
-  <string name="key_letter_size_title">修改按键字母字号</string>
+  <string name="key_letter_size_title">修改按键主字母字号</string>
   <string name="letters_hide_vowels_on_initials">隐藏声母键上的韵母</string>
   <string name="keyboard_test_title">键盘自测</string>
+  <string name="show_semicolon_title">显示分号键</string>
+  <string name="hide_number_hints_summary">适用于不显示独立数字键时的首排字母</string>
+  <string name="flexible_emoji_title">更灵活的 emoji 建议</string>
+    <string name="inline_uppercase_title">分词键用于行内大写</string>
 </resources>

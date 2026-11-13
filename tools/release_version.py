@@ -16,9 +16,10 @@ versions = [parse(tag[1:]) for tag in subprocess.check_output(
 version = parse(base['name'])
 if versions:
     latest = max(versions)
-    version = max(version, (latest[0], latest[1], latest[2] + 1))
+    version = (latest[0], latest[1], latest[2] + 1)
 name = '.'.join(map(str, version))
-code = max(base['code'], version[0] * 1000000 + version[1] * 10000 + version[2] + 1)
+previous_code = int(os.environ.get('PREVIOUS_RELEASE_CODE', '0'))
+code = max(base['code'], previous_code + 1, version[0] * 1000000 + version[1] * 10000 + version[2] + 1)
 values = {'version': name, 'code': str(code), 'tag': 'v' + name}
 if os.environ.get('GITHUB_OUTPUT'):
     with open(os.environ['GITHUB_OUTPUT'], 'a') as output:

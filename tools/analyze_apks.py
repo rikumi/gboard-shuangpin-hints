@@ -71,7 +71,7 @@ class Dex:
                         elif opcode == 27 and unit + 2 < units:
                             index = self.u32(start + (unit + 1) * 2)
                         else: continue
-                        if index < len(self.strings) and self.strings[index] in ('DECODE', 'COMMIT', 'PRESS', 'DOWN', 'UP'):
+                        if index < len(self.strings) and self.strings[index] in ('DECODE', 'COMMIT', 'PRESS', 'DOWN', 'UP', 'EMOJI'):
                             info['enumNames'].append(self.strings[index])
 
     def u32(self, p): return struct.unpack_from('<I', self.data, p)[0]
@@ -111,6 +111,65 @@ def separator_layouts(apk, sdk, resources):
     assert result, 'No native decode-apostrophe separator binding found'
     return result
 
+def native_semicolon_adapter(classes, metadata, bindings, resources):
+    definition = classes[metadata['type']]
+    if metadata['type'].endswith('/metadata/SoftKeyDef;'):
+        fields=sorted([f for f in definition['fields'] if f['access']&1 and f['access']&16 and not f['access']&8],key=lambda f:f['name'])
+        assert len(fields)==10 and fields[3]['type']==fields[4]['type']
+        assert any(m['name']=='<init>' and m['args']==[f['type'] for f in fields] for m in definition['methods'])
+        assert any(m['name']=='<init>' and len(m['args'])==10 for m in definition['methods'])
+        group=classes['Lcom/google/android/libraries/inputmethod/metadata/ActionDef;']
+        assert any(m['name']=='<init>' and len(m['args'])==14 for m in group['methods'])
+        groups=sorted([f for f in group['fields'] if f['access']&1 and f['access']&16 and not f['access']&8],key=lambda f:f['name'])
+        assert len(groups)==14
+        assert any(m['name']=='<init>' and m['args']==[f['type'] for f in groups] for m in group['methods'])
+        assert 'PRESS' in classes[groups[0]['type']]['enumNames']
+        actions=[]
+        for m in group['methods']:
+            for ctor in classes.get(m['return'],{}).get('methods',[]):
+                a=ctor['args']
+                if ctor['name']=='<init>' and len(a)==4 and a[0]=='I' and a[2:]==['Ljava/lang/Object;','I'] and set(classes.get(a[1],{}).get('enumNames',[]))>={'DECODE','COMMIT'}:
+                    if ctor not in actions:actions.append(ctor)
+        assert len(actions)==1
+        binders=[m for m in bindings if m['args']==[metadata['type'],'J']];assert len(binders)==1
+        keyboard=classes['Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;']
+        registration=[m for m in keyboard['methods'] if m['args']==['Landroid/view/View;'] and m['return']=='V' and m['access']&2 and not m['access']&8]
+        assert len(registration)==1
+        assert all(' id/'+name+' ' in resources or ' id/'+name+'\n' in resources for name in ['B00','C01','C09','C10','D01','D10'])
+        return {'format':'immutable lists','binder':binders[0],'registration':registration[0],'actionConstructor':actions[0],'definitionStateFields':[f['name'] for f in fields],'bindingStateFields':[f['name'] for f in groups],'positions':['B00','C01','C09','C10','D01','D10']}
+    assert len([f for f in definition['fields'] if f['type'] == '[Ljava/lang/CharSequence;' and not f['access'] & 8]) == 1
+    binders = [m for m in bindings if m['args'] == [metadata['type'], 'J']] or [m for m in bindings if m['args'] == [metadata['type']]]
+    assert len(binders) == 1, 'Ambiguous key binder'
+    def has_builder(info):
+        return any(len(m['args']) == 1 and any(c['name'] == '<init>' and not c['args']
+                   for c in classes.get(m['args'][0], {}).get('methods', []))
+                   for m in info['methods'] if m['name'] == '<init>')
+    assert has_builder(definition), 'Missing native definition copy builder'
+    candidates = []
+    for field in definition['fields']:
+        if field['access'] & 8 or not field['type'].startswith('[L'): continue
+        group = classes.get(field['type'][1:])
+        if not group: continue
+        phases = [f for f in group['fields'] if not f['access'] & 8 and 'PRESS' in classes.get(f['type'], {}).get('enumNames', [])]
+        if not phases: continue
+        for array in group['fields']:
+            if array['access'] & 8 or not array['type'].startswith('[L'): continue
+            action = classes.get(array['type'][1:])
+            if not action: continue
+            ctors = [m for m in action['methods'] if m['name'] == '<init>' and len(m['args']) == 3 and m['args'][0] == 'I'
+                     and m['args'][2] == 'Ljava/lang/Object;' and set(classes.get(m['args'][1], {}).get('enumNames', [])) >= {'DECODE','COMMIT'}]
+            if ctors:
+                assert has_builder(group), 'Missing native action group copy builder'
+                candidates.append({'bindings':field,'actions':array,'phase':phases,'constructor':ctors})
+    assert len(candidates) == 1, 'Ambiguous native press action'
+    keyboard = classes['Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;']
+    registration = [m for m in keyboard['methods'] if m['args'] == ['Landroid/view/View;'] and m['return'] == 'V' and m['access'] & 2 and not m['access'] & 8]
+    assert len(registration) == 1, 'Ambiguous native registration'
+    positions = next((names for names in [['C01','C09','C10','D01','D10'], ['key_pos_1_0','key_pos_1_8','key_pos_1_9','key_pos_0_0','key_pos_0_9']]
+                      if all(' id/' + name + '\n' in resources for name in names)), None)
+    assert positions, 'Missing keyboard positions'
+    return {'binder':binders[0],'registration':registration[0], 'pressAction':candidates[0], 'positions':positions}
+
 def analyze(apk, sdk):
     classes, strings = {}, set()
     resources = subprocess.check_output([str(sdk / 'aapt2'), 'dump', 'resources', str(apk)], text=True)
@@ -139,9 +198,12 @@ def analyze(apk, sdk):
         if f['access'] & 8: continue
         fields = classes.get(f['type'], {}).get('fields', [])
         if any(g['type'] in ('[Ljava/lang/CharSequence;', '[Ljava/lang/String;') for g in fields): metadata.append(f)
+    named=[f for f in key['fields'] if f['type'].endswith('/metadata/SoftKeyDef;') and not f['access']&8]
+    if named:metadata=named
     assert len(metadata) == 1, f'Metadata detection is ambiguous: {metadata}'
     bindings = [m for m in key['methods'] if m['args'] and m['args'][0] == metadata[0]['type'] and not m['access'] & 8]
     assert bindings, 'No metadata binding hook'
+    native_semicolon = native_semicolon_adapter(classes,metadata[0],bindings,resources)
     callbacks = []
     processor = 'Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;'
     while processor in classes:
@@ -190,7 +252,7 @@ def analyze(apk, sdk):
     assert package == 'com.google.android.inputmethod.latin'
     return {'file': apk.name, 'package': package, 'versionCode': int(code), 'version': version,
             'sha256': hashlib.sha256(apk.read_bytes()).hexdigest(), 'googleSigningRootVerified': True,
-            'metadataField': metadata[0], 'bindingMethods': bindings, 'activationMethods': callbacks,
+            'metadataField': metadata[0], 'bindingMethods': bindings, 'nativeSemicolon':native_semicolon, 'activationMethods': callbacks,
             'hmmBasePresent': True,
             'enginePreedit': {'updates': preedit_updates, 'readers': preedit_readers, 'clearNotifications': preedit_clear_notifications, 'cache': preedit_caches, 'fallbackGetter': preedit_getters if not preedit_caches else [], 'emptyTextResetMethods': preedit_resets},
             'imeActivation': ime_activations,

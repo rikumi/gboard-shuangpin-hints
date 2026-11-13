@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.SemicolonKeysTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:49.605Z" hostname="local-validation" time="1.584">
+  <testcase name="inlineUppercaseShowsArrowEvenWithoutPreeditAndRestoresOnDisable" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.416" />
+  <testcase name="shiftAlwaysUsesApostropheWhileComposingAndRestoresNativeDefinition" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.019" />
+  <testcase name="nativeShiftWithoutPressBindingStillKeepsItsPresentationAndGetsASeparatorAction" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.017" />
+  <testcase name="edgeKeyPaddingAndWidthsFollowTopColumnsAndRestoreAfterDisable" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.024" />
+  <testcase name="uppercaseReusesNativeShiftPresentationInsteadOfDrawingALetterGlyph" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.014" />
+  <testcase name="tenthNativeKeyAlignsWithEveryTopKeyAndDisablingRestoresStagger" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.021" />
+  <testcase name="nativeEmptyTenthSlotIsReusedAndItsOriginalStateIsRestored" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.02" />
+  <testcase name="semicolonUsesNativeDecodeOnlyWithPreeditAndSchemeBinding" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.019" />
+  <testcase name="cachedKeyboardCanReuseItsInjectedKeyAfterRestoreAndRebinding" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.018" />
+  <testcase name="invalidSemicolonRowDoesNotPreventShiftFromBecomingUppercase" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.023" />
+  <testcase name="legacyOneArgumentBinderCopiesImmutableDefinitionsWithoutEditingNativeSource" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.013" />
+  <testcase name="weightedEdgeContentHostsMatchOrdinaryKeysAndRestoreNativeWeights" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.022" />
+  <testcase name="clonedKeyIncludesNativeXmlContentHostAndStyle" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.538" />
+  <testcase name="englishAndNonPinyinChineseNeverSendShuangpinFinals" classname="io.github.rikumi.gboardhints.SemicolonKeysTest" time="0.324" />
+  </testsuite>

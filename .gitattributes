@@ -1,3 +1,6 @@
 * text=auto eol=lf
 gradlew.bat text eol=crlf
 *.jar binary
+
+# Generated TSV records retain an empty third field after the final tab.
+src/main/assets/emoji/*.tsv whitespace=-blank-at-eol

@@ -70,7 +70,12 @@ jobs:
         run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
       - name: Compute next version
         id: version
-        run: python3 tools/release_version.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          previous_body=$(gh release view --repo "$GITHUB_REPOSITORY" --json body --jq .body 2>/dev/null || true)
+          previous_code=$(printf '%s' "$previous_body" | sed -n 's/^Android versionCode: \([0-9][0-9]*\)$/\1/p' | tail -n 1)
+          PREVIOUS_RELEASE_CODE="${previous_code:-0}" python3 tools/release_version.py
       - name: Restore persistent signing key
         env:
           ANDROID_SIGNING_BUNDLE: ${{ secrets.ANDROID_SIGNING_BUNDLE }}
@@ -81,7 +86,7 @@ jobs:
           VERSION_CODE: ${{ steps.version.outputs.code }}
         run: ./gradlew assembleRelease -PreleaseVersionName="$VERSION_NAME" -PreleaseVersionCode="$VERSION_CODE" --console=plain
       - name: Download Gboard and LSPatch, embed module, sign and verify
-        run: python3 tools/patch_gboard.py --module build/outputs/apk/release/GboardShuangpinHints-release.apk --output dist
+        run: python3 tools/patch_gboard.py --module build/outputs/apk/release/GboardShuangpinHints-release.apk --output dist --skip-unavailable
       - name: Upload release artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -92,11 +97,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_CODE: ${{ steps.version.outputs.code }}
         run: |
-          gh release create "$RELEASE_TAG" dist/*.apk dist/SHA256SUMS \
+          shopt -s nullglob
+          artifacts=(dist/*.apk dist/*.apks dist/SHA256SUMS)
+          gh release create "$RELEASE_TAG" "${artifacts[@]}" \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
             --title "$RELEASE_TAG" --generate-notes \
-            --notes 'Includes the release module and Gboard 16.6.3 with the same module embedded using [JingMatrix/LSPatch v1.2](https://github.com/JingMatrix/LSPatch/tree/v1.2).'
+            --notes "Includes the release module. A Gboard 18 LSPatch package is included only when its pinned original-package mirror is available, using [JingMatrix/LSPatch v1.2](https://github.com/JingMatrix/LSPatch/tree/v1.2).
+
+          Android versionCode: $RELEASE_CODE"
       - name: Remove signing material
         if: always()
         run: rm -rf "$RUNNER_TEMP/gboard-hints-signing"

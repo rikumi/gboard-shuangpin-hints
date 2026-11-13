@@ -46,7 +46,7 @@ class SettingsAppearanceTest {
             compose.waitForIdle()
             assertTrue(prefs.getBoolean("finals_letters", false))
             assertTrue(prefs.getBoolean("single_vowels", false))
-            for (key in listOf("hide_number_hints", "hide_gboard_launcher")) {
+            for (key in listOf("show_semicolon", "flexible_emoji", "inline_uppercase", "hide_number_hints", "hide_gboard_launcher")) {
                 assertFalse(prefs.getBoolean(key, false))
                 compose.onNodeWithTag(key).performScrollTo().performClick()
                 assertTrue(prefs.getBoolean(key, false))
@@ -54,6 +54,7 @@ class SettingsAppearanceTest {
             activity.contentResolver.query(ConfigProvider.URI, null, null, null, null)!!.use { cursor ->
                 assertTrue(cursor.moveToFirst())
                 assertEquals("auto", cursor.getString(cursor.getColumnIndexOrThrow("scheme")))
+                assertEquals(1, cursor.getInt(cursor.getColumnIndexOrThrow("show_semicolon")))
                 assertEquals(1, cursor.getInt(cursor.getColumnIndexOrThrow("single_vowels")))
                 assertEquals(1, cursor.getInt(cursor.getColumnIndexOrThrow("hide_gboard_launcher")))
             }
@@ -90,18 +91,20 @@ class SettingsAppearanceTest {
     @Test fun onlyDeveloperRequestedSubtitlesArePresent() = launch {
         compose.onNodeWithText("初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V").assertDoesNotExist()
         compose.onNodeWithText("需系统启动器支持").assertExists()
+        compose.onNodeWithText("适用于不显示独立数字键时的首排字母").assertExists()
         compose.onNodeWithText("在所有提示状态下隐藏 zh、ch、sh。").assertDoesNotExist()
         compose.onNodeWithText("仅在双拼键盘隐藏字母及数字、符号角标，保留功能键。双拼提示由上方开关独立控制。").assertDoesNotExist()
     }
-    @Test fun stateGroupsContainIndependentLettersAndTheThreeGlobalControls() = launch {
-        for (title in listOf("默认状态下", "等待韵母状态下", "全局设置"))
+    @Test fun stateGroupsKeepControlsInTheirRequestedSections() = launch {
+        for (title in listOf("默认状态下", "等待韵母状态下", "实用功能"))
             compose.onNodeWithText(title).assertExists()
-        compose.onAllNodesWithText("隐藏按键字母").assertCountEquals(2)
+        compose.onAllNodesWithText("隐藏按键主字母").assertCountEquals(2)
         for (tag in listOf("default_visibility", "hint_range", "initials_below"))
             compose.onNode(hasTestTag(tag) and hasAnyAncestor(hasTestTag("default_group"))).assertExists()
         compose.onNode(hasTestTag("finals_visibility") and hasAnyAncestor(hasTestTag("finals_group"))).assertExists()
-        for (tag in listOf("hide_number_hints", "hide_launcher", "hide_gboard_launcher"))
+        for (tag in listOf("show_semicolon", "hide_number_hints", "hide_launcher", "hide_gboard_launcher"))
             compose.onNode(hasTestTag(tag) and hasAnyAncestor(hasTestTag("global_group"))).assertExists()
+        compose.onNode(hasTestTag("key_letter_size_row") and hasAnyAncestor(hasTestTag("global_group"))).assertExists()
         compose.onNodeWithText("无刻模式").assertDoesNotExist()
     }
     @Test @Config(sdk = [31], qualifiers = "night") fun nightPaletteIsPureBlackWithWhiteAccent() = launch { activity ->
@@ -160,7 +163,7 @@ class SettingsAppearanceTest {
     @Test fun waitingLetterMenuHasThreeModesAndPublishesTheirNativePolicies() = launch { activity ->
         val prefs = ConfigStore.prefs(activity)
         val menu = compose.onNodeWithTag("finals_visibility")
-        compose.onNodeWithText("动态显示可用韵母").assertExists()
+        compose.onNodeWithText("双拼提示动态显示可用韵母").assertExists()
         compose.onNodeWithText("根据声母显示可用韵母").assertDoesNotExist()
         compose.onNodeWithText("根据声母显示单韵母").assertDoesNotExist()
         for ((label, mode) in listOf("只显示可用韵母" to StateOptions.LETTERS_AVAILABLE,
@@ -178,6 +181,27 @@ class SettingsAppearanceTest {
             }
         }
     }
+    @Test fun hintSizeIsOptInDefaultsToTenAndPublishesEffectiveValue() = launch { activity ->
+        val prefs = ConfigStore.prefs(activity)
+        fun effectiveSize(): Int = activity.contentResolver.query(ConfigProvider.URI, null, null, null, null)!!.use {
+            assertTrue(it.moveToFirst()); it.getInt(it.getColumnIndexOrThrow("size"))
+        }
+        val row = compose.onNodeWithTag("hint_size_row")
+        val slider = compose.onNodeWithTag("hint_size_slider")
+        compose.onNodeWithText("修改提示字号").assertExists()
+        assertEquals(10, effectiveSize()); slider.assertDoesNotExist()
+        row.performScrollTo().performClick()
+        assertTrue(prefs.getBoolean("hint_size_enabled", false)); slider.assertExists()
+        assertEquals(10, prefs.getInt("size", 0))
+        slider.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.SetProgress) { it(14f) }
+        assertEquals(14, effectiveSize())
+        row.performScrollTo().performClick(); compose.waitForIdle(); slider.assertDoesNotExist()
+        assertTrue(prefs.getBoolean("hint_size_enabled", false))
+        row.performClick(); compose.waitForIdle(); slider.assertExists()
+        compose.onNodeWithTag("hint_size_switch").performClick(); compose.waitForIdle()
+        assertEquals(10, effectiveSize()); slider.assertDoesNotExist()
+    }
+
     @Test fun letterSizeSwitchExpandsAndLeftSideOnlyTogglesItsSlider() = launch { activity ->
         val prefs = ConfigStore.prefs(activity)
         val row = compose.onNodeWithTag("key_letter_size_row")
@@ -221,7 +245,7 @@ class SettingsAppearanceTest {
 
     @Test fun keyboardTestButtonIsLeftOfRestartAndOpensAFocusedEditor() = launch { activity ->
         compose.onNodeWithText("分词键改为行内大写").assertDoesNotExist()
-        compose.onNodeWithTag("inline_uppercase").assertDoesNotExist()
+        compose.onNodeWithTag("inline_uppercase").assertExists()
         val keyboard = compose.onNodeWithTag("keyboard_test")
         val restart = compose.onNodeWithTag("restart_menu")
         val keyboardBounds = SettingsSnapshot.bounds(keyboard)

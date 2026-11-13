@@ -1,0 +1,202 @@
+[
+  {
+    "file": "gboard9.apk",
+    "candidate": "Lksf;",
+    "builder": {
+      "owner": "Lksf;",
+      "name": "<init>",
+      "args": [
+        "Lksc;"
+      ],
+      "return": "V",
+      "access": 65537,
+      "code_offset": 5285868
+    },
+    "publication": {
+      "owner": "Lkuu;",
+      "name": "a",
+      "args": [
+        "Ljava/util/List;",
+        "Lksf;",
+        "Z",
+        "Ljava/lang/Object;"
+      ],
+      "return": "Lkuu;",
+      "access": 9,
+      "code_offset": 5296764
+    },
+    "commit": {
+      "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+      "name": "a",
+      "args": [
+        "Ljava/lang/String;",
+        "I",
+        "Z"
+      ],
+      "return": "V",
+      "access": 20,
+      "code_offset": 2956244
+    },
+    "verification": "static structure only; 18 reference is a derivative package, not the stock Beta APK"
+  },
+  {
+    "file": "gboard15-complete.apk",
+    "candidate": "Lhsw;",
+    "builder": {
+      "owner": "Lhsw;",
+      "name": "<init>",
+      "args": [
+        "Lhst;"
+      ],
+      "return": "V",
+      "access": 65537,
+      "code_offset": 5592096
+    },
+    "publication": {
+      "owner": "Lhvb;",
+      "name": "b",
+      "args": [
+        "Ljava/util/List;",
+        "Lhsw;",
+        "Z",
+        "Ljava/lang/Object;"
+      ],
+      "return": "Lhvb;",
+      "access": 9,
+      "code_offset": 5618408
+    },
+    "commit": {
+      "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+      "name": "ax",
+      "args": [
+        "Ljava/lang/String;",
+        "I",
+        "Z"
+      ],
+      "return": "V",
+      "access": 20,
+      "code_offset": 3915212
+    },
+    "verification": "static structure only; 18 reference is a derivative package, not the stock Beta APK"
+  },
+  {
+    "file": "gboard16.apk",
+    "candidate": "Lmeb;",
+    "builder": {
+      "owner": "Lmeb;",
+      "name": "<init>",
+      "args": [
+        "Lmdy;"
+      ],
+      "return": "V",
+      "access": 65537,
+      "code_offset": 2294008
+    },
+    "publication": {
+      "owner": "Lmgy;",
+      "name": "c",
+      "args": [
+        "Ljava/util/List;",
+        "Lmeb;",
+        "Z",
+        "Ljava/lang/Object;"
+      ],
+      "return": "Lmgy;",
+      "access": 9,
+      "code_offset": 2324016
+    },
+    "commit": {
+      "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+      "name": "aC",
+      "args": [
+        "Ljava/lang/String;",
+        "I",
+        "Z"
+      ],
+      "return": "V",
+      "access": 20,
+      "code_offset": 4643272
+    },
+    "verification": "static structure only; 18 reference is a derivative package, not the stock Beta APK"
+  },
+  {
+    "file": "pixelboard18-reference.apk",
+    "candidate": "Loqn;",
+    "builder": {
+      "owner": "Loqn;",
+      "name": "<init>",
+      "args": [
+        "Loqk;"
+      ],
+      "return": "V",
+      "access": 65537,
+      "code_offset": 5190320
+    },
+    "publication": {
+      "owner": "Lotm;",
+      "name": "a",
+      "args": [
+        "Ljava/util/List;",
+        "Loqn;",
+        "Z",
+        "Ljava/lang/Object;"
+      ],
+      "return": "Lotm;",
+      "access": 9,
+      "code_offset": 5990508
+    },
+    "commit": {
+      "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+      "name": "aD",
+      "args": [
+        "Ljava/lang/String;",
+        "I",
+        "Z"
+      ],
+      "return": "V",
+      "access": 20,
+      "code_offset": 4055868
+    },
+    "verification": "static structure only; 18 reference is a derivative package, not the stock Beta APK"
+  },
+  {
+    "file": "Gboard_18.6.3.1002251336-beta-arm64-v8a.apks/base.apk",
+    "candidate": "Ladoz;",
+    "builder": {
+      "owner": "Ladoz;",
+      "name": "<init>",
+      "args": [
+        "Ladow;"
+      ],
+      "return": "V",
+      "access": 65537,
+      "code_offset": 5489440
+    },
+    "publication": {
+      "owner": "Ladtv;",
+      "name": "a",
+      "args": [
+        "Ljava/util/List;",
+        "Ladoz;",
+        "Z",
+        "Ljava/lang/Object;"
+      ],
+      "return": "Ladtv;",
+      "access": 9,
+      "code_offset": 2124336
+    },
+    "commit": {
+      "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+      "name": "aD",
+      "args": [
+        "Ljava/lang/String;",
+        "I",
+        "Z"
+      ],
+      "return": "V",
+      "access": 20,
+      "code_offset": 4180616
+    },
+    "verification": "Static stock Beta APK structure only; device test pending"
+  }
+]

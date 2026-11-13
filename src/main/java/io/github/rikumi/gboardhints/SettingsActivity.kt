@@ -19,8 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.platform.testTag
@@ -43,6 +41,7 @@ import io.github.suqi8.coui.kmp.theme.Colors
 import io.github.suqi8.coui.kmp.theme.darkColorScheme
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Edit
+import top.yukonga.miuix.kmp.icon.extended.Refresh
 import kotlin.math.roundToInt
 
 class SettingsActivity : ComponentActivity() {
@@ -54,7 +53,7 @@ class SettingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         prefs = ConfigStore.prefs(this)
-        prefs.edit().remove("scheme").remove("inline_uppercase").apply()
+        prefs.edit().remove("scheme").apply()
         StateOptions.migrate(prefs)
         prefs.registerOnSharedPreferenceChangeListener(onChange)
         LauncherIcon.setHidden(this, prefs.getBoolean("hide_launcher", false))
@@ -140,7 +139,6 @@ internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean)
                     SettingsCard {
                         SettingSwitch(prefs, "enabled", R.string.hints_title, true)
                         HintSize(prefs)
-                        KeyLetterSize(prefs)
                     }
                     SettingsGroup(R.string.default_state, "default_group") {
                         DefaultVisibility(prefs)
@@ -151,10 +149,15 @@ internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean)
                         SettingSwitch(prefs, "dynamic", R.string.dynamic_title, true)
                     }
                     SettingsGroup(R.string.global_settings, "global_group") {
-                        SettingSwitch(prefs, "hide_number_hints", R.string.hide_number_hints_title)
-                        SettingSwitch(prefs, "hide_launcher", R.string.hide_launcher_title, onChange = onHideLauncher)
+                        KeyLetterSize(prefs)
+                        SettingSwitch(prefs, "show_semicolon", R.string.show_semicolon_title)
+                        SettingSwitch(prefs, "flexible_emoji", R.string.flexible_emoji_title)
+                        SettingSwitch(prefs, "inline_uppercase", R.string.inline_uppercase_title)
+                        SettingSwitch(prefs, "hide_number_hints", R.string.hide_number_hints_title,
+                            summary = R.string.hide_number_hints_summary)
                         SettingSwitch(prefs, "hide_gboard_launcher", R.string.hide_gboard_launcher_title,
                             summary = R.string.hide_gboard_launcher_summary)
+                        SettingSwitch(prefs, "hide_launcher", R.string.hide_launcher_title, onChange = onHideLauncher)
                     }
                 }
                 if (testing) {
@@ -269,47 +272,40 @@ private fun FinalsVisibility(prefs: SharedPreferences) {
 }
 
 @Composable
-private fun HintSize(prefs: SharedPreferences) {
-    var value by remember { mutableFloatStateOf(prefs.getInt("size", 10).coerceIn(7, 17).toFloat()) }
-    Column(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-        Text(stringResource(R.string.size_label, value.roundToInt()), style = COUITheme.textStyles.headline1,
-            modifier = Modifier.padding(horizontal = 16.dp))
-        Slider(value = value, onValueChange = {
-            value = it.roundToInt().toFloat()
-            prefs.edit().putInt("size", value.toInt()).apply()
-        }, valueRange = 7f..17f, steps = 9,
-            // COUI's resting track sits 4dp inside its layout bounds.
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 12.dp).testTag("hint_size"))
-    }
-}
+private fun HintSize(prefs: SharedPreferences) = SizePreference(prefs, "hint_size_enabled", "size",
+    R.string.size_title, 10, 7, 17, "hint_size")
 
 @Composable
-private fun KeyLetterSize(prefs: SharedPreferences) {
-    var checked by remember { mutableStateOf(prefs.getBoolean("key_letter_size_enabled", false)) }
-    var expanded by remember { mutableStateOf(false) }
-    var value by remember { mutableIntStateOf(prefs.getInt("key_letter_size", PrimaryLetterSize.DEFAULT_SP)
-        .coerceIn(PrimaryLetterSize.MIN_SP, PrimaryLetterSize.MAX_SP)) }
+private fun KeyLetterSize(prefs: SharedPreferences) = SizePreference(prefs, "key_letter_size_enabled", "key_letter_size",
+    R.string.key_letter_size_title, PrimaryLetterSize.DEFAULT_SP, PrimaryLetterSize.MIN_SP, PrimaryLetterSize.MAX_SP, "key_letter_size")
+
+@Composable
+private fun SizePreference(prefs: SharedPreferences, enabledKey: String, valueKey: String,
+                           titleResource: Int, defaultSize: Int, minSize: Int, maxSize: Int, tag: String) {
+    var checked by remember(enabledKey) { mutableStateOf(prefs.getBoolean(enabledKey, false)) }
+    var expanded by remember(enabledKey) { mutableStateOf(false) }
+    var value by remember(valueKey) { mutableIntStateOf(prefs.getInt(valueKey, defaultSize).coerceIn(minSize,maxSize)) }
     val toggle: (Boolean) -> Unit = { next ->
         checked = next
         expanded = next
-        val edit = prefs.edit().putBoolean("key_letter_size_enabled", next)
-        if (next) { value = PrimaryLetterSize.DEFAULT_SP; edit.putInt("key_letter_size", value) }
+        val edit = prefs.edit().putBoolean(enabledKey, next)
+        if (next) { value = defaultSize; edit.putInt(valueKey, value) }
         edit.apply()
     }
-    val title = stringResource(R.string.key_letter_size_title)
+    val title = stringResource(titleResource)
     Column(Modifier.fillMaxWidth()) {
         if (!checked) {
             SwitchPreference(checked = false, onCheckedChange = toggle, title = title,
-                modifier = Modifier.testTag("key_letter_size_row"))
+                modifier = Modifier.testTag(tag + "_row"))
         } else {
             BasicComponent(title = title, onClick = { expanded = !expanded },
-                modifier = Modifier.testTag("key_letter_size_row"), endActions = {
+                modifier = Modifier.testTag(tag + "_row"), endActions = {
                     Text("$value sp", style = COUITheme.textStyles.body2,
                         color = COUITheme.colorScheme.onSurfaceSecondary)
                     VerticalDivider(modifier = Modifier.padding(start = 12.dp).height(24.dp), thickness = 1.dp,
                         color = COUITheme.colorScheme.onSurfaceVariantSummary.copy(alpha = .2f))
                     Switch(checked = true, onCheckedChange = toggle,
-                        modifier = Modifier.padding(start = 12.dp).testTag("key_letter_size_switch"))
+                        modifier = Modifier.padding(start = 12.dp).testTag(tag + "_switch"))
                 })
         }
         AnimatedVisibility(visible = checked && expanded,
@@ -317,27 +313,14 @@ private fun KeyLetterSize(prefs: SharedPreferences) {
             exit = shrinkVertically(shrinkTowards = Alignment.Bottom)) {
             Slider(value = value.toFloat(), onValueChange = {
                 value = it.roundToInt()
-                prefs.edit().putInt("key_letter_size", value).apply()
-            }, valueRange = PrimaryLetterSize.MIN_SP.toFloat()..PrimaryLetterSize.MAX_SP.toFloat(),
-                steps = PrimaryLetterSize.MAX_SP - PrimaryLetterSize.MIN_SP - 1,
-                showKeyPoints = true,
-                keyPoints = listOf(PrimaryLetterSize.DEFAULT_SP.toFloat()),
+                prefs.edit().putInt(valueKey, value).apply()
+            }, valueRange = minSize.toFloat()..maxSize.toFloat(), steps = maxSize - minSize - 1,
+                showKeyPoints = true, keyPoints = listOf(defaultSize.toFloat()),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 12.dp)
-                    .padding(vertical = 4.dp).testTag("key_letter_size_slider"))
+                    .padding(top = 12.dp).testTag(tag + "_slider"))
         }
     }
 }
-
-private val RestartIcon = ImageVector.Builder("Restart", 24.dp, 24.dp, 24f, 24f).apply {
-    path(fill = androidx.compose.ui.graphics.SolidColor(Color.Black)) {
-        moveTo(17.65f, 6.35f); curveTo(16.2f, 4.9f, 14.21f, 4f, 12f, 4f)
-        curveTo(7.58f, 4f, 4f, 7.58f, 4f, 12f); curveTo(4f, 16.42f, 7.58f, 20f, 12f, 20f)
-        curveTo(15.73f, 20f, 18.84f, 17.45f, 19.73f, 14f); lineTo(17.65f, 14f)
-        curveTo(16.83f, 16.33f, 14.61f, 18f, 12f, 18f); curveTo(8.69f, 18f, 6f, 15.31f, 6f, 12f)
-        curveTo(6f, 8.69f, 8.69f, 6f, 12f, 6f); curveTo(13.66f, 6f, 15.14f, 6.69f, 16.22f, 7.78f)
-        lineTo(13f, 11f); lineTo(20f, 11f); lineTo(20f, 4f); close()
-    }
-}.build()
 
 @Composable
 private fun RestartMenu(onRestart: () -> Unit) {
@@ -345,7 +328,7 @@ private fun RestartMenu(onRestart: () -> Unit) {
     val title = stringResource(R.string.restart_title)
     Box(Modifier.size(48.dp)) {
         IconButton(onClick = { expanded = true }, modifier = Modifier.fillMaxSize().testTag("restart_menu")) {
-            Icon(imageVector = RestartIcon, contentDescription = title,
+            Icon(imageVector = MiuixIcons.Refresh, contentDescription = title,
                 tint = COUITheme.colorScheme.onSurface, modifier = Modifier.size(24.dp).testTag("restart_icon"))
         }
         WindowDropdownPopup(entry = DropdownEntry(listOf(DropdownItem(text = title, onClick = {

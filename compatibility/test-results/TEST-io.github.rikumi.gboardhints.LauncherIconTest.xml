@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.LauncherIconTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:57.509Z" time="0.011">
-  <properties />
-  <testcase name="moduleSettingsEntryRemainsResolvableAfterHidingLauncher" classname="io.github.rikumi.gboardhints.LauncherIconTest" time="0.01" />
-  <system-out />
-  <system-err />
-</testsuite>
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.LauncherIconTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:49.493Z" hostname="local-validation" time="0.006">
+  <testcase name="moduleSettingsEntryRemainsResolvableAfterHidingLauncher" classname="io.github.rikumi.gboardhints.LauncherIconTest" time="0.006" />
+  </testsuite>

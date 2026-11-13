@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:55.391Z" time="0.052">
-  <properties />
-  <testcase name="nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
-  <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.012" />
-  <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.01" />
-  <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
-  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.009" />
-  <system-out />
-  <system-err />
-</testsuite>
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.648Z" hostname="local-validation" time="0.026">
+  <testcase name="inlinedInflationAndLateKeyAssignmentStillCreateOneNativeEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.005" />
+  <testcase name="staleScreenCannotPreventEntryInCurrentScreen" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.004" />
+  <testcase name="nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
+  <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.004" />
+  <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
+  <testcase name="adapterCreationObservesAnAlreadyInflatedScreenAndItsCategories" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
+  <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
+  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
+  </testsuite>

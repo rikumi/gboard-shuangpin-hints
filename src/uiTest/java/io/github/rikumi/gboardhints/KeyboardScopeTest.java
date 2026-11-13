@@ -34,7 +34,7 @@ public final class KeyboardScopeTest {
         controller = new HintController();
         ReflectionHelpers.setField(controller, "blankEnabled", true);
         for (char c = 'a'; c <= 'z'; c++) {
-            FrameLayout key = new FrameLayout(activity.get());
+            FrameLayout key = new KeyboardKeyFixture(activity.get());
             TextView letter = new TextView(activity.get()); letter.setText(String.valueOf(c));
             letter.setTextSize(TypedValue.COMPLEX_UNIT_PX, 24);
             key.addView(letter); root.addView(key); keys.add(key); letters.add(letter);
@@ -396,6 +396,32 @@ public final class KeyboardScopeTest {
         assertFalse(hint('k'));
         controller.schemeRead("pinyin"); controller.decoderStarted(true); idle();
         for (TextView letter : letters) assertEquals(1f, letter.getAlpha(), 0f);
+    }
+
+    @Test public void globalLetterSizingLeavesObservedSingleCharacterCandidatesAlone() {
+        FrameLayout root = (FrameLayout) keys.get(0).getParent();
+        FrameLayout candidate = new FrameLayout(activity.get());
+        TextView word = new TextView(activity.get()); word.setText("字"); word.setTextSize(TypedValue.COMPLEX_UNIT_PX,18);
+        candidate.addView(word); root.addView(candidate); candidate.layout(0,0,60,40); word.layout(0,0,60,40);
+        controller.observe(candidate,null);
+        ReflectionHelpers.setField(controller,"keyLetterSizeEnabled",true);
+        ReflectionHelpers.setField(controller,"keyLetterSize",40);
+        controller.refreshLater(); idle();
+        assertEquals(18f,word.getTextSize(),.01f);
+        for(TextView letter : letters) assertEquals(40f,letter.getTextSize(),.01f);
+        word.setText("a"); controller.enforceKeyState(candidate);
+        assertEquals(18f,word.getTextSize(),.01f);
+    }
+
+    @Test public void completeSyllablesStillCountAsPreeditEvenWhenNoInitialIsPending() {
+        DynamicHintState state = ReflectionHelpers.getField(controller,"compositionState");
+        controller.engineComposition("ni"); idle();
+        assertEquals("",state.initial()); assertTrue(state.composing());
+        controller.composition(null); idle(); assertTrue(state.composing());
+        controller.engineComposition(""); idle(); assertFalse(state.composing());
+        controller.engineComposition(" \t\u0085\u2009"); idle(); assertFalse(state.composing());
+        controller.engineComposition("nihao", "ni hao"); idle(); assertTrue(state.composing());
+        controller.finish(); idle(); assertFalse(state.composing());
     }
 
 }

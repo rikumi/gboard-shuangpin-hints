@@ -1,0 +1,59 @@
+{
+  "version": "18.6.3.1002251336-beta-arm64-v8a",
+  "baseSha256": "481abda0808b6a2505cd59efb7d3a12b8b4c461c16f33331d09bba86386e5355",
+  "keyboardLayoutHooks": [
+    {
+      "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+      "name": "onLayout",
+      "args": [
+        "Z",
+        "I",
+        "I",
+        "I",
+        "I"
+      ],
+      "return": "V",
+      "access": 4,
+      "code_offset": 3476928
+    }
+  ],
+  "settingsScreenHooks": [
+    {
+      "owner": "Lcom/google/android/libraries/inputmethod/preferencewidgets/CommonPreferenceFragment;",
+      "name": "ax",
+      "args": [
+        "Landroidx/preference/PreferenceScreen;"
+      ],
+      "return": "V",
+      "access": 17,
+      "code_offset": 2428788
+    },
+    {
+      "owner": "Lcom/google/android/libraries/inputmethod/preferencewidgets/CommonPreferenceFragment;",
+      "name": "m",
+      "args": [
+        "Landroidx/preference/PreferenceScreen;"
+      ],
+      "return": "Lpt;",
+      "access": 20,
+      "code_offset": 2426860
+    }
+  ],
+  "keyAppearance": "Clone the original XML layout subtree, including host, before binding; preserve native Shift presentation.",
+  "verification": "Static stock APK inspection and regression tests; on-device behavior remains unverified.",
+  "edgeKeyContentHost": {
+    "sourceExamples": [
+      {
+        "xml": "res/11t.xml",
+        "weightSum": 60,
+        "hostWeight": 56
+      },
+      {
+        "xml": "res/1cK.xml",
+        "weightSum": 69,
+        "hostWeight": 65
+      }
+    ],
+    "fix": "Preserve physical A/L key views and native actions; replace edge-specific XML host, renderer layout and constructor presentation with normal letter presentation from S/K. Restore original XML host and metadata when disabled."
+  }
+}

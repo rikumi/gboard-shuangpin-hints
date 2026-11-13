@@ -16,6 +16,11 @@ import java.lang.reflect.*;
 final class AdaptiveKeyAdapter {
     static final String KEY_CLASS = "com.google.android.libraries.inputmethod.widgets.SoftKeyView";
     static Field metadataField(Class<?> type) {
+        for (Field field : type.getDeclaredFields()) if (!Modifier.isStatic(field.getModifiers())
+                && field.getType().getName().endsWith(".metadata.SoftKeyDef")) {
+            field.setAccessible(true); return field;
+        }
+
         for (Field field : type.getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())) continue;
             for (Field member : field.getType().getDeclaredFields()) {

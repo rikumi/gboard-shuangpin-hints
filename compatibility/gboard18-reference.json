@@ -1,0 +1,49 @@
+{
+  "format": "immutable lists",
+  "binder": {
+    "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+    "name": "s",
+    "args": [
+      "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+      "J"
+    ],
+    "return": "Z",
+    "access": 17,
+    "code_offset": 2071908
+  },
+  "registration": {
+    "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+    "name": "n",
+    "args": [
+      "Landroid/view/View;"
+    ],
+    "return": "V",
+    "access": 18,
+    "code_offset": 2074632
+  },
+  "actionConstructor": {
+    "owner": "Lpva;",
+    "name": "<init>",
+    "args": [
+      "I",
+      "Lpuz;",
+      "Ljava/lang/Object;",
+      "I"
+    ],
+    "return": "V",
+    "access": 65537,
+    "code_offset": 3381284
+  },
+  "positions": [
+    "B00",
+    "C01",
+    "C09",
+    "C10",
+    "D01",
+    "D10"
+  ],
+  "source": "https://github.com/Akshayykadam/PixelBoard/releases/tag/1.3.4",
+  "sha256": "a4628c2e42d3f62028742ee1880c33ce5d96e2a034fcb72ad16a586320cc8fa8",
+  "baseVersion": "18.6.3.1002251336-release",
+  "verification": "Static derivative-package structure only. Not the stock Google Beta APK; no device verification."
+}

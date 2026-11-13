@@ -1,0 +1,6 @@
+The bundled emoji dictionary is a manually reviewed Mainland Simplified Chinese selection of common meanings from Unicode CLDR release-48 (Unicode License v3). Country/region entries use common Chinese short names, without regional-code aliases. The full reviewed list contains fewer than 1000 rows; no Traditional Chinese aliases or unrestricted upstream dictionaries are expanded at build time.
+
+Source: tools/reference/emoji/zh-CN-curated.tsv
+Unicode CLDR: https://github.com/unicode-org/cldr/tree/acd6d88ae493633240e19a87a721076a8a75c310
+Pronunciation generation: pypinyin 0.55.0 (MIT); license in tools/reference/emoji/pypinyin-LICENSE.
+Historical raw Rime and Jieba reference files remain in the source tree for provenance, but are not inputs to the bundled dictionary.

@@ -104,4 +104,34 @@ public class GboardSettingsEntryTest {
         assertTrue(following.p > adapterRows.get(1).p);
     }
 
+    @Test public void inlinedInflationAndLateKeyAssignmentStillCreateOneNativeEntry() throws Exception {
+        Context ctx=RuntimeEnvironment.getApplication();NativeGroup group=new NativeGroup(ctx);
+        GboardSettingsEntryAdapter adapter=adapter();adapter.observe(group);
+        NativeList scheme=new NativeList(ctx);group.al(scheme);
+        adapter.reconcileAll();assertEquals(1,group.b.size());
+        NativePreference next=new NativePreference(ctx);next.q="next";group.al(next);
+        scheme.r="pinyin_scheme";scheme.q="双拼方案";
+        adapter.reconcileAll();adapter.reconcileAll();
+        Collections.sort(group.b);
+        assertEquals(3,group.b.size());assertSame(scheme,group.b.get(0));
+        assertEquals(GboardSettingsEntryAdapter.KEY,group.b.get(1).r);
+        assertEquals(new ComponentName(ctx,SettingsActivity.class),group.b.get(1).s.getComponent());
+    }
+
+    @Test public void adapterCreationObservesAnAlreadyInflatedScreenAndItsCategories() throws Exception {
+        Context ctx=RuntimeEnvironment.getApplication();NativeGroup screen=new NativeGroup(ctx),category=new NativeGroup(ctx);
+        screen.al(category);NativeList scheme=scheme(ctx);category.al(scheme);
+        GboardSettingsEntryAdapter adapter=adapter();adapter.observeTree(screen);adapter.reconcileAll();
+        assertEquals(2,category.b.size());assertEquals(GboardSettingsEntryAdapter.KEY,category.b.get(1).r);
+    }
+
+    @Test public void staleScreenCannotPreventEntryInCurrentScreen() throws Exception {
+        Context ctx=RuntimeEnvironment.getApplication();
+        NativeGroup stale=new NativeGroup(ctx){@Override public void al(NativePreference preference){throw new IllegalStateException("detached manager");}};
+        stale.b.add(scheme(ctx));NativeGroup current=new NativeGroup(ctx);current.al(scheme(ctx));
+        GboardSettingsEntryAdapter adapter=adapter();adapter.observeTree(stale);adapter.observeTree(current);
+        try {adapter.reconcileAll();}catch(java.lang.reflect.InvocationTargetException expected) { }
+        assertEquals(2,current.b.size());assertEquals(GboardSettingsEntryAdapter.KEY,current.b.get(1).r);
+    }
+
 }

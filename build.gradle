@@ -43,7 +43,7 @@ android {
                 throw new GradleException('A persistent signing key is required for release builds.')
         }
     }
-    buildFeatures { compose true }
+    buildFeatures { compose true; buildConfig true }
     buildTypes {
         release {
             minifyEnabled true

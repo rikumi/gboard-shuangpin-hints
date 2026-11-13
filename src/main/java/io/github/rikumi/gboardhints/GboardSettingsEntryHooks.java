@@ -12,6 +12,34 @@ final class GboardSettingsEntryHooks {
         if (preference == null || group == null || list == null) return;
         try {
             GboardSettingsEntryAdapter adapter = new GboardSettingsEntryAdapter(preference, group, list);
+            XposedBridge.hookAllConstructors(group,new XC_MethodHook() {
+                @Override protected void afterHookedMethod(MethodHookParam p) { adapter.observe(p.thisObject); }
+            });
+            for(Method method:preference.getDeclaredMethods()) if(Modifier.isPublic(method.getModifiers())
+                    && !Modifier.isStatic(method.getModifiers()) && method.getReturnType()==void.class && method.getParameterTypes().length<=1) {
+                XposedBridge.hookMethod(method,new XC_MethodHook() {
+                    @Override protected void afterHookedMethod(MethodHookParam p) {
+                        if(p.hasThrowable())return;
+                        try {adapter.observePreference(p.thisObject);adapter.reconcileAll();}
+                        catch(ReflectiveOperationException | RuntimeException e){HintsModule.logFailure("settings entry reconcile",e);}
+                    }
+                });
+            }
+            Class<?> screen=XposedHelpers.findClassIfExists("androidx.preference.PreferenceScreen",loader);
+            Class<?> common=XposedHelpers.findClassIfExists("com.google.android.libraries.inputmethod.preferencewidgets.CommonPreferenceFragment",loader);
+            java.util.Set<Method> screenHooks=new java.util.HashSet<>();
+            if(screen!=null && common!=null)for(Class<?> type=common;type!=Object.class;type=type.getSuperclass())
+                for(Method method:type.getDeclaredMethods())if(!Modifier.isStatic(method.getModifiers())
+                        && !Modifier.isAbstract(method.getModifiers()) && java.util.Arrays.equals(method.getParameterTypes(),new Class<?>[]{screen})
+                        && screenHooks.add(method)) {
+                    XposedBridge.hookMethod(method,new XC_MethodHook(){
+                        @Override protected void beforeHookedMethod(MethodHookParam p) {
+                            if(p.args[0]==null)return;
+                            try {adapter.observeTree(p.args[0]);adapter.reconcileAll();}
+                            catch(ReflectiveOperationException | RuntimeException e){HintsModule.logFailure("settings screen adapter",e);}
+                        }
+                    });
+                }
             int bindings = 0;
             for (Method method : group.getDeclaredMethods()) {
                 if (!Modifier.isPublic(method.getModifiers()) || Modifier.isStatic(method.getModifiers())) continue;

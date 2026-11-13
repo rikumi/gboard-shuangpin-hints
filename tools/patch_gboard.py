@@ -21,17 +21,22 @@ def sha256(path):
     return digest.hexdigest()
 
 
+def download_stream(config, destination):
+    with urllib.request.urlopen(config['url'], timeout=60) as response, destination.open('wb') as stream:
+        shutil.copyfileobj(response, stream)
+
+
 def checked_download(config, output, local=None):
     source = Path(local) if local else output
-    if not local and (not source.exists() or sha256(source) != config['sha256']):
+    expected=config.get('sha256')
+    if not local and (not source.exists() or expected and sha256(source) != expected):
         part = source.with_suffix('.part')
-        with urllib.request.urlopen(config['url'], timeout=120) as response, part.open('wb') as stream:
-            shutil.copyfileobj(response, stream)
-        if sha256(part) != config['sha256']:
+        download_stream(config, part)
+        if expected and sha256(part) != expected:
             part.unlink()
             raise RuntimeError('Downloaded input failed SHA-256 validation')
         part.replace(source)
-    if sha256(source) != config['sha256']:
+    if expected and sha256(source) != expected:
         raise RuntimeError('Input failed SHA-256 validation')
     return source.resolve()
 
@@ -49,13 +54,13 @@ def main():
     parser.add_argument('--module', required=True, type=Path)
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--gboard', type=Path)
+    parser.add_argument('--inputs-config',type=Path)
     parser.add_argument('--lspatch', type=Path)
+    parser.add_argument('--skip-unavailable', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    config = json.loads((root / 'ci/patch-inputs.json').read_text())
+    config = json.loads((args.inputs_config or root / 'ci/patch-inputs.json').read_text())
     work = root / 'build/patch'; work.mkdir(parents=True, exist_ok=True)
-    gboard = checked_download(config['gboard'], work / 'gboard.apk', args.gboard)
-    patcher = checked_download(config['lspatch'], work / 'lspatch.jar', args.lspatch)
     signing_path = os.environ.get('ANDROID_SIGNING_CONFIG')
     if signing_path:
         signing = json.loads(Path(signing_path).read_text())
@@ -67,7 +72,44 @@ def main():
     java = str(Path(os.environ['JAVA_HOME']) / 'bin/java') if os.environ.get('JAVA_HOME') else 'java'
     module = args.module.resolve()
     verify_signature(apksigner, module, config['moduleCertificateSha256'])
-    # The pinned Google APK hash also protects its original signing block.
+    args.output.mkdir(parents=True, exist_ok=True)
+    metadata = json.loads((module.parent / 'output-metadata.json').read_text())
+    version = metadata['elements'][0]['versionName']
+    module_out = args.output / f'gboard-shuangpin-hints-{version}-release.apk'
+    shutil.copy2(module,module_out)
+    def sums(paths):
+        (args.output/'SHA256SUMS').write_text(''.join(f'{sha256(path)}  {path.name}\n' for path in paths))
+    try:
+        source = checked_download(config['gboard'], work/'gboard-input', args.gboard)
+        patcher = checked_download(config['lspatch'], work/'lspatch.jar', args.lspatch)
+    except (OSError, RuntimeError) as error:
+        if not args.skip_unavailable:raise
+        sums([module_out]);print('LSPatch skipped: verified public input unavailable ('+type(error).__name__+'). Module APK prepared.')
+        return
+    inputs=work/'inputs';inputs.mkdir(exist_ok=True)
+    splits=[]
+    with zipfile.ZipFile(source) as archive:
+        if 'AndroidManifest.xml' in archive.namelist():gboard=source
+        else:
+            names=[n for n in archive.namelist() if n.endswith('.apk')]
+            if len({Path(n).name for n in names})!=len(names):raise RuntimeError('Duplicate bundle split names')
+            for name in names:
+                target=inputs/Path(name).name;target.write_bytes(archive.read(name))
+                if target.name=='base.apk':gboard=target
+                else:splits.append(target)
+            if not any(Path(n).name=='base.apk' for n in names):raise RuntimeError('Bundle has no base APK')
+    badging=subprocess.check_output([str(sdk/'build-tools/36.0.0/aapt2'),'dump','badging',str(gboard)],text=True)
+    actual_name=re.search(r"versionName='([^']+)'",badging)
+    package=re.search(r"package: name='([^']+)'",badging)
+    if not actual_name or not actual_name[1].startswith(config['gboard'].get('version','18.')) or not actual_name[1].startswith('18.') or not package or package[1]!='com.google.android.inputmethod.latin':
+        if not args.skip_unavailable:raise RuntimeError('LSPatch requires the selected Gboard 18 package')
+        sums([module_out]);print('LSPatch skipped: downloaded APK is not Gboard 18.');return
+    # Verify the original Google signing root in addition to the pinned archive hash.
+    original_cert=subprocess.check_output([str(apksigner),'verify','--print-certs',str(gboard)],text=True)
+    if 'f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83' not in original_cert:
+        if not args.skip_unavailable:raise RuntimeError('Unexpected Gboard signing root')
+        sums([module_out]);print('LSPatch skipped: Google signature verification failed.');return
+    # Verify the original signing block before passing the APK to LSPatch.
     subprocess.run([str(apksigner), 'verify', str(gboard)], check=True, stdout=subprocess.DEVNULL)
     patched_dir = work / 'output'; patched_dir.mkdir(exist_ok=True)
     for old in patched_dir.glob('*.apk'):
@@ -93,13 +135,25 @@ def main():
             raise RuntimeError('Patched APK does not embed this exact release module')
         if 'assets/lspatch/config.json' not in archive.namelist():
             raise RuntimeError('Missing LSPatch configuration')
-    args.output.mkdir(parents=True, exist_ok=True)
-    metadata = json.loads((module.parent / 'output-metadata.json').read_text())
-    version = metadata['elements'][0]['versionName']
-    module_out = args.output / f'gboard-shuangpin-hints-{version}-release.apk'
-    patched_out = args.output / f'gboard-{config["gboard"]["version"]}-hints-{version}-lspatch.apk'
-    shutil.copy2(module, module_out); shutil.copy2(patched, patched_out)
-    (args.output / 'SHA256SUMS').write_text(''.join(f'{sha256(path)}  {path.name}\n' for path in (module_out, patched_out)))
+    if splits:
+        patched_out=args.output/f'gboard-{config["gboard"]["version"]}-hints-{version}-lspatch.apks'
+        signed=work/'signed-splits';signed.mkdir(exist_ok=True)
+        with zipfile.ZipFile(patched_out,'w',zipfile.ZIP_DEFLATED) as archive:
+            archive.write(patched,'base.apk')
+            for split in splits:
+                split_cert=subprocess.check_output([str(apksigner),'verify','--print-certs',str(split)],text=True)
+                if 'f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83' not in split_cert:
+                    raise RuntimeError('Unexpected original split signing root')
+                output=signed/split.name
+                command=[str(apksigner),'sign','--ks',str(Path(signing['storeFile']).resolve()),'--ks-key-alias',signing['keyAlias'],
+                         '--ks-pass','pass:'+signing['storePassword'],'--key-pass','pass:'+signing['keyPassword'],'--out',str(output),str(split)]
+                result=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+                if result.returncode:raise RuntimeError('Split signing failed')
+                verify_signature(apksigner,output,config['moduleCertificateSha256']);archive.write(output,split.name)
+    else:
+        patched_out=args.output/f'gboard-{config["gboard"]["version"]}-hints-{version}-lspatch.apk'
+        shutil.copy2(patched,patched_out)
+    sums([module_out,patched_out])
     print(f'Prepared {module_out.name} and {patched_out.name}')
 
 

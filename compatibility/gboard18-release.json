@@ -1,0 +1,374 @@
+[
+  {
+    "file": "Gboard_18.6.3.1002251336-release-arm64-v8a.apk",
+    "package": "com.google.android.inputmethod.latin",
+    "versionCode": 176071766,
+    "version": "18.6.3.1002251336-release-arm64-v8a",
+    "sha256": "2b1c28cf650894ead8a95224ac15fce246e61cd54d11e2149c2a13fc24b30d84",
+    "googleSigningRootVerified": true,
+    "metadataField": {
+      "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+      "type": "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+      "name": "e",
+      "access": 1
+    },
+    "bindingMethods": [
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "A",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 2070876
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "c",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;"
+        ],
+        "return": "V",
+        "access": 1,
+        "code_offset": 2072224
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "s",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+          "J"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 2071908
+      }
+    ],
+    "nativeSemicolon": {
+      "format": "immutable lists",
+      "binder": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "s",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+          "J"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 2071908
+      },
+      "registration": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+        "name": "n",
+        "args": [
+          "Landroid/view/View;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 2074632
+      },
+      "actionConstructor": {
+        "owner": "Lpva;",
+        "name": "<init>",
+        "args": [
+          "I",
+          "Lpuz;",
+          "Ljava/lang/Object;",
+          "I"
+        ],
+        "return": "V",
+        "access": 65537,
+        "code_offset": 3381284
+      },
+      "definitionStateFields": [
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n"
+      ],
+      "bindingStateFields": [
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r"
+      ],
+      "positions": [
+        "B00",
+        "C01",
+        "C09",
+        "C10",
+        "D01",
+        "D10"
+      ]
+    },
+    "activationMethods": [
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 20,
+        "code_offset": 4641492
+      },
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 3623272
+      },
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 4056044
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/core/BaseDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 5990284
+      }
+    ],
+    "hmmBasePresent": true,
+    "enginePreedit": {
+      "updates": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "P",
+          "args": [
+            "J"
+          ],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3624548
+        }
+      ],
+      "readers": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "y",
+          "args": [],
+          "return": "Ljava/lang/CharSequence;",
+          "access": 20,
+          "code_offset": 3619996
+        }
+      ],
+      "clearNotifications": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "<init>",
+          "args": [],
+          "return": "V",
+          "access": 65537,
+          "code_offset": 3621024
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aH",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3622892
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aO",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3624200
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aP",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3624264
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "C",
+          "args": [],
+          "return": "V",
+          "access": 131092,
+          "code_offset": 3622396
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "D",
+          "args": [],
+          "return": "V",
+          "access": 20,
+          "code_offset": 3622516
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "E",
+          "args": [],
+          "return": "V",
+          "access": 20,
+          "code_offset": 3622644
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "K",
+          "args": [],
+          "return": "V",
+          "access": 131089,
+          "code_offset": 3624060
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "L",
+          "args": [],
+          "return": "V",
+          "access": 4,
+          "code_offset": 3624116
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "ah",
+          "args": [],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3622768
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aj",
+          "args": [],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3623244
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "j",
+          "args": [],
+          "return": "V",
+          "access": 1,
+          "code_offset": 3623044
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "m",
+          "args": [],
+          "return": "V",
+          "access": 4,
+          "code_offset": 3623548
+        }
+      ],
+      "cache": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "type": "Ljava/lang/CharSequence;",
+          "name": "H",
+          "access": 66
+        }
+      ],
+      "fallbackGetter": [],
+      "emptyTextResetMethods": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+          "name": "aq",
+          "args": [
+            "Ljava/lang/CharSequence;"
+          ],
+          "return": "V",
+          "access": 20,
+          "code_offset": 4055820
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+          "name": "au",
+          "args": [
+            "Ljava/lang/CharSequence;"
+          ],
+          "return": "V",
+          "access": 20,
+          "code_offset": 4057004
+        }
+      ]
+    },
+    "imeActivation": [
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/AbstractIme;",
+        "name": "fz",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z",
+          "Lpwf;"
+        ],
+        "return": "V",
+        "access": 1,
+        "code_offset": 2025568
+      }
+    ],
+    "lifecycleOwners": {
+      "onCreate": "Lpbk;",
+      "onCurrentInputMethodSubtypeChanged": "Lpbk;",
+      "onDestroy": "Lpbk;",
+      "onFinishInputView": "Lpbk;",
+      "onStartInputView": "Lpbk;"
+    },
+    "schemes": [
+      "shuangpin_flypy",
+      "shuangpin_ziranma",
+      "shuangpin_ms",
+      "shuangpin_abc",
+      "shuangpin_ziguang",
+      "shuangpin_jiajia"
+    ],
+    "settingsEntry": {
+      "preferenceFields": {
+        "context": "j",
+        "intent": "s",
+        "title": "q"
+      },
+      "groupChildren": "b",
+      "operations": [
+        "an",
+        "ao"
+      ],
+      "anchorKey": "pinyin_scheme"
+    },
+    "launcherActivity": "com.google.android.libraries.inputmethod.launcher.LauncherActivity",
+    "verification": "static APK structure only; device test pending"
+  }
+]

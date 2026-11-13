@@ -1,33 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.KeyboardScopeTest" tests="27" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:55.702Z" time="1.521">
-  <properties />
-  <testcase name="otherChineseDecodersDoNotKeepShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.077" />
-  <testcase name="letterVisibilitySwitchesIndependentlyWhenThePendingInitialChanges" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.081" />
-  <testcase name="hiddenWaitingLettersDoNotLeakMatchingVowelsOrHideCornerDigits" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.061" />
-  <testcase name="globalNumberHintsHideAcrossEnglishFullPinyinAndNonLatinKeyboards" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.08" />
-  <testcase name="nativeCenterFontStaysUnchangedAcrossShuangpinAndEnglish" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.068" />
-  <testcase name="englishImeActivationRestoresAllLabelsAndRemovesHints" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.069" />
-  <testcase name="symbolsPageRetainsItsOriginalLabels" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.077" />
-  <testcase name="hidingCompoundInitialsRemovesBothTopAndBottomAndRestoresOnDisable" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.061" />
-  <testcase name="forcedLowerInitialsAlsoApplyWhenWaitingHintsAreNotFiltered" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.057" />
-  <testcase name="singleVowelFilterWorksWithAndWithoutBlankingAndRestores" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.058" />
-  <testcase name="initialsOnlyUpdatesAfterCompletedSyllableAndFinalFilterCanBeDisabled" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.079" />
-  <testcase name="spacedMultiSyllablePreeditKeepsFinalFilterAndNativeFontSize" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.031" />
-  <testcase name="defaultLetterModesUseSchemeMappingsAndRestoreOnStateOrLanguageChange" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.033" />
-  <testcase name="queuedWorkerSnapshotCannotRestoreADeletedInitial" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.067" />
-  <testcase name="fullPinyinDisablesShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.036" />
-  <testcase name="pendingStateDoesNotDependOnEnablingFinalHintFiltering" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.055" />
-  <testcase name="pendingFirstFrameRenderIsAppliedBeforeChildrenDraw" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.036" />
-  <testcase name="idleInitialOnlyModeHidesUivAndRestoresThemDuringFinalPhase" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.043" />
-  <testcase name="defaultSelectiveNativeLetterHidingDoesNotRequireHintOverlays" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.022" />
-  <testcase name="microsoftSemicolonKeepsItsNativeSizeWhenHintsAreDrawn" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.031" />
-  <testcase name="formattedInternalPhraseFiltersThenClearImmediatelyRestoresInitialMode" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.049" />
-  <testcase name="matchingNativeKeysKeepOriginalTypefaceColorCaseAndCornerBlanking" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.045" />
-  <testcase name="availableNativeVowelsFilterIndependentlyOfDynamicHintsAndHintMasterSwitch" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.061" />
-  <testcase name="letterFontSizeIsGlobalAndRestoresWhenDisabledOrKeyboardFinishes" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.05" />
-  <testcase name="zeroInitialLettersRenderAndRestoreWithBothBlankModes" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.057" />
-  <testcase name="nativeDrawCannotRestoreHiddenLettersAndDisablingRestoresOriginalAlpha" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.045" />
-  <testcase name="returningToShuangpinRestoresIndependentBlankSwitch" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.087" />
-  <system-out />
-  <system-err />
-</testsuite>
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.KeyboardScopeTest" tests="29" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.790Z" hostname="local-validation" time="0.598">
+  <testcase name="otherChineseDecodersDoNotKeepShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.035" />
+  <testcase name="letterVisibilitySwitchesIndependentlyWhenThePendingInitialChanges" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.033" />
+  <testcase name="hiddenWaitingLettersDoNotLeakMatchingVowelsOrHideCornerDigits" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.023" />
+  <testcase name="globalNumberHintsHideAcrossEnglishFullPinyinAndNonLatinKeyboards" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.021" />
+  <testcase name="nativeCenterFontStaysUnchangedAcrossShuangpinAndEnglish" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.021" />
+  <testcase name="englishImeActivationRestoresAllLabelsAndRemovesHints" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.019" />
+  <testcase name="symbolsPageRetainsItsOriginalLabels" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="hidingCompoundInitialsRemovesBothTopAndBottomAndRestoresOnDisable" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.028" />
+  <testcase name="completeSyllablesStillCountAsPreeditEvenWhenNoInitialIsPending" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.025" />
+  <testcase name="forcedLowerInitialsAlsoApplyWhenWaitingHintsAreNotFiltered" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.022" />
+  <testcase name="singleVowelFilterWorksWithAndWithoutBlankingAndRestores" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.027" />
+  <testcase name="initialsOnlyUpdatesAfterCompletedSyllableAndFinalFilterCanBeDisabled" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.023" />
+  <testcase name="spacedMultiSyllablePreeditKeepsFinalFilterAndNativeFontSize" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.017" />
+  <testcase name="defaultLetterModesUseSchemeMappingsAndRestoreOnStateOrLanguageChange" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.022" />
+  <testcase name="queuedWorkerSnapshotCannotRestoreADeletedInitial" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="fullPinyinDisablesShuangpinFeatures" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.016" />
+  <testcase name="pendingStateDoesNotDependOnEnablingFinalHintFiltering" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.017" />
+  <testcase name="globalLetterSizingLeavesObservedSingleCharacterCandidatesAlone" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="pendingFirstFrameRenderIsAppliedBeforeChildrenDraw" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="idleInitialOnlyModeHidesUivAndRestoresThemDuringFinalPhase" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.02" />
+  <testcase name="defaultSelectiveNativeLetterHidingDoesNotRequireHintOverlays" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.017" />
+  <testcase name="microsoftSemicolonKeepsItsNativeSizeWhenHintsAreDrawn" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.018" />
+  <testcase name="formattedInternalPhraseFiltersThenClearImmediatelyRestoresInitialMode" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.016" />
+  <testcase name="matchingNativeKeysKeepOriginalTypefaceColorCaseAndCornerBlanking" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.016" />
+  <testcase name="availableNativeVowelsFilterIndependentlyOfDynamicHintsAndHintMasterSwitch" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.016" />
+  <testcase name="letterFontSizeIsGlobalAndRestoresWhenDisabledOrKeyboardFinishes" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.021" />
+  <testcase name="zeroInitialLettersRenderAndRestoreWithBothBlankModes" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.014" />
+  <testcase name="nativeDrawCannotRestoreHiddenLettersAndDisablingRestoresOriginalAlpha" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.014" />
+  <testcase name="returningToShuangpinRestoresIndependentBlankSwitch" classname="io.github.rikumi.gboardhints.KeyboardScopeTest" time="0.014" />
+  </testsuite>

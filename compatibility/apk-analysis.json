@@ -24,6 +24,71 @@
         "code_offset": 3226768
       }
     ],
+    "nativeSemicolon": {
+      "binder": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "a",
+        "args": [
+          "Llhz;"
+        ],
+        "return": "V",
+        "access": 17,
+        "code_offset": 3226768
+      },
+      "registration": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+        "name": "a",
+        "args": [
+          "Landroid/view/View;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 3230472
+      },
+      "pressAction": {
+        "bindings": {
+          "owner": "Llhz;",
+          "type": "[Llez;",
+          "name": "m",
+          "access": 17
+        },
+        "actions": {
+          "owner": "Llez;",
+          "type": "[Lcom/google/android/libraries/inputmethod/metadata/KeyData;",
+          "name": "d",
+          "access": 17
+        },
+        "phase": [
+          {
+            "owner": "Llez;",
+            "type": "Llet;",
+            "name": "c",
+            "access": 17
+          }
+        ],
+        "constructor": [
+          {
+            "owner": "Lcom/google/android/libraries/inputmethod/metadata/KeyData;",
+            "name": "<init>",
+            "args": [
+              "I",
+              "Llfs;",
+              "Ljava/lang/Object;"
+            ],
+            "return": "V",
+            "access": 65537,
+            "code_offset": 3207432
+          }
+        ]
+      },
+      "positions": [
+        "key_pos_1_0",
+        "key_pos_1_8",
+        "key_pos_1_9",
+        "key_pos_0_0",
+        "key_pos_0_9"
+      ]
+    },
     "activationMethods": [
       {
         "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;",
@@ -131,134 +196,6 @@
         "code_offset": 3195388
       }
     ],
-    "inlineUppercase": {
-      "dispatch": {
-        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-        "name": "a",
-        "args": [
-          "Lknc;"
-        ],
-        "return": "Z",
-        "access": 17,
-        "code_offset": 3204504
-      },
-      "actions": {
-        "owner": "Lknc;",
-        "type": "[Lcom/google/android/libraries/inputmethod/metadata/KeyData;",
-        "name": "b",
-        "access": 1
-      },
-      "constructor": {
-        "owner": "Lcom/google/android/libraries/inputmethod/metadata/KeyData;",
-        "name": "<init>",
-        "args": [
-          "I",
-          "Llfs;",
-          "Ljava/lang/Object;"
-        ],
-        "return": "V",
-        "access": 65537,
-        "code_offset": 3207432
-      },
-      "phase": {
-        "owner": "Lknc;",
-        "type": "Llet;",
-        "name": "a",
-        "access": 1
-      },
-      "intention": "DECODE",
-      "primaryDecoderPaths": [
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Lkut;",
-            "name": "a",
-            "access": 4
-          },
-          "candidate": {
-            "owner": "Lkut;",
-            "type": "[Lkur;",
-            "name": "a",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        },
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Lkut;",
-            "name": "a",
-            "access": 4
-          },
-          "candidate": {
-            "owner": "Lkut;",
-            "type": "Lkuq;",
-            "name": "b",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        }
-      ],
-      "decoderEventHandlers": [
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/AbstractHmmPinyinDecodeProcessor;",
-          "name": "a",
-          "args": [
-            "Lknc;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 3029436
-        },
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
-          "name": "b",
-          "args": [
-            "Lknc;"
-          ],
-          "return": "Z",
-          "access": 20,
-          "code_offset": 2834860
-        },
-        {
-          "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/BaseDecodeProcessor;",
-          "name": "a",
-          "args": [
-            "Lknc;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 3202636
-        }
-      ],
-      "identification": "PRESS + DECODE apostrophe; no position ID required",
-      "nativeSeparatorLayouts": [
-        {
-          "file": "res/fWC.xml",
-          "definitionId": "0x7f0b1da0",
-          "keycode": "KEYCODE_7",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/qUd.xml",
-          "definitionId": "0x7f0b08fb",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/sqN.xml",
-          "definitionId": "0x7f0b0ced",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        }
-      ]
-    },
     "lifecycleOwners": {
       "onCreate": "Ledb;",
       "onCurrentInputMethodSubtypeChanged": "Ledb;",
@@ -315,6 +252,71 @@
         "code_offset": 6591616
       }
     ],
+    "nativeSemicolon": {
+      "binder": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "b",
+        "args": [
+          "Litu;"
+        ],
+        "return": "Z",
+        "access": 1,
+        "code_offset": 6591616
+      },
+      "registration": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+        "name": "z",
+        "args": [
+          "Landroid/view/View;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 6600300
+      },
+      "pressAction": {
+        "bindings": {
+          "owner": "Litu;",
+          "type": "[Lirh;",
+          "name": "l",
+          "access": 17
+        },
+        "actions": {
+          "owner": "Lirh;",
+          "type": "[Lisa;",
+          "name": "d",
+          "access": 17
+        },
+        "phase": [
+          {
+            "owner": "Lirh;",
+            "type": "Lire;",
+            "name": "c",
+            "access": 17
+          }
+        ],
+        "constructor": [
+          {
+            "owner": "Lisa;",
+            "name": "<init>",
+            "args": [
+              "I",
+              "Lirz;",
+              "Ljava/lang/Object;"
+            ],
+            "return": "V",
+            "access": 65537,
+            "code_offset": 6022604
+          }
+        ]
+      },
+      "positions": [
+        "key_pos_1_0",
+        "key_pos_1_8",
+        "key_pos_1_9",
+        "key_pos_0_0",
+        "key_pos_0_9"
+      ]
+    },
     "activationMethods": [
       {
         "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;",
@@ -521,150 +523,6 @@
         "code_offset": 5587608
       }
     ],
-    "inlineUppercase": {
-      "dispatch": {
-        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-        "name": "c",
-        "args": [
-          "Lhlv;"
-        ],
-        "return": "Z",
-        "access": 17,
-        "code_offset": 5619192
-      },
-      "actions": {
-        "owner": "Lhlv;",
-        "type": "[Lisa;",
-        "name": "b",
-        "access": 1
-      },
-      "constructor": {
-        "owner": "Lisa;",
-        "name": "<init>",
-        "args": [
-          "I",
-          "Lirz;",
-          "Ljava/lang/Object;"
-        ],
-        "return": "V",
-        "access": 65537,
-        "code_offset": 6022604
-      },
-      "phase": {
-        "owner": "Lhlv;",
-        "type": "Lire;",
-        "name": "a",
-        "access": 1
-      },
-      "intention": "DECODE",
-      "primaryDecoderPaths": [
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Libm;",
-            "name": "a",
-            "access": 17
-          },
-          "candidate": {
-            "owner": "Libm;",
-            "type": "Ljava/lang/Object;",
-            "name": "a",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        },
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Libm;",
-            "name": "a",
-            "access": 17
-          },
-          "candidate": {
-            "owner": "Libm;",
-            "type": "Ljava/lang/Object;",
-            "name": "b",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        }
-      ],
-      "decoderEventHandlers": [
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/AbstractHmmPinyinDecodeProcessor;",
-          "name": "o",
-          "args": [
-            "Lhlv;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 4291616
-        },
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
-          "name": "T",
-          "args": [
-            "Lhlv;"
-          ],
-          "return": "Z",
-          "access": 20,
-          "code_offset": 3148824
-        },
-        {
-          "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/BaseDecodeProcessor;",
-          "name": "o",
-          "args": [
-            "Lhlv;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 5616440
-        }
-      ],
-      "identification": "PRESS + DECODE apostrophe; no position ID required",
-      "nativeSeparatorLayouts": [
-        {
-          "file": "res/BBI.xml",
-          "definitionId": "0x7f0b1b28",
-          "keycode": "KEYCODE_7",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/b86.xml",
-          "definitionId": "0x7f0b06a9",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/beT.xml",
-          "definitionId": "0x7f0b06a9",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/feO.xml",
-          "definitionId": "0x7f0b0a9e",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/mGu.xml",
-          "definitionId": "0x7f0b1b28",
-          "keycode": "KEYCODE_7",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        }
-      ]
-    },
     "lifecycleOwners": {
       "onCreate": "Libx;",
       "onCurrentInputMethodSubtypeChanged": "Libx;",
@@ -732,6 +590,72 @@
         "code_offset": 3963280
       }
     ],
+    "nativeSemicolon": {
+      "binder": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "p",
+        "args": [
+          "Lnhp;",
+          "J"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 3963280
+      },
+      "registration": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+        "name": "j",
+        "args": [
+          "Landroid/view/View;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 3972688
+      },
+      "pressAction": {
+        "bindings": {
+          "owner": "Lnhp;",
+          "type": "[Lnfb;",
+          "name": "m",
+          "access": 17
+        },
+        "actions": {
+          "owner": "Lnfb;",
+          "type": "[Lnfv;",
+          "name": "d",
+          "access": 17
+        },
+        "phase": [
+          {
+            "owner": "Lnfb;",
+            "type": "Lney;",
+            "name": "c",
+            "access": 17
+          }
+        ],
+        "constructor": [
+          {
+            "owner": "Lnfv;",
+            "name": "<init>",
+            "args": [
+              "I",
+              "Lnfu;",
+              "Ljava/lang/Object;"
+            ],
+            "return": "V",
+            "access": 65537,
+            "code_offset": 2767428
+          }
+        ]
+      },
+      "positions": [
+        "C01",
+        "C09",
+        "C10",
+        "D01",
+        "D10"
+      ]
+    },
     "activationMethods": [
       {
         "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;",
@@ -938,160 +862,6 @@
         "code_offset": 2289604
       }
     ],
-    "inlineUppercase": {
-      "dispatch": {
-        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-        "name": "ff",
-        "args": [
-          "Llut;"
-        ],
-        "return": "Z",
-        "access": 17,
-        "code_offset": 2320580
-      },
-      "actions": {
-        "owner": "Llut;",
-        "type": "[Lnfv;",
-        "name": "b",
-        "access": 1
-      },
-      "constructor": {
-        "owner": "Lnfv;",
-        "name": "<init>",
-        "args": [
-          "I",
-          "Lnfu;",
-          "Ljava/lang/Object;"
-        ],
-        "return": "V",
-        "access": 65537,
-        "code_offset": 2767428
-      },
-      "phase": {
-        "owner": "Llut;",
-        "type": "Lney;",
-        "name": "a",
-        "access": 1
-      },
-      "intention": "DECODE",
-      "primaryDecoderPaths": [
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Lmgx;",
-            "name": "a",
-            "access": 17
-          },
-          "candidate": {
-            "owner": "Lmgx;",
-            "type": "[Lmgv;",
-            "name": "b",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        },
-        {
-          "manager": {
-            "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
-            "type": "Lmgx;",
-            "name": "a",
-            "access": 17
-          },
-          "candidate": {
-            "owner": "Lmgx;",
-            "type": "Lcom/google/android/libraries/inputmethod/ime/processor/core/BaseDecodeProcessor;",
-            "name": "c",
-            "access": 1
-          },
-          "selection": "runtime BaseDecodeProcessor instance; direct field preferred"
-        }
-      ],
-      "decoderEventHandlers": [
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/AbstractHmmPinyinDecodeProcessor;",
-          "name": "o",
-          "args": [
-            "Llut;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 5342432
-        },
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
-          "name": "W",
-          "args": [
-            "Llut;"
-          ],
-          "return": "Z",
-          "access": 20,
-          "code_offset": 3820756
-        },
-        {
-          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
-          "name": "X",
-          "args": [
-            "Llut;"
-          ],
-          "return": "Z",
-          "access": 20,
-          "code_offset": 3821260
-        },
-        {
-          "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/core/BaseDecodeProcessor;",
-          "name": "o",
-          "args": [
-            "Llut;"
-          ],
-          "return": "Z",
-          "access": 4,
-          "code_offset": 2323108
-        }
-      ],
-      "identification": "PRESS + DECODE apostrophe; no position ID required",
-      "nativeSeparatorLayouts": [
-        {
-          "file": "res/BBI.xml",
-          "definitionId": "0x7f0b1f6c",
-          "keycode": "KEYCODE_7",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/b86.xml",
-          "definitionId": "0x7f0b0808",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/beT.xml",
-          "definitionId": "0x7f0b0808",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/feO.xml",
-          "definitionId": "0x7f0b0cab",
-          "keycode": "APOSTROPHE",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        },
-        {
-          "file": "res/mGu.xml",
-          "definitionId": "0x7f0b1f6c",
-          "keycode": "KEYCODE_7",
-          "data": "'",
-          "intention": "DECODE",
-          "phase": "PRESS"
-        }
-      ]
-    },
     "lifecycleOwners": {
       "onCreate": "Lmoa;",
       "onCurrentInputMethodSubtypeChanged": "Lmoa;",
@@ -1117,6 +887,378 @@
       "operations": [
         "al",
         "am"
+      ],
+      "anchorKey": "pinyin_scheme"
+    },
+    "launcherActivity": "com.google.android.libraries.inputmethod.launcher.LauncherActivity",
+    "verification": "static APK structure only; device test pending"
+  },
+  {
+    "file": "Gboard_18.6.3.1002251336-beta-arm64-v8a.apks/base.apk",
+    "package": "com.google.android.inputmethod.latin",
+    "versionCode": 176071774,
+    "version": "18.6.3.1002251336-beta-arm64-v8a",
+    "sha256": "481abda0808b6a2505cd59efb7d3a12b8b4c461c16f33331d09bba86386e5355",
+    "googleSigningRootVerified": true,
+    "metadataField": {
+      "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+      "type": "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+      "name": "e",
+      "access": 1
+    },
+    "bindingMethods": [
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "A",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 3474576
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "c",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;"
+        ],
+        "return": "V",
+        "access": 1,
+        "code_offset": 3475924
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "s",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+          "J"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 3475608
+      }
+    ],
+    "nativeSemicolon": {
+      "format": "immutable lists",
+      "binder": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;",
+        "name": "s",
+        "args": [
+          "Lcom/google/android/libraries/inputmethod/metadata/SoftKeyDef;",
+          "J"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 3475608
+      },
+      "registration": {
+        "owner": "Lcom/google/android/libraries/inputmethod/widgets/SoftKeyboardView;",
+        "name": "n",
+        "args": [
+          "Landroid/view/View;"
+        ],
+        "return": "V",
+        "access": 18,
+        "code_offset": 3478332
+      },
+      "actionConstructor": {
+        "owner": "Lafru;",
+        "name": "<init>",
+        "args": [
+          "I",
+          "Lafrt;",
+          "Ljava/lang/Object;",
+          "I"
+        ],
+        "return": "V",
+        "access": 65537,
+        "code_offset": 2098760
+      },
+      "definitionStateFields": [
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o"
+      ],
+      "bindingStateFields": [
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s"
+      ],
+      "positions": [
+        "B00",
+        "C01",
+        "C09",
+        "C10",
+        "D01",
+        "D10"
+      ]
+    },
+    "activationMethods": [
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/pinyin/HmmPinyinQwertyDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 20,
+        "code_offset": 4804248
+      },
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 3714108
+      },
+      {
+        "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 4180792
+      },
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/core/BaseDecodeProcessor;",
+        "name": "k",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z"
+        ],
+        "return": "V",
+        "access": 4,
+        "code_offset": 2124076
+      }
+    ],
+    "hmmBasePresent": true,
+    "enginePreedit": {
+      "updates": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "Q",
+          "args": [
+            "J"
+          ],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3715388
+        }
+      ],
+      "readers": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "z",
+          "args": [],
+          "return": "Ljava/lang/CharSequence;",
+          "access": 20,
+          "code_offset": 3710856
+        }
+      ],
+      "clearNotifications": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "<init>",
+          "args": [],
+          "return": "V",
+          "access": 65537,
+          "code_offset": 3711848
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aH",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3713728
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aO",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3715040
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aP",
+          "args": [],
+          "return": "V",
+          "access": 18,
+          "code_offset": 3715104
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "D",
+          "args": [],
+          "return": "V",
+          "access": 131092,
+          "code_offset": 3713232
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "E",
+          "args": [],
+          "return": "V",
+          "access": 20,
+          "code_offset": 3713352
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "F",
+          "args": [],
+          "return": "V",
+          "access": 20,
+          "code_offset": 3713480
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "L",
+          "args": [],
+          "return": "V",
+          "access": 131089,
+          "code_offset": 3714900
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "M",
+          "args": [],
+          "return": "V",
+          "access": 4,
+          "code_offset": 3714956
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "ah",
+          "args": [],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3713604
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "aj",
+          "args": [],
+          "return": "V",
+          "access": 17,
+          "code_offset": 3714080
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "j",
+          "args": [],
+          "return": "V",
+          "access": 1,
+          "code_offset": 3713880
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "name": "m",
+          "args": [],
+          "return": "V",
+          "access": 4,
+          "code_offset": 3714388
+        }
+      ],
+      "cache": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/chinese/ime/hmm/AbstractHmmChineseDecodeProcessor;",
+          "type": "Ljava/lang/CharSequence;",
+          "name": "H",
+          "access": 66
+        }
+      ],
+      "fallbackGetter": [],
+      "emptyTextResetMethods": [
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+          "name": "aq",
+          "args": [
+            "Ljava/lang/CharSequence;"
+          ],
+          "return": "V",
+          "access": 20,
+          "code_offset": 4180568
+        },
+        {
+          "owner": "Lcom/google/android/apps/inputmethod/libs/hmm/AbstractHmmDecodeProcessor;",
+          "name": "au",
+          "args": [
+            "Ljava/lang/CharSequence;"
+          ],
+          "return": "V",
+          "access": 20,
+          "code_offset": 4181752
+        }
+      ]
+    },
+    "imeActivation": [
+      {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/AbstractIme;",
+        "name": "dF",
+        "args": [
+          "Landroid/view/inputmethod/EditorInfo;",
+          "Z",
+          "Lafuk;"
+        ],
+        "return": "V",
+        "access": 1,
+        "code_offset": 3428968
+      }
+    ],
+    "lifecycleOwners": {
+      "onCreate": "Laeht;",
+      "onCurrentInputMethodSubtypeChanged": "Laeht;",
+      "onDestroy": "Laeht;",
+      "onFinishInputView": "Laeht;",
+      "onStartInputView": "Laeht;"
+    },
+    "schemes": [
+      "shuangpin_flypy",
+      "shuangpin_ziranma",
+      "shuangpin_ms",
+      "shuangpin_abc",
+      "shuangpin_ziguang",
+      "shuangpin_jiajia"
+    ],
+    "settingsEntry": {
+      "preferenceFields": {
+        "context": "j",
+        "intent": "s",
+        "title": "q"
+      },
+      "groupChildren": "b",
+      "operations": [
+        "an",
+        "ao"
       ],
       "anchorKey": "pinyin_scheme"
     },

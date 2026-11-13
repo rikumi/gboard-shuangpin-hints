@@ -1,8 +1,8 @@
 {
   "gboard": {
-    "version": "16.6.3.855170483",
-    "url": "https://github.com/SuperSaveGroup/GBoardAPK/releases/download/16.6.3.855170483/Gboard.-.the.Google.Keyboard_16.6.3.855170483-release-arm64-v8a_APKPure.apk",
-    "sha256": "04f6eb301f558141cd8afa8848f7cc51264f0991ba3ec83c2b5cf91ba9cb97ce"
+    "version": "18.6.3.1002251336-release-arm64-v8a",
+    "url": "https://github.com/rikumi/gboard-shuangpin-hints/releases/download/gboard-input-18.6.3/Gboard_18.6.3.1002251336-release-arm64-v8a.apk",
+    "sha256": "2b1c28cf650894ead8a95224ac15fce246e61cd54d11e2149c2a13fc24b30d84"
   },
   "lspatch": {
     "version": "1.2",

@@ -56,4 +56,31 @@ public final class ConfigStoreTest {
         ConfigStore.prefs(app).edit().putBoolean("blank_keys", false).commit();
         assertFalse(app.getSharedPreferences("config", 0).getBoolean("blank_keys", true));
     }
+    @Test public void dictionaryUpdateIgnoresOldSameVersionCache() throws Exception {
+        Context app=RuntimeEnvironment.getApplication();
+        Context storage=app.createDeviceProtectedStorageContext();
+        java.io.File stale=new java.io.File(storage.getCacheDir(),"emoji-"+BuildConfig.VERSION_CODE+"-XIAOHE.tsv");
+        try(java.io.FileWriter writer=new java.io.FileWriter(stale)) { writer.write("ui\t🐖\n"); }
+        ConfigProvider provider=Robolectric.buildContentProvider(ConfigProvider.class).create().get();
+        try(android.content.res.AssetFileDescriptor file=provider.openAssetFile(
+                android.net.Uri.parse("content://io.github.rikumi.gboardhints.config/emoji/XIAOHE"),"r");
+            java.io.Reader reader=new java.io.InputStreamReader(file.createInputStream(),"UTF-8")) {
+            assertEquals("💩",new EmojiLexicon(reader).match("ui").get(0));
+        }
+    }
+    @Test public void emojiDictionaryProviderOnlyExposesBundledReadOnlyProfiles() throws Exception {
+        ConfigProvider provider=Robolectric.buildContentProvider(ConfigProvider.class).create().get();
+        android.net.Uri uri=android.net.Uri.parse("content://io.github.rikumi.gboardhints.config/emoji/XIAOHE");
+        try(android.content.res.AssetFileDescriptor file=provider.openAssetFile(uri,"r");
+            java.io.InputStream input=file.createInputStream()) {
+            assertTrue(file.getLength()>1000 && file.getLength()<200000);assertTrue(input.read()>=0);
+        }
+        for(String path:new String[]{"/emoji/unknown","/emoji/../config","/preferences","/emoji/full/extra"}) {
+            try {provider.openAssetFile(android.net.Uri.parse("content://io.github.rikumi.gboardhints.config"+path),"r");fail(path);}
+            catch(java.io.FileNotFoundException expected) { }
+        }
+        try {provider.openAssetFile(uri,"w");fail("writes allowed");}
+        catch(java.io.FileNotFoundException expected) { }
+    }
+
 }

@@ -23,8 +23,22 @@ final class HintController {
     private int startupAttempt;
     private static final long[] CONFIG_RETRY_DELAYS = {100, 400, 1000, 2000, 4000, 8000};
     private final Runnable configRetry = () -> refreshConfiguration(false);
-    private boolean enabled = true, dynamic = true, visible, pinyinActive, password;
+    private boolean enabled = true, dynamic = true, visible, pinyinActive, chineseActive, password, showSemicolon;
+    private SemicolonKeys semicolonKeys;
+    void nativeKeys(NativeKeyAdapter adapter) { semicolonKeys = new SemicolonKeys(adapter); }
+    private boolean inlineUppercaseEnabled, inlineReady, inlineArmed;
+    void inlineSupported(boolean supported) { inlineReady = supported; }
+    boolean inlineUppercaseConfigured() { return inlineReady && inlineUppercaseEnabled && service != null && visible && !password; }
+    boolean inlineUppercaseActive() { return inlineUppercaseConfigured() && chineseActive; }
+    boolean inlineUppercaseArmed() { return inlineUppercaseActive() && inlineArmed; }
+    void inlineDecoderObserved(boolean chinese) { chineseActive = chinese; if (!chinese) inlineArmed = false; }
+    void toggleInlineUppercase() { if (inlineUppercaseActive()) inlineArmed = !inlineArmed; refreshLater(); }
+    void cancelInlineUppercase() { inlineArmed = false; refreshLater(); }
     private int size = 10;
+    private volatile boolean flexibleEmoji;
+    Context context() { return service; }
+    boolean emojiAllowed() { return flexibleEmoji && chineseActive && visible && !password; }
+    String emojiScheme() { return pinyinActive ? automatic : null; }
     private boolean blankEnabled, initialsOnly, singleVowels, hideCompoundInitials, hideNumberHints;
     private boolean stateOptionsConfigured, defaultLetters = true, finalsLetters = true, initialsBelow;
     private boolean defaultVisibilityConfigured;
@@ -71,14 +85,15 @@ final class HintController {
         observerRegistered = false; unlockReceiver = null;
         main.removeCallbacks(configRetry);
         engineUpdates.incrementAndGet();
-        service = null; visible = false; pinyinActive = false; compositionState.reset();
+        if (semicolonKeys != null) semicolonKeys.restore();
+        service = null; visible = false; pinyinActive = false; chineseActive = false; compositionState.reset();
         render();
         for (KeyState key : keys.values()) { key.labels.restore(); key.letterSize.restore(); }
         main.removeCallbacks(renderTask); scheduled = false;
     }
     void start(EditorInfo info) {
         engineUpdates.incrementAndGet();
-        refreshConfiguration(true); visible = true; compositionState.reset();
+        inlineArmed = false; refreshConfiguration(true); visible = true; compositionState.reset();
         password = isPassword(info == null ? 0 : info.inputType);
         refreshLater();
     }
@@ -90,19 +105,22 @@ final class HintController {
                 || variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 || variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD);
     }
-    void finish() { engineUpdates.incrementAndGet(); visible = false; compositionState.reset(); refreshLater(); }
+    void finish() { inlineArmed = false; engineUpdates.incrementAndGet(); visible = false; compositionState.reset(); refreshLater(); }
     void imeActivated() {
+        inlineArmed = false;
         long revision = engineUpdates.incrementAndGet();
-        Runnable reset = () -> { pinyinActive = false;
+        Runnable reset = () -> { pinyinActive = false; chineseActive = false;
             if (revision == engineUpdates.get()) compositionState.reset(); refreshLater(); };
         if (Looper.myLooper() == main.getLooper()) reset.run(); else main.post(reset);
     }
-    void decoderStarted(boolean pinyin) {
+    void decoderStarted(boolean pinyin) { decoderStarted(pinyin,pinyin); }
+    void decoderStarted(boolean pinyin, boolean chinese) {
         long revision = engineUpdates.incrementAndGet();
-        main.post(() -> { pinyinActive = pinyin;
+        main.post(() -> { pinyinActive = pinyin; chineseActive = chinese;
             if (revision == engineUpdates.get()) compositionState.reset(); refreshLater(); });
     }
     void subtypeChanged(InputMethodSubtype subtype) {
+        inlineArmed = false;
         engineUpdates.incrementAndGet(); compositionState.reset(); refreshLater();
     }
     void schemeRead(String value) {
@@ -113,24 +131,32 @@ final class HintController {
         // Retain only a possible initial, never the composition or committed text.
         final String next = HintEngine.independentInitial(text,
                 automatic);
-        main.post(() -> { compositionState.clientInitial(next); refreshLater(); });
+        final boolean composing = hasPreedit(text);
+        main.post(() -> { compositionState.clientInitial(next,composing); refreshLater(); });
     }
     void engineComposition(CharSequence text) {
         final String next = HintEngine.independentInitial(text,
                 automatic);
-        applyEngineInitial(next);
+        applyEngineInitial(next, hasPreedit(text));
     }
     String engineComposition(CharSequence raw, CharSequence segmented) {
         String next = HintEngine.pendingEngineInitial(raw, segmented,
                 automatic);
-        applyEngineInitial(next);
+        applyEngineInitial(next, hasPreedit(raw != null ? raw : segmented));
         return next;
     }
-    private void applyEngineInitial(String next) {
+    private static boolean hasPreedit(CharSequence text) {
+        if (text != null) for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (!Character.isWhitespace(c) && !Character.isSpaceChar(c) && c != '\u0085') return true;
+        }
+        return false;
+    }
+    private void applyEngineInitial(String next, boolean composing) {
         long revision = engineUpdates.incrementAndGet();
         Runnable update = () -> {
             if (revision != engineUpdates.get()) return;
-            compositionState.engineInitial(next); refreshLater();
+            compositionState.engineInitial(next,composing); refreshLater();
         };
         if (Looper.myLooper() == main.getLooper()) update.run(); else main.post(update);
     }
@@ -204,6 +230,13 @@ final class HintController {
                     finalsLetters = cursor.getInt(finals) != 0;
                     initialsBelow = cursor.getInt(below) != 0;
                 }
+                int semicolon = cursor.getColumnIndex("show_semicolon");
+                showSemicolon = semicolon >= 0 && cursor.getInt(semicolon) != 0;
+                inlineUppercaseEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("inline_uppercase")) != 0;
+                if (!inlineUppercaseEnabled) inlineArmed = false;
+                int emoji = cursor.getColumnIndex("flexible_emoji");
+                flexibleEmoji = emoji >= 0 && cursor.getInt(emoji) != 0;
+                if(flexibleEmoji) EmojiLexicon.request(service,emojiScheme(),null);
                 int defaultsMode = cursor.getColumnIndex("default_visibility");
                 defaultVisibilityConfigured = defaultsMode >= 0;
                 defaultVisibility = defaultsMode < 0 ? StateOptions.DEFAULT_ALL : Math.max(StateOptions.DEFAULT_ALL,
@@ -222,6 +255,8 @@ final class HintController {
     }
     private void render() {
         String scheme = automatic;
+        if (semicolonKeys != null) semicolonKeys.update(new ArrayList<>(keys.keySet()), showSemicolon && visible && !password,
+                chineseActive && visible && !password, pinyinActive, compositionState.composing(), scheme, inlineUppercaseActive());
         ArrayList<Map.Entry<View, KeyState>> snapshot = new ArrayList<>(keys.entrySet());
         Map<View, Character> labels = new IdentityHashMap<>();
         Set<Character> alphabet = new HashSet<>();

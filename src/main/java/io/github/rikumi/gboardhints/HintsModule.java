@@ -33,12 +33,20 @@ public final class HintsModule implements IXposedHookLoadPackage {
             }
         });
         Field metadata = AdaptiveKeyAdapter.metadataField(keys);
+        if (metadata != null) try { controller.nativeKeys(new NativeKeyAdapter(keys,metadata)); }
+        catch (ReflectiveOperationException | RuntimeException e) { logFailure("native semicolon adapter",e); }
         XposedBridge.hookAllConstructors(keys, new XC_MethodHook() {
             @Override protected void afterHookedMethod(MethodHookParam p) {
                 try { controller.observe((View)p.thisObject, metadata); }
                 catch (RuntimeException e) { logFailure("observe", e); }
             }
         });
+        Class<?> keyboard=XposedHelpers.findClassIfExists("com.google.android.libraries.inputmethod.widgets.SoftKeyboardView",param.classLoader);
+        if(keyboard!=null)try {
+            XposedBridge.hookMethod(implementation(keyboard,"onLayout",boolean.class,int.class,int.class,int.class,int.class),new XC_MethodHook(){
+                @Override protected void afterHookedMethod(MethodHookParam p){controller.refreshLater();}
+            });
+        } catch(NoSuchMethodException | RuntimeException error){logFailure("native keyboard layout",error);}
         int bindings = 0;
         if (metadata != null) for (Method method : keys.getDeclaredMethods()) {
             if (Modifier.isStatic(method.getModifiers())) continue;
@@ -101,6 +109,17 @@ public final class HintsModule implements IXposedHookLoadPackage {
                 "com.google.android.apps.inputmethod.libs.hmm.AbstractHmmDecodeProcessor", param.classLoader);
         Class<?> chinese = XposedHelpers.findClassIfExists(
                 "com.google.android.apps.inputmethod.libs.chinese.ime.hmm.AbstractHmmChineseDecodeProcessor", param.classLoader);
+        InlineUppercaseHooks inline = new InlineUppercaseHooks(param.classLoader, controller, chinese, processor);
+        controller.inlineSupported(inline.supported());
+        EmojiSuggestions emojiSuggestions = null;
+        if (chinese != null && hmm != null) try {
+            Class<?> base = hmm.getSuperclass();
+            while (base != null && !base.getSimpleName().equals("BaseDecodeProcessor")) base = base.getSuperclass();
+            if (base == null) throw new NoSuchMethodException("Base decode processor");
+            emojiSuggestions = new EmojiSuggestions(base,hmm,chinese,controller);
+            emojiSuggestions.install();
+        } catch (ReflectiveOperationException | RuntimeException e) { logFailure("emoji adapter",e); }
+        final EmojiSuggestions emoji = emojiSuggestions;
         // LatinIme has a separate decoder hierarchy. Clear the previous mode on
         // common IME activation; an actual Pinyin decoder can then opt back in.
         Class<?> ime = XposedHelpers.findClassIfExists("com.google.android.libraries.inputmethod.ime.AbstractIme", param.classLoader);
@@ -121,7 +140,8 @@ public final class HintsModule implements IXposedHookLoadPackage {
                     XposedBridge.hookMethod(method, new XC_MethodHook() {
                         @Override protected void afterHookedMethod(MethodHookParam p) {
                             if (processor.isInstance(p.thisObject) || hmm != null && hmm.isInstance(p.thisObject)) {
-                                controller.decoderStarted(processor.isInstance(p.thisObject));
+                                controller.decoderStarted(processor.isInstance(p.thisObject), chinese != null && chinese.isInstance(p.thisObject));
+                                if (emoji != null && chinese != null && chinese.isInstance(p.thisObject)) emoji.watchDecoder(p.thisObject.getClass());
                             }
                         }
                     });

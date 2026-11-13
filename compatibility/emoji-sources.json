@@ -1,0 +1,53 @@
+{
+  "locale": "zh-CN",
+  "emojiCount": 938,
+  "keywords": 1085,
+  "source": "tools/reference/emoji/zh-CN-curated.tsv",
+  "selection": "Manually reviewed everyday Mainland Simplified Chinese vocabulary; Common Chinese country/region short names only; country codes are excluded",
+  "matching": "Exact complete spelling or per-character initials; no prefixes, alternate readings or native candidate-word lookup",
+  "ranking": "Exact spelling before initials; reviewed source row order resolves collisions. Native Gboard candidates are preserved.",
+  "revision": "2152fe189e77d5c1fc367e4e1a28142723b7413a3fe037d63939bdd192f9d5b9",
+  "pypinyin": "0.55.0",
+  "sources": {
+    "zh-CN-curated.tsv": "722d447f7777c5fdc3b4dff1461f951b9b2f47cdc7278c1e0fb2fdd022ee3730",
+    "annotations-zh.xml": "92389f71659998736530c72d4dcc86e453fe0be170cde5c5ad27094cab2a2de8",
+    "annotationsDerived-zh.xml": "777acebb7c4ed103c34f5605881a2537656e0a17d9d1127518da7cd54f612bcc"
+  },
+  "indices": {
+    "full": {
+      "rows": 938,
+      "bytes": 27443,
+      "sha256": "1ce3966bfe3be4556595167890f5172d172898ebc42fca598bf2ba56a81fe29c"
+    },
+    "XIAOHE": {
+      "rows": 938,
+      "bytes": 33443,
+      "sha256": "dd351e54826837f5b1fdc4ad925ac54a8c48452f190f95e3d218a1dac3b6fc3e"
+    },
+    "Ziranma": {
+      "rows": 938,
+      "bytes": 33443,
+      "sha256": "6716373af66b515eabd78cca334dc05ce7af9f6f29304d232cde1beeb4f42eef"
+    },
+    "MS": {
+      "rows": 938,
+      "bytes": 33546,
+      "sha256": "6d8322decd32cd5f790482ac52673272292cb29e4418450e1bf843752ac920e2"
+    },
+    "ABC": {
+      "rows": 938,
+      "bytes": 33443,
+      "sha256": "4a7536169ad566ff1fb5bfbcf88fd76bfaed911e411c154b950973f66ad9bace"
+    },
+    "Ziguang": {
+      "rows": 938,
+      "bytes": 33443,
+      "sha256": "09dc6c9e9799f56fc5e4892cf84fc9e3df42133ade333785cea6ee8caf0fdd07"
+    },
+    "PinyinJiaJia": {
+      "rows": 938,
+      "bytes": 33443,
+      "sha256": "93eee8693674f3376287ad2c66dcfc3610054ea8f03bdc7f518526d08e9c2c1c"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "source": "User-provided Gboard_18.6.3.1002251336-beta-arm64-v8a.apks/base.apk",
+  "targets": [
+    {
+      "dispatch": {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/ProcessorBasedIme;",
+        "name": "p",
+        "args": [
+          "Lacjd;"
+        ],
+        "return": "Z",
+        "access": 17,
+        "code_offset": 2120688
+      },
+      "event": "Lacjd;",
+      "actionConstructor": [
+        {
+          "owner": "Lafru;",
+          "name": "<init>",
+          "args": [
+            "I",
+            "Lafrt;",
+            "Ljava/lang/Object;",
+            "I"
+          ],
+          "return": "V",
+          "access": 65537,
+          "code_offset": 2098760
+        }
+      ],
+      "phase": [
+        {
+          "owner": "Lacjd;",
+          "type": "Lafqb;",
+          "name": "a",
+          "access": 1
+        }
+      ]
+    }
+  ],
+  "verification": "static stock Beta APK structure; device behavior unverified"
+}

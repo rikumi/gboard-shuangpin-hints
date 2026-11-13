@@ -1,10 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T05:12:54.388Z" time="0.124">
-  <properties />
-  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.083" />
-  <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.018" />
-  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.02" />
-  <system-out />
-  <system-err>Intent = Intent { act=android.intent.action.USER_UNLOCKED }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.HintController$2@4d8ad40d], context=[android.app.ContextImpl@634ede4d], intentFilter=[android.content.IntentFilter@3049d3aa]]]
-</system-err>
-</testsuite>
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.203Z" hostname="local-validation" time="0.041">
+  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.027" />
+  <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.005" />
+  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.008" />
+  </testsuite>

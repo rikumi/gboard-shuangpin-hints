@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.EmojiSuggestionsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:42.291Z" hostname="local-validation" time="0.935">
+  <testcase name="fullPinyinAndInitialsUseExactWholeQuery" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.708" />
+  <testcase name="staleEmojiCandidateCannotConsumeNewPreedit" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.018" />
+  <testcase name="reviewedDictionaryKeepsCommonMainlandMeaningsAndCountryNames" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.016" />
+  <testcase name="selectingNativeEmojiReplacesCompositionAndUsesNativeReset" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.015" />
+  <testcase name="disabledEnglishAndPasswordContextsKeepOriginalList" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.014" />
+  <testcase name="completeExternalIndexCoversRequestedExamplesAndPreservesNativeFirstCandidate" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.017" />
+  <testcase name="exactQueryNeverUsesPrefixesOrNativeCorrectedWordsAndPreservesNativeEmoji" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.013" />
+  <testcase name="bestNativeEmojiIsNotDuplicatedOrReplacedBySecondMatch" classname="io.github.rikumi.gboardhints.EmojiSuggestionsTest" time="0.01" />
+  </testsuite>
