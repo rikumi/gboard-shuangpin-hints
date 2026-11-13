@@ -100,4 +100,19 @@ public final class HintOptionsTest {
                         }
     }
 
+    @Test public void initialHintPositionIsIndependentOfInitialsOnly() {
+        for (boolean only : new boolean[]{false, true}) {
+            HintEngine.KeyHint top = HintEngine.hint("XIAOHE", 'v', "", only, false, false, false);
+            assertEquals("zh", top.top);
+            HintEngine.KeyHint bottom = HintEngine.hint("XIAOHE", 'v', "", only, false, false, true);
+            assertEquals("", bottom.top);
+            assertEquals(only ? "zh" : "zh/ui", bottom.bottom);
+            assertEquals(top.bottom, only ? "" : "ui");
+            HintEngine.KeyHint waiting = HintEngine.hint("XIAOHE", 'v', "n", only, false, false, true);
+            assertEquals("", waiting.top); assertFalse(waiting.bottom.contains("zh"));
+            HintEngine.KeyHint hidden = HintEngine.hint("XIAOHE", 'v', "", only, false, true, true);
+            assertFalse(hidden.top.contains("zh")); assertFalse(hidden.bottom.contains("zh"));
+        }
+    }
+
 }

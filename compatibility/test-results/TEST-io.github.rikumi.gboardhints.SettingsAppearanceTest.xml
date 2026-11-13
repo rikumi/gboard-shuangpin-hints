@@ -1,12 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:10:38.620Z" time="4.839">
+<testsuite name="io.github.rikumi.gboardhints.SettingsAppearanceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:03.558Z" time="8.501">
   <properties />
-  <testcase name="onlyDeveloperRequestedSubtitlesArePresent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="2.222" />
-  <testcase name="dayModeUsesLightSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.054" />
-  <testcase name="restartRequiresSelectingTheSingleMenuItem" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.177" />
-  <testcase name="couiSwitchesPreserveSettingsAndPublishProviderUpdates" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.114" />
-  <testcase name="hidingModuleLauncherKeepsSettingsActivityEnabledAndRestoresAlias" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.043" />
-  <testcase name="systemNightModeUsesDarkSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="2.068" />
+  <testcase name="onlyDeveloperRequestedSubtitlesArePresent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="3.806" />
+  <testcase name="stateGroupsContainIndependentLettersAndTheFourGlobalControls" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.127" />
+  <testcase name="dayModeUsesLightSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.162" />
+  <testcase name="restartRequiresSelectingTheSingleMenuItem" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.391" />
+  <testcase name="couiSwitchesPreserveSettingsAndPublishProviderUpdates" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.384" />
+  <testcase name="hidingModuleLauncherKeepsSettingsActivityEnabledAndRestoresAlias" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.121" />
+  <testcase name="systemNightModeUsesDarkSystemBars" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="3.166" />
+  <testcase name="nightPaletteIsPureBlackWithWhiteAccent" classname="io.github.rikumi.gboardhints.SettingsAppearanceTest" time="0.1" />
   <system-out />
   <system-err />
 </testsuite>

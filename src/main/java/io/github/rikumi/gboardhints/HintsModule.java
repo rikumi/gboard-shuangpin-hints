@@ -20,6 +20,7 @@ public final class HintsModule implements IXposedHookLoadPackage {
     private static final Set<String> reportedFailures = Collections.synchronizedSet(new HashSet<>());
     @Override public void handleLoadPackage(XC_LoadPackage.LoadPackageParam param) throws Throwable {
         if (!TARGET.equals(param.packageName)) return;
+        GboardSettingsEntryHooks.install(param.classLoader);
         HintController controller = new HintController();
         Class<?> serviceType = XposedHelpers.findClassIfExists("com.android.inputmethod.latin.LatinIME", param.classLoader);
         if (serviceType == null) serviceType = InputMethodService.class;

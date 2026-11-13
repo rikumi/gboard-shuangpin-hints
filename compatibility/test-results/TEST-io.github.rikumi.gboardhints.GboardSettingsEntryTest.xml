@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.970Z" time="0.033">
+  <properties />
+  <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.01" />
+  <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.007" />
+  <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.008" />
+  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.007" />
+  <system-out />
+  <system-err />
+</testsuite>

@@ -274,6 +274,19 @@
       "shuangpin_ziguang",
       "shuangpin_jiajia"
     ],
+    "settingsEntry": {
+      "preferenceFields": {
+        "context": "j",
+        "intent": "u",
+        "title": "q"
+      },
+      "groupChildren": "b",
+      "operations": [
+        "a",
+        "b"
+      ],
+      "anchorKey": "pinyin_scheme"
+    },
     "launcherActivity": "com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity",
     "verification": "static APK structure only; device test pending"
   },
@@ -667,6 +680,19 @@
       "shuangpin_ziguang",
       "shuangpin_jiajia"
     ],
+    "settingsEntry": {
+      "preferenceFields": {
+        "context": "j",
+        "intent": "t",
+        "title": "q"
+      },
+      "groupChildren": "b",
+      "operations": [
+        "aj",
+        "ak"
+      ],
+      "anchorKey": "pinyin_scheme"
+    },
     "launcherActivity": "com.google.android.libraries.inputmethod.launcher.LauncherActivity",
     "verification": "static APK structure only; device test pending"
   },
@@ -1081,6 +1107,19 @@
       "shuangpin_ziguang",
       "shuangpin_jiajia"
     ],
+    "settingsEntry": {
+      "preferenceFields": {
+        "context": "j",
+        "intent": "s",
+        "title": "q"
+      },
+      "groupChildren": "b",
+      "operations": [
+        "al",
+        "am"
+      ],
+      "anchorKey": "pinyin_scheme"
+    },
     "launcherActivity": "com.google.android.libraries.inputmethod.launcher.LauncherActivity",
     "verification": "static APK structure only; device test pending"
   }

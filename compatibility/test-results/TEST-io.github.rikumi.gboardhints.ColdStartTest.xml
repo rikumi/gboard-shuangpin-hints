@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:36:44.473Z" time="0.063">
+<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.158Z" time="0.082">
   <properties />
-  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.043" />
-  <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.006" />
-  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.013" />
+  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.054" />
+  <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.008" />
+  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.018" />
   <system-out />
-  <system-err>Intent = Intent { act=android.intent.action.USER_UNLOCKED }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.HintController$2@76a1cd5c], context=[android.app.ContextImpl@73ad125a], intentFilter=[android.content.IntentFilter@4faa7973]]]
+  <system-err>Intent = Intent { act=android.intent.action.USER_UNLOCKED }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.HintController$2@7a82dbc6], context=[android.app.ContextImpl@1ced33d8], intentFilter=[android.content.IntentFilter@3a4df723]]]
 </system-err>
 </testsuite>

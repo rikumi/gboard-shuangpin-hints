@@ -285,4 +285,39 @@ public final class KeyboardScopeTest {
         assertEquals(0f, letters.get(0).getAlpha(), 0f);
     }
 
+    @Test public void letterVisibilitySwitchesIndependentlyWhenThePendingInitialChanges() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "defaultLetters", false);
+        ReflectionHelpers.setField(controller, "finalsLetters", true);
+        controller.engineComposition(""); idle(); assertEquals(0f, letters.get(0).getAlpha(), 0f);
+        controller.engineComposition("n"); idle(); assertEquals(1f, letters.get(0).getAlpha(), 0f);
+        controller.engineComposition("ni"); idle(); assertEquals(0f, letters.get(0).getAlpha(), 0f);
+        ReflectionHelpers.setField(controller, "defaultLetters", true);
+        ReflectionHelpers.setField(controller, "finalsLetters", false);
+        controller.engineComposition("n"); idle(); assertEquals(0f, letters.get(0).getAlpha(), 0f);
+        controller.engineComposition(""); idle(); assertEquals(1f, letters.get(0).getAlpha(), 0f);
+        controller.imeActivated(); idle();
+        for (TextView letter : letters) assertEquals(1f, letter.getAlpha(), 0f);
+    }
+    @Test public void pendingStateDoesNotDependOnEnablingFinalHintFiltering() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "dynamic", false);
+        ReflectionHelpers.setField(controller, "defaultLetters", true);
+        ReflectionHelpers.setField(controller, "finalsLetters", false);
+        controller.engineComposition("n"); idle(); assertEquals(0f, letters.get(0).getAlpha(), 0f);
+        controller.engineComposition("ni"); idle(); assertEquals(1f, letters.get(0).getAlpha(), 0f);
+    }
+    @Test public void hiddenWaitingLettersDoNotLeakMatchingVowelsOrHideCornerDigits() {
+        ReflectionHelpers.setField(controller, "stateOptionsConfigured", true);
+        ReflectionHelpers.setField(controller, "finalsLetters", false);
+        ReflectionHelpers.setField(controller, "singleVowels", true);
+        TextView corner = new TextView(activity.get()); corner.setText("1"); keys.get(0).addView(corner);
+        controller.engineComposition("m"); idle();
+        assertEquals(0f, letters.get(0).getAlpha(), 0f);
+        assertEquals(1f, corner.getAlpha(), 0f);
+        ReflectionHelpers.setField(controller, "finalsLetters", true); controller.refreshLater(); idle();
+        assertEquals(1f, letters.get(0).getAlpha(), 0f);
+        assertEquals(0f, letters.get('v' - 'a').getAlpha(), 0f);
+    }
+
 }

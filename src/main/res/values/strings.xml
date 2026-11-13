@@ -4,7 +4,7 @@
   <string name="hints_title">显示双拼提示</string>
   <string name="dynamic_title">根据声母显示可用韵母</string>
   <string name="hide_compound_initials_title">隐藏复声母</string>
-  <string name="initials_only_title">每字初始时只显示声母</string>
+  <string name="initials_only_title">只显示声母提示</string>
   <string name="initials_only_summary">初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V</string>
   <string name="single_vowels_title">根据声母显示单韵母</string>
   <string name="size_title">提示字号</string>
@@ -18,4 +18,9 @@
   <string name="restart_title">重启 Gboard</string>
   <string name="restart_success">已发送重启请求</string>
   <string name="restart_unavailable">未连接 Gboard</string>
+  <string name="default_state">默认状态下</string>
+  <string name="finals_state">等待韵母状态下</string>
+  <string name="global_settings">全局设置</string>
+  <string name="show_key_letters">显示按键字母</string>
+  <string name="initials_below_title">声母显示在下方</string>
 </resources>

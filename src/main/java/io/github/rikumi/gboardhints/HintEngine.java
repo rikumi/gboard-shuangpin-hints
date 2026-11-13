@@ -152,6 +152,16 @@ public final class HintEngine {
         return new KeyHint(isCompoundInitial(hint.top) ? "" : hint.top,
                 hint.center, isCompoundInitial(hint.bottom) ? "" : hint.bottom);
     }
+    public static KeyHint hint(String scheme, char key, String initial, boolean initialsOnly,
+                               boolean singleVowels, boolean hideCompoundInitials, boolean initialsBelow) {
+        KeyHint result = hint(scheme, key, initial, initialsOnly, singleVowels, hideCompoundInitials);
+        if (hideCompoundInitials || initial != null && !initial.isEmpty()) return result;
+        String special = SchemeData.initial(scheme, key);
+        if (special == null) return result;
+        String finals = initialsOnly ? "" : result.bottom;
+        return new KeyHint(initialsBelow ? "" : special, result.center,
+                initialsBelow ? special + (finals.isEmpty() ? "" : "/" + finals) : finals);
+    }
     private static boolean isCompoundInitial(String text) {
         return text.equals("zh") || text.equals("ch") || text.equals("sh");
     }

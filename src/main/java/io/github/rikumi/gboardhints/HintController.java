@@ -43,6 +43,7 @@ final class HintController {
     void cancelInlineUppercase() { inlineArmed = false; refreshLater(); }
 
     private boolean blankEnabled, initialsOnly, singleVowels, hideCompoundInitials, hideNumberHints;
+    private boolean stateOptionsConfigured, defaultLetters = true, finalsLetters = true, initialsBelow;
     private volatile String automatic;
     private final DynamicHintState compositionState = new DynamicHintState();
     private final java.util.concurrent.atomic.AtomicLong engineUpdates = new java.util.concurrent.atomic.AtomicLong();
@@ -208,6 +209,15 @@ final class HintController {
                 hideCompoundInitials = cursor.getColumnCount() > 7 && cursor.getInt(7) != 0;
                 hideNumberHints = cursor.getColumnCount() > 8 && cursor.getInt(8) != 0;
                 inlineUppercaseEnabled = cursor.getColumnCount() > 9 && cursor.getInt(9) != 0;
+                int defaults = cursor.getColumnIndex("default_letters");
+                int finals = cursor.getColumnIndex("finals_letters");
+                int below = cursor.getColumnIndex("initials_below");
+                stateOptionsConfigured = defaults >= 0 && finals >= 0 && below >= 0;
+                if (stateOptionsConfigured) {
+                    defaultLetters = cursor.getInt(defaults) != 0;
+                    finalsLetters = cursor.getInt(finals) != 0;
+                    initialsBelow = cursor.getInt(below) != 0;
+                }
                 if (!inlineUppercaseEnabled) inlineArmed = false;
                 if (cursor.getColumnCount() > 10) try { GboardLauncherIcon.setHidden(service, cursor.getInt(10) != 0); }
                 catch (RuntimeException e) { HintsModule.logFailure("Gboard launcher visibility", e); return false; }
@@ -236,15 +246,22 @@ final class HintController {
             if (view == null) continue;
             try {
                 char key = labels.containsKey(view) ? labels.get(view) : 0;
-                boolean finalsPhase = dynamic && !compositionState.initial().isEmpty();
+                boolean waiting = !compositionState.initial().isEmpty();
+                boolean finalsPhase = dynamic && waiting;
+                boolean showLetters = stateOptionsConfigured ? (waiting ? finalsLetters : defaultLetters) : !blankEnabled;
                 boolean filterPrimary = show && singleVowels && finalsPhase;
-                boolean hideIdleLetter = show && initialsOnly && compositionState.initial().isEmpty()
+                boolean hideIdleLetter = show && initialsOnly && !waiting
                         && (key == 'u' || key == 'i' || key == 'v');
-                HintEngine.KeyHint policy = !show || key == 0 ? HintEngine.KeyHint.EMPTY
-                        : HintEngine.hint(scheme, key, dynamic ? compositionState.initial() : "",
-                                initialsOnly && compositionState.initial().isEmpty(), singleVowels, hideCompoundInitials);
-                state.labels.apply(view, shuangpin && blankEnabled || filterPrimary || hideIdleLetter, key,
-                        !blankEnabled, !hideIdleLetter && filterPrimary && !policy.center.isEmpty(),
+                HintEngine.KeyHint policy;
+                if (!show || key == 0) policy = HintEngine.KeyHint.EMPTY;
+                else if (stateOptionsConfigured) policy = HintEngine.hint(scheme, key,
+                        dynamic ? compositionState.initial() : "", initialsOnly && !waiting,
+                        singleVowels, hideCompoundInitials, initialsBelow && !waiting);
+                else policy = HintEngine.hint(scheme, key, dynamic ? compositionState.initial() : "",
+                        initialsOnly && compositionState.initial().isEmpty(), singleVowels, hideCompoundInitials);
+                state.labels.apply(view, shuangpin && !showLetters || filterPrimary || hideIdleLetter, key,
+                        stateOptionsConfigured || !blankEnabled,
+                        !hideIdleLetter && filterPrimary && (!stateOptionsConfigured || showLetters) && !policy.center.isEmpty(),
                         hideNumberHints && visible && view.isShown());
                 // The center is an eligibility signal, never an overlay glyph.
                 // Let Gboard render its own text, font, color and pressed state.

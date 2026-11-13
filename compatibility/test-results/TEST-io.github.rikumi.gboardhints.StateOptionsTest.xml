@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.StateOptionsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:15.103Z" time="0.022">
+  <properties />
+  <testcase name="oldBlankWithMatchingSingleVowelsKeepsTheNativeVowelFilter" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.007" />
+  <testcase name="lockedProviderReadsCannotFreezeDefaultsBeforeLegacyMigration" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.006" />
+  <testcase name="legacyBlankAndInitialsOnlyMigrateWithoutLosingSelections" classname="io.github.rikumi.gboardhints.StateOptionsTest" time="0.009" />
+  <system-out />
+  <system-err />
+</testsuite>

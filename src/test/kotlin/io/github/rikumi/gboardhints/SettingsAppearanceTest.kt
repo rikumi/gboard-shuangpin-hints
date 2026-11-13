@@ -33,9 +33,11 @@ class SettingsAppearanceTest {
         launch { activity ->
             val prefs = ConfigStore.prefs(activity)
             assertFalse(prefs.contains("scheme"))
-            assertTrue(prefs.getBoolean("blank_keys", false))
-            compose.onNodeWithTag("blank_keys").performScrollTo().performClick()
-            assertFalse(prefs.getBoolean("blank_keys", true))
+            assertFalse(prefs.getBoolean("default_letters", true))
+            assertFalse(prefs.getBoolean("finals_letters", true))
+            compose.onNodeWithTag("default_letters").performScrollTo().performClick()
+            assertTrue(prefs.getBoolean("default_letters", false))
+            assertFalse(prefs.getBoolean("finals_letters", true))
             for (key in listOf("initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher")) {
                 assertFalse(prefs.getBoolean(key, false))
                 compose.onNodeWithTag(key).performScrollTo().performClick()
@@ -78,9 +80,31 @@ class SettingsAppearanceTest {
         assertFalse(WindowCompat.getInsetsController(activity.window, activity.window.decorView).isAppearanceLightStatusBars)
     }
     @Test fun onlyDeveloperRequestedSubtitlesArePresent() = launch {
-        compose.onNodeWithText("初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V").assertExists()
+        compose.onNodeWithText("初始或等待声母状态下只显示 zh ch sh 的提示，并同时隐藏字母 U I V").assertDoesNotExist()
         compose.onNodeWithText("需系统启动器支持").assertExists()
         compose.onNodeWithText("在所有提示状态下隐藏 zh、ch、sh。").assertDoesNotExist()
         compose.onNodeWithText("仅在双拼键盘隐藏字母及数字、符号角标，保留功能键。双拼提示由上方开关独立控制。").assertDoesNotExist()
     }
+    @Test fun stateGroupsContainIndependentLettersAndTheFourGlobalControls() = launch {
+        for (title in listOf("默认状态下", "等待韵母状态下", "全局设置"))
+            compose.onNodeWithText(title).assertExists()
+        compose.onAllNodesWithText("显示按键字母").assertCountEquals(2)
+        for (tag in listOf("default_letters", "initials_only", "initials_below"))
+            compose.onNode(hasTestTag(tag) and hasAnyAncestor(hasTestTag("default_group"))).assertExists()
+        compose.onNode(hasTestTag("finals_letters") and hasAnyAncestor(hasTestTag("finals_group"))).assertExists()
+        for (tag in listOf("hide_number_hints", "inline_uppercase", "hide_launcher", "hide_gboard_launcher"))
+            compose.onNode(hasTestTag(tag) and hasAnyAncestor(hasTestTag("global_group"))).assertExists()
+        compose.onNodeWithText("无刻模式").assertDoesNotExist()
+    }
+    @Test @Config(sdk = [31], qualifiers = "night") fun nightPaletteIsPureBlackWithWhiteAccent() = launch { activity ->
+        var colors: io.github.suqi8.coui.kmp.theme.Colors? = null
+        activity.setContent { colors = settingsColors() }
+        compose.runOnIdle {
+            assertEquals(androidx.compose.ui.graphics.Color.Black, colors!!.background)
+            assertEquals(androidx.compose.ui.graphics.Color.Black, colors!!.surface)
+            assertEquals(androidx.compose.ui.graphics.Color.White, colors!!.primary)
+            assertEquals(androidx.compose.ui.graphics.Color.Black, colors!!.onPrimary)
+        }
+    }
+
 }

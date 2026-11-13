@@ -32,6 +32,8 @@ import io.github.suqi8.coui.kmp.preference.SwitchPreference
 import io.github.suqi8.coui.kmp.theme.COUITheme
 import io.github.suqi8.coui.kmp.theme.ColorSchemeMode
 import io.github.suqi8.coui.kmp.theme.ThemeController
+import io.github.suqi8.coui.kmp.theme.Colors
+import io.github.suqi8.coui.kmp.theme.darkColorScheme
 import kotlin.math.roundToInt
 
 class SettingsActivity : ComponentActivity() {
@@ -44,7 +46,7 @@ class SettingsActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         prefs = ConfigStore.prefs(this)
         prefs.edit().remove("scheme").apply()
-        if (!prefs.contains("blank_keys")) prefs.edit().putBoolean("blank_keys", prefs.getInt("blank", 0) != 0).apply()
+        StateOptions.migrate(prefs)
         prefs.registerOnSharedPreferenceChangeListener(onChange)
         LauncherIcon.setHidden(this, prefs.getBoolean("hide_launcher", false))
         setContent {
@@ -63,7 +65,7 @@ class SettingsActivity : ComponentActivity() {
 
 @Composable
 internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean) -> Unit, onRestart: () -> Unit) {
-    val controller = remember { ThemeController(ColorSchemeMode.MonetSystem) }
+    val colors = settingsColors()
     val navigation = remember {
         object : NavigationEventDispatcherOwner {
             override val navigationEventDispatcher = NavigationEventDispatcher()
@@ -76,7 +78,7 @@ internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean)
             button = styles.button.copy(fontWeight = FontWeight.Normal))
     }
     CompositionLocalProvider(LocalNavigationEventDispatcherOwner provides navigation) {
-        COUITheme(controller = controller, textStyles = textStyles) {
+        COUITheme(colors = colors, textStyles = textStyles) {
             val view = LocalView.current
             val dark = isSystemInDarkTheme()
             SideEffect {
@@ -95,18 +97,22 @@ internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean)
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     SettingsCard {
                         SettingSwitch(prefs, "enabled", R.string.hints_title, true)
-                        SettingSwitch(prefs, "dynamic", R.string.dynamic_title, true)
-                        SettingSwitch(prefs, "hide_compound_initials", R.string.hide_compound_initials_title)
-                        SettingSwitch(prefs, "initials_only", R.string.initials_only_title, summary = R.string.initials_only_summary)
-                        SettingSwitch(prefs, "single_vowels", R.string.single_vowels_title)
                         HintSize(prefs)
-                        SettingSwitch(prefs, "blank_keys", R.string.blank_title)
                     }
-                    SettingsCard {
+                    SettingsGroup(R.string.default_state, "default_group") {
+                        SettingSwitch(prefs, "default_letters", R.string.show_key_letters, true)
+                        SettingSwitch(prefs, "initials_only", R.string.initials_only_title)
+                        SettingSwitch(prefs, "initials_below", R.string.initials_below_title)
+                        SettingSwitch(prefs, "hide_compound_initials", R.string.hide_compound_initials_title)
+                    }
+                    SettingsGroup(R.string.finals_state, "finals_group") {
+                        SettingSwitch(prefs, "finals_letters", R.string.show_key_letters, true)
+                        SettingSwitch(prefs, "dynamic", R.string.dynamic_title, true)
+                        SettingSwitch(prefs, "single_vowels", R.string.single_vowels_title)
+                    }
+                    SettingsGroup(R.string.global_settings, "global_group") {
                         SettingSwitch(prefs, "hide_number_hints", R.string.hide_number_hints_title)
                         SettingSwitch(prefs, "inline_uppercase", R.string.inline_uppercase_title)
-                    }
-                    SettingsCard {
                         SettingSwitch(prefs, "hide_launcher", R.string.hide_launcher_title, onChange = onHideLauncher)
                         SettingSwitch(prefs, "hide_gboard_launcher", R.string.hide_gboard_launcher_title,
                             summary = R.string.hide_gboard_launcher_summary)
@@ -114,6 +120,31 @@ internal fun SettingsContent(prefs: SharedPreferences, onHideLauncher: (Boolean)
                 }
             }
         }
+    }
+}
+
+@Composable
+internal fun settingsColors(): Colors {
+    val dark = isSystemInDarkTheme()
+    val dynamic = remember { ThemeController(ColorSchemeMode.MonetSystem) }
+    return if (dark) remember {
+        darkColorScheme(primary = Color.White, onPrimary = Color.Black,
+            primaryVariant = Color.White.copy(alpha = .16f), onPrimaryVariant = Color.White,
+            disabledPrimary = Color.White.copy(alpha = .3f),
+            disabledPrimaryButton = Color.White.copy(alpha = .3f),
+            primaryContainer = Color.White, onPrimaryContainer = Color.Black,
+            tertiaryContainer = Color.White.copy(alpha = .16f), onTertiaryContainer = Color.White,
+            tertiaryContainerVariant = Color.White.copy(alpha = .16f),
+            background = Color.Black, surface = Color.Black,
+            sliderKeyPointForeground = Color.White)
+    } else dynamic.currentColors()
+}
+
+@Composable
+private fun SettingsGroup(title: Int, tag: String, content: @Composable ColumnScope.() -> Unit) {
+    Column(Modifier.testTag(tag)) {
+        SmallTitle(stringResource(title))
+        SettingsCard(content)
     }
 }
 

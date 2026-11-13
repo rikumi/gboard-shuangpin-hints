@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.GboardControlTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:55.212Z" time="0.028">
+<testsuite name="io.github.rikumi.gboardhints.GboardControlTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.896Z" time="0.036">
   <properties />
-  <testcase name="missingInjectedReceiverReportsUnavailable" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.009" />
-  <testcase name="orderedRequestAcknowledgesBeforeRestartAndDebounces" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.005" />
-  <testcase name="unorderedBroadcastDoesNotRestart" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.004" />
+  <testcase name="missingInjectedReceiverReportsUnavailable" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.012" />
+  <testcase name="orderedRequestAcknowledgesBeforeRestartAndDebounces" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.008" />
+  <testcase name="unorderedBroadcastDoesNotRestart" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.005" />
   <testcase name="requestTargetsOnlyGboard" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.005" />
   <testcase name="receiverRequiresTheModuleSignaturePermission" classname="io.github.rikumi.gboardhints.GboardControlTest" time="0.004" />
   <system-out />
   <system-err>Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 pkg=com.google.android.inputmethod.latin }; Matching wrappers: []
-Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@11642a77], context=[android.app.ContextImpl@34be323], intentFilter=[android.content.IntentFilter@1f775571]]]
-Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@11642a77], context=[android.app.ContextImpl@34be323], intentFilter=[android.content.IntentFilter@1f775571]]]
-Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@306c81f3], context=[android.app.ContextImpl@7c6c6677], intentFilter=[android.content.IntentFilter@5530c551]]]
+Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@4a12a3c], context=[android.app.ContextImpl@78aa2b5c], intentFilter=[android.content.IntentFilter@2877df6a]]]
+Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@4a12a3c], context=[android.app.ContextImpl@78aa2b5c], intentFilter=[android.content.IntentFilter@2877df6a]]]
+Intent = Intent { act=io.github.rikumi.gboardhints.action.RESTART_GBOARD flg=0x10000000 }; Matching wrappers: [Wrapper[receiver=[io.github.rikumi.gboardhints.GboardControl$RestartReceiver@1f334078], context=[android.app.ContextImpl@66ef40ba], intentFilter=[android.content.IntentFilter@401e5a27]]]
 </system-err>
 </testsuite>

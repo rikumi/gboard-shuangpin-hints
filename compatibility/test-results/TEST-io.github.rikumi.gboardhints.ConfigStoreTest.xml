@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.ConfigStoreTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:54.842Z" time="0.327">
+<testsuite name="io.github.rikumi.gboardhints.ConfigStoreTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:13.243Z" time="0.604">
   <properties />
-  <testcase name="unlockMergesLegacyValuesWithoutOverwritingDeviceChanges" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.006" />
-  <testcase name="existingPreferencesMigrateOnceAndSurviveLockedStartup" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.006" />
-  <testcase name="configProviderIsAvailableDuringDirectBoot" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.006" />
-  <testcase name="androidSixKeepsCredentialStorage" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.289" />
+  <testcase name="unlockMergesLegacyValuesWithoutOverwritingDeviceChanges" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.018" />
+  <testcase name="existingPreferencesMigrateOnceAndSurviveLockedStartup" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.009" />
+  <testcase name="configProviderIsAvailableDuringDirectBoot" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.009" />
+  <testcase name="androidSixKeepsCredentialStorage" classname="io.github.rikumi.gboardhints.ConfigStoreTest" time="0.524" />
   <system-out />
   <system-err />
 </testsuite>

@@ -119,6 +119,20 @@ def analyze(apk, sdk):
         for name in z.namelist():
             if re.fullmatch(r'classes\d*\.dex', name):
                 dex = Dex(z.read(name)); classes.update(dex.classes); strings.update(dex.strings)
+    preference = classes['Landroidx/preference/Preference;']
+    preference_group = classes['Landroidx/preference/PreferenceGroup;']
+    assert any(m['name'] == '<init>' and m['args'] == ['Landroid/content/Context;'] and m['access'] & 1 for m in preference['methods'])
+    native_fields = {}
+    for field_type, role in [('Landroid/content/Context;', 'context'), ('Landroid/content/Intent;', 'intent'), ('Ljava/lang/CharSequence;', 'title')]:
+        matched = [f for f in preference['fields'] if f['type'] == field_type and not f['access'] & 8 and (role != 'title' or f['access'] & 1)]
+        assert len(matched) == 1, f'Ambiguous native preference {role}'
+        native_fields[role] = matched[0]['name']
+    native_lists = [f for f in preference_group['fields'] if f['type'] == 'Ljava/util/List;' and not f['access'] & 8]
+    assert len(native_lists) == 1
+    operations = [m for m in preference_group['methods'] if m['args'] == ['Landroidx/preference/Preference;'] and m['access'] & 1 and not m['access'] & 8 and m['return'] in ('V', 'Z')]
+    assert operations and 'pinyin_scheme' in strings
+    settings_entry = {'preferenceFields': native_fields, 'groupChildren': native_lists[0]['name'],
+                      'operations': [m['name'] for m in operations], 'anchorKey': 'pinyin_scheme'}
     key = classes['Lcom/google/android/libraries/inputmethod/widgets/SoftKeyView;']
     metadata = []
     for f in key['fields']:
@@ -228,7 +242,8 @@ def analyze(apk, sdk):
             'enginePreedit': {'updates': preedit_updates, 'readers': preedit_readers, 'clearNotifications': preedit_clear_notifications, 'cache': preedit_caches, 'fallbackGetter': preedit_getters if not preedit_caches else [], 'emptyTextResetMethods': preedit_resets},
             'imeActivation': ime_activations, 'inlineUppercase': inline_uppercase,
             'lifecycleOwners': lifecycle, 'schemes': schemes,
-            'launcherActivity': re.search(r"launchable-activity: name='([^']+)'", badging).group(1), 'verification': 'static APK structure only; device test pending'}
+            'settingsEntry': settings_entry,
+        'launcherActivity': re.search(r"launchable-activity: name='([^']+)'", badging).group(1), 'verification': 'static APK structure only; device test pending'}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

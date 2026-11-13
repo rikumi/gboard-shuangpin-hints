@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-12T18:32:55.268Z" time="0.004">
+<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T03:38:14.004Z" time="0.004">
   <properties />
+  <testcase name="initialHintPositionIsIndependentOfInitialsOnly" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="zeroInitialPhaseUsesOnlyLastSeparatorSegment" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="initialPhaseOnlyKeepsCompoundInitialsAcrossSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="zeroInitialCentralLettersFollowLiteralSyllableContinuation" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
