@@ -21,6 +21,7 @@ final class SemicolonKeys {
         update(observed,enabled,chinese,pinyin,composing,scheme,false);
     }
     void update(Collection<View> observed, boolean enabled, boolean chinese, boolean pinyin, boolean composing, String scheme, boolean uppercase) {
+        uppercase = uppercase && composing;
         for (Row row : rows.values()) row.wanted = false;
         Map<View, Map<Character, View>> keyboards = new IdentityHashMap<>();
         try {

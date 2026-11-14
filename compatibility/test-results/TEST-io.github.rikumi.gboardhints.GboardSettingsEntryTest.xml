@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.648Z" hostname="local-validation" time="0.026">
+<testsuite name="io.github.rikumi.gboardhints.GboardSettingsEntryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:00.172Z" hostname="local-validation" time="0.028">
   <testcase name="inlinedInflationAndLateKeyAssignmentStillCreateOneNativeEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.005" />
-  <testcase name="staleScreenCannotPreventEntryInCurrentScreen" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.004" />
-  <testcase name="nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
+  <testcase name="staleScreenCannotPreventEntryInCurrentScreen" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.005" />
+  <testcase name="nativeAdapterCanSortItsOwnCopyWithoutMovingEntryAboveScheme" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
   <testcase name="directSettingsIntentWorksWhenModuleLauncherAliasIsHidden" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.004" />
   <testcase name="entryRemainsImmediatelyAfterSchemeAcrossSortingAndRepeatedAdds" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
-  <testcase name="adapterCreationObservesAnAlreadyInflatedScreenAndItsCategories" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
+  <testcase name="adapterCreationObservesAnAlreadyInflatedScreenAndItsCategories" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
   <testcase name="unrelatedListPreferencesDoNotGainAnEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
-  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.002" />
-  </testsuite>
+  <testcase name="removingSchemeAlsoRemovesItsCompanionEntry" classname="io.github.rikumi.gboardhints.GboardSettingsEntryTest" time="0.003" />
+</testsuite>

@@ -54,11 +54,12 @@ final class EmojiLexicon {
             if (callbacks != null) { if (ready != null) callbacks.add(ready); return null; }
             callbacks = new HashSet<>(); if (ready != null) callbacks.add(ready); pending.put(profile,callbacks);
         }
-        Context app = context.getApplicationContext();
+        Context application = context.getApplicationContext();
+        Context app = application != null ? application : context;
         loader.execute(() -> {
             EmojiLexicon dictionary = null;
             Uri uri = Uri.parse("content://" + AUTHORITY + "/emoji/" + profile);
-            try (InputStream input=app.getContentResolver().openInputStream(uri)) {
+            try (InputStream input=open(app,uri,profile)) {
                 if (input == null) throw new FileNotFoundException();
                 dictionary = new EmojiLexicon(new InputStreamReader(input,"UTF-8"));
             } catch (IOException | RuntimeException e) { HintsModule.logFailure("emoji dictionary",e); }
@@ -73,6 +74,13 @@ final class EmojiLexicon {
             if (dictionary != null && callbacks != null) for (Runnable callback : callbacks) new Handler(Looper.getMainLooper()).post(callback);
         });
         return null;
+    }
+    private static InputStream open(Context context,Uri uri,String profile) throws IOException {
+        if(io.github.rikumi.gboardhints.bridge.XposedBridge.moduleApk!=null) {
+            try {return ModuleAssets.open("emoji/"+profile+".tsv");}
+            catch(IOException error){StartupDiagnostics.failure("emoji.module.asset",error);}
+        }
+        return context.getContentResolver().openInputStream(uri);
     }
     List<String> match(CharSequence raw) {
         List<String> result = entries.get(normalize(raw));

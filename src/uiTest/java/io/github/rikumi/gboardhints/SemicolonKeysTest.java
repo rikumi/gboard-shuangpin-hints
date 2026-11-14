@@ -185,13 +185,13 @@ public class SemicolonKeysTest {
     }
     @Test public void invalidSemicolonRowDoesNotPreventShiftFromBecomingUppercase() throws Exception {
         Key extra=add(top,"D11",'x');
-        feature.update(observed,true,true,true,false,"MS",true);
+        feature.update(observed,true,true,true,true,"MS",true);
         assertEquals("⇧",shift.label.getText().toString());assertNull(semicolon());
     }
     @Test public void nativeShiftWithoutPressBindingStillKeepsItsPresentationAndGetsASeparatorAction() throws Exception {
         java.lang.reflect.Field labels=Definition.class.getField("labels");labels.setAccessible(true);labels.set(shift.definition,new CharSequence[]{"",""});
         java.lang.reflect.Field phase=Binding.class.getField("phase");phase.setAccessible(true);phase.set(shift.definition.bindings[0],Phase.LONG_PRESS);
-        feature.update(observed,false,true,true,false,"MS",true);
+        feature.update(observed,false,true,true,true,"MS",true);
         assertEquals("",shift.label.getText().toString());assertEquals("'",action(shift).text);
         assertEquals(Phase.PRESS,shift.definition.bindings[0].phase);
     }
@@ -200,7 +200,7 @@ public class SemicolonKeysTest {
         java.lang.reflect.Field actions=Binding.class.getField("actions");actions.setAccessible(true);
         actions.set(shift.definition.bindings[0],new Action[]{new Action(-100,Intention.DECODE,null)});
         Object source=shift.definition;
-        feature.update(observed,false,true,true,false,"MS",true);
+        feature.update(observed,false,true,true,true,"MS",true);
         assertEquals("",shift.label.getText().toString());assertEquals("'",action(shift).text);
         feature.update(observed,false,false,false,false,"MS",false);assertSame(source,shift.definition);
     }
@@ -212,12 +212,14 @@ public class SemicolonKeysTest {
             assertEquals(decode ? ";" : "；",action(semicolon()).text); assertEquals(74,action(semicolon()).code);
         }
     }
-    @Test public void inlineUppercaseShowsArrowEvenWithoutPreeditAndRestoresOnDisable() throws Exception {
+    @Test public void inlineUppercaseOnlyReplacesShiftWhilePreeditExists() throws Exception {
         Definition original=shift.definition;
         for(boolean composing:new boolean[]{false,true,false}) {
             feature.update(observed,false,true,true,composing,"MS",true);
-            assertEquals("⇧",shift.label.getText().toString());assertEquals("'",action(shift).text);
-            assertEquals(Intention.DECODE,action(shift).intention);
+            if(composing) {
+                assertEquals("⇧",shift.label.getText().toString());assertEquals("'",action(shift).text);
+                assertEquals(Intention.DECODE,action(shift).intention);
+            } else assertSame(original,shift.definition);
         }
         feature.update(observed,false,true,true,true,"MS",false);
         assertEquals("'",shift.label.getText().toString());

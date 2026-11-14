@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:49.518Z" hostname="local-validation" time="0.082">
-  <testcase name="singleCharacterCandidatesAndToolbarLabelsKeepTheirNativeSize" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.009" />
-  <testcase name="supportsUnicodeLettersAndSemicolonButLeavesFunctionLabelsAlone" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.005" />
-  <testcase name="recycledLabelOutsideItsRegisteredKeyKeepsNativeCandidateStyle" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
+<testsuite name="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:01.150Z" hostname="local-validation" time="0.089">
+  <testcase name="singleCharacterCandidatesAndToolbarLabelsKeepTheirNativeSize" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.01" />
+  <testcase name="supportsUnicodeLettersAndSemicolonButLeavesFunctionLabelsAlone" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.006" />
+  <testcase name="recycledLabelOutsideItsRegisteredKeyKeepsNativeCandidateStyle" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.004" />
   <testcase name="keyRebindingToDigitsDoesNotRetainLetterOverride" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
   <testcase name="movingAKeyIntoTheCandidateAreaRestoresAndStopsOverridingItsLabel" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
   <testcase name="nativeGridKanaAndSemicolonPositionsRemainEligible" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.004" />
-  <testcase name="reducingMainFontDoesNotAccidentallySelectALetterCorner" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.004" />
+  <testcase name="reducingMainFontDoesNotAccidentallySelectALetterCorner" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
   <testcase name="digitPrimaryWithALetterCornerDoesNotResizeTheCorner" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
-  <testcase name="resizesMainLetterOnlyAndRestoresNativeFontAndColor" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
+  <testcase name="resizesMainLetterOnlyAndRestoresNativeFontAndColor" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.006" />
   <testcase name="nativeStyleRequestsKeepOverrideAndUpdateTheRestorationValue" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.003" />
-  <testcase name="fontOverrideAlsoWorksOnAndroidSix" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.04" />
-  </testsuite>
+  <testcase name="fontOverrideAlsoWorksOnAndroidSix" classname="io.github.rikumi.gboardhints.PrimaryLetterSizeTest" time="0.042" />
+</testsuite>

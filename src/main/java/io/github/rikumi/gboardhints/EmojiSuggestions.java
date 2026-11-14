@@ -5,7 +5,7 @@ import android.content.Context;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.*;
 import java.util.*;
-import de.robv.android.xposed.*;
+import io.github.rikumi.gboardhints.bridge.*;
 
 /** Adds native emoji candidates, keeping native selection, composition replacement and reset semantics. */
 final class EmojiSuggestions {

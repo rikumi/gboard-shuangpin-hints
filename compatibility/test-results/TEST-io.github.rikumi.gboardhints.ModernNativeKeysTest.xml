@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.ModernNativeKeysTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:49.500Z" hostname="local-validation" time="0.014">
-  <testcase name="separatorDispatchArmsExactlyOneChineseLetterAndLeavesEnglishAndPasswordsNative" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.005" />
-  <testcase name="immutableMetadataCreatesNativeSemicolonWithCorrectActionAndLabel" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.006" />
+<testsuite name="io.github.rikumi.gboardhints.ModernNativeKeysTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:01.087Z" hostname="local-validation" time="0.021">
+  <testcase name="decoderThreadPreeditChangesAffectCurrentShiftEventImmediately" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.007" />
+  <testcase name="separatorDispatchArmsExactlyOneChineseLetterAndLeavesEnglishAndPasswordsNative" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.003" />
+  <testcase name="immutableMetadataCreatesNativeSemicolonWithCorrectActionAndLabel" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.005" />
+  <testcase name="emptyPreeditLeavesNativeShiftAndCapsLockEventsUntouched" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.003" />
   <testcase name="fourArgumentNativeEventsSupportOneShotUppercaseWithoutCommit" classname="io.github.rikumi.gboardhints.ModernNativeKeysTest" time="0.002" />
-  </testsuite>
+</testsuite>

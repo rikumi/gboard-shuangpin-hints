@@ -90,8 +90,40 @@ public final class ColdStartTest {
         HintController controller = new HintController(); controller.attach(new Ime(app));
         try {
             shadowOf(Looper.getMainLooper()).idle();
-            assertEquals("Unlock during the first query cannot be lost", 2, provider.attempts);
+            assertTrue("Unlock during the first query cannot be lost", provider.attempts >= 2);
+            assertTrue("Only unlock and the optional access-grant callback reload", provider.attempts <= 3);
             assertTrue(ReflectionHelpers.getField(controller, "blankEnabled"));
         } finally { controller.detach(); }
     }
+    @Test public void providerStartingAfterRetryWindowStillRecoversWithoutAnotherInputSession() {
+        Context app=RuntimeEnvironment.getApplication();
+        ColdProvider provider=Robolectric.buildContentProvider(ColdProvider.class).create().get();
+        provider.hideLauncher=false;
+        ShadowContentResolver.registerProviderInternal(ConfigProvider.URI.getAuthority(),provider);
+        HintController controller=new HintController();controller.attach(new Ime(app));
+        try {
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(30));
+            int failedAttempts=provider.attempts;assertTrue(failedAttempts>=7);
+            provider.available=true;
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(30));
+            assertTrue(ReflectionHelpers.getField(controller,"blankEnabled"));
+            assertEquals(failedAttempts+1,provider.attempts);
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMinutes(2));
+            assertEquals(failedAttempts+1,provider.attempts);
+        } finally {controller.detach();}
+    }
+    @Test public void applicationInitializationLoadsSettingsBeforeInputMethodServiceExists() {
+        Context app=RuntimeEnvironment.getApplication();
+        ColdProvider provider=Robolectric.buildContentProvider(ColdProvider.class).create().get();
+        provider.available=true;provider.hideLauncher=false;
+        ShadowContentResolver.registerProviderInternal(ConfigProvider.URI.getAuthority(),provider);
+        HintController controller=new HintController();
+        controller.initialize(new Ime(app));
+        try {
+            assertNull(ReflectionHelpers.getField(controller,"service"));
+            assertTrue(ReflectionHelpers.getField(controller,"blankEnabled"));
+            controller.initialize(new Ime(app));assertEquals(1,provider.attempts);
+        } finally {controller.detach();}
+    }
+
 }

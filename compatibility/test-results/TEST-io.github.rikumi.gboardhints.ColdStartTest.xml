@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.203Z" hostname="local-validation" time="0.041">
-  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.027" />
+<testsuite name="io.github.rikumi.gboardhints.ColdStartTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:57:59.428Z" hostname="local-validation" time="0.076">
+  <testcase name="unlockingDuringFirstQueryReloadsPreferencesImmediately" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.047" />
   <testcase name="detachCancelsPendingStartupRetry" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.005" />
-  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.008" />
-  </testsuite>
+  <testcase name="applicationInitializationLoadsSettingsBeforeInputMethodServiceExists" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.005" />
+  <testcase name="providerStartingAfterRetryWindowStillRecoversWithoutAnotherInputSession" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.007" />
+  <testcase name="unavailableFirstQueryRecoversBothOptionsWithoutReopeningSettings" classname="io.github.rikumi.gboardhints.ColdStartTest" time="0.01" />
+</testsuite>

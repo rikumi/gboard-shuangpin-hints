@@ -10,7 +10,7 @@ final class InlineUppercaseDispatcher {
     }
     boolean handle(Object event, boolean chineseDecoder) throws ReflectiveOperationException {
         if (chineseDecoder) controller.inlineDecoderObserved(true);
-        if (!controller.inlineUppercaseConfigured() || !chineseDecoder || !adapter.press(event)) return false;
+        if (!controller.inlineUppercaseActive() || !chineseDecoder || !adapter.press(event)) return false;
         if (adapter.separator(event)) {
             controller.toggleInlineUppercase(); return true;
         }
@@ -22,6 +22,6 @@ final class InlineUppercaseDispatcher {
         return false;
     }
     boolean acceptsUppercase(Object action, boolean chineseDecoder) throws IllegalAccessException {
-        return chineseDecoder && controller.inlineUppercaseConfigured() && adapter.uppercaseDecode(action);
+        return chineseDecoder && controller.inlineUppercaseActive() && adapter.uppercaseDecode(action);
     }
 }

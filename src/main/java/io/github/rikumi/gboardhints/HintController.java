@@ -17,26 +17,34 @@ import java.util.*;
 final class HintController {
     private final Handler main = new Handler(Looper.getMainLooper());
     private final Map<View, KeyState> keys = new WeakHashMap<>();
-    private InputMethodService service;
+    private volatile InputMethodService service;
+    private Context configurationContext;
     private BroadcastReceiver controlReceiver, unlockReceiver;
     private boolean observerRegistered;
+    private SharedPreferences remotePreferences;
+    private final SharedPreferences.OnSharedPreferenceChangeListener remoteChanges=(p,key)->
+            main.post(() -> refreshConfiguration(true,"remote_preferences_changed"));
     private int startupAttempt;
+    private boolean configAccessPending, configAccessPersisted;
+    private long nextConfigAccessRequest;
+    private long diagnosticConfigGeneration;
+    private String diagnosticRenderSignature;
     private static final long[] CONFIG_RETRY_DELAYS = {100, 400, 1000, 2000, 4000, 8000};
-    private final Runnable configRetry = () -> refreshConfiguration(false);
-    private boolean enabled = true, dynamic = true, visible, pinyinActive, chineseActive, password, showSemicolon;
+    private final Runnable configRetry = () -> refreshConfiguration(false,"retry");
+    private volatile boolean enabled = true, dynamic = true, visible, pinyinActive, chineseActive, password, showSemicolon;
     private SemicolonKeys semicolonKeys;
     void nativeKeys(NativeKeyAdapter adapter) { semicolonKeys = new SemicolonKeys(adapter); }
-    private boolean inlineUppercaseEnabled, inlineReady, inlineArmed;
+    private volatile boolean inlineUppercaseEnabled, inlineReady, inlineArmed, inlineComposing;
     void inlineSupported(boolean supported) { inlineReady = supported; }
     boolean inlineUppercaseConfigured() { return inlineReady && inlineUppercaseEnabled && service != null && visible && !password; }
-    boolean inlineUppercaseActive() { return inlineUppercaseConfigured() && chineseActive; }
+    boolean inlineUppercaseActive() { return inlineUppercaseConfigured() && chineseActive && inlineComposing; }
     boolean inlineUppercaseArmed() { return inlineUppercaseActive() && inlineArmed; }
-    void inlineDecoderObserved(boolean chinese) { chineseActive = chinese; if (!chinese) inlineArmed = false; }
+    void inlineDecoderObserved(boolean chinese) { if(!primaryModeKnown)chineseActive = chinese; if (!chinese) { inlineArmed = false;inlineComposing=false; } }
     void toggleInlineUppercase() { if (inlineUppercaseActive()) inlineArmed = !inlineArmed; refreshLater(); }
     void cancelInlineUppercase() { inlineArmed = false; refreshLater(); }
     private int size = 10;
     private volatile boolean flexibleEmoji;
-    Context context() { return service; }
+    Context context() { return service != null ? service : configurationContext; }
     boolean emojiAllowed() { return flexibleEmoji && chineseActive && visible && !password; }
     String emojiScheme() { return pinyinActive ? automatic : null; }
     private boolean blankEnabled, initialsOnly, singleVowels, hideCompoundInitials, hideNumberHints;
@@ -46,23 +54,24 @@ final class HintController {
     private boolean keyLetterSizeEnabled;
     private int keyLetterSize = PrimaryLetterSize.DEFAULT_SP;
     private volatile String automatic;
+    private volatile boolean primaryModeKnown, primarySchemeKnown;
     private final DynamicHintState compositionState = new DynamicHintState();
     private final java.util.concurrent.atomic.AtomicLong engineUpdates = new java.util.concurrent.atomic.AtomicLong();
     private boolean scheduled;
     private final Runnable renderTask = () -> { scheduled = false; render(); };
     private final ContentObserver observer = new ContentObserver(main) {
-        @Override public void onChange(boolean self) { refreshConfiguration(true); }
+        @Override public void onChange(boolean self) { refreshConfiguration(true,"preferences_changed"); }
     };
-    void attach(InputMethodService ime) {
-        if (service == ime) return;
-        if (service != null) detach();
-        service = ime;
-        try { controlReceiver = GboardControl.register(ime, () -> android.os.Process.killProcess(android.os.Process.myPid()),
-                () -> KeyboardTest.switchToPinyin(ime)); }
-        catch (RuntimeException e) { HintsModule.logFailure("restart receiver", e); }
+    void initialize(Context context) {
+        if(configurationContext!=null)return;
+        StartupDiagnostics.context("controller.initialize",context);
+        StartupDiagnostics.providerVisibility(context);
+        Context app=context.getApplicationContext();
+        configurationContext=app!=null && HintsModule.TARGET.equals(app.getPackageName()) ? app : context;
+        Context ime=configurationContext;
         if (Build.VERSION.SDK_INT >= 24) {
             unlockReceiver = new BroadcastReceiver() {
-                @Override public void onReceive(Context context, Intent intent) { refreshConfiguration(true); }
+                @Override public void onReceive(Context context, Intent intent) { refreshConfiguration(true,"user_unlocked"); }
             };
             try {
                 IntentFilter filter = new IntentFilter(Intent.ACTION_USER_UNLOCKED);
@@ -72,28 +81,44 @@ final class HintController {
         }
         // Register unlock before reading: unlocking between the first query and
         // receiver registration must not leave a migrated configuration unread.
-        refreshConfiguration(true);
+        refreshConfiguration(true,"application_initialize");
+    }
+    void attach(InputMethodService ime) {
+        if (service == ime) return;
+        if (service != null) detach();
+        service = ime;
+        StartupDiagnostics.context("ime.attach",ime);
+        initialize(ime);
+        try { controlReceiver = GboardControl.register(ime, () -> android.os.Process.killProcess(android.os.Process.myPid()),
+                () -> KeyboardTest.switchToPinyin(ime)); }
+        catch (RuntimeException e) { HintsModule.logFailure("restart receiver", e); }
         // This exact key is also observed when Gboard reads per-profile preferences.
         android.content.SharedPreferences preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(ime);
         if (preferences.contains("pinyin_scheme")) schemeRead(preferences.getString("pinyin_scheme", ""));
     }
     void detach() {
+        StartupDiagnostics.record("ime.detach","controller",System.identityHashCode(this));
         if (service != null && controlReceiver != null) service.unregisterReceiver(controlReceiver);
         controlReceiver = null;
-        if (service != null && observerRegistered) service.getContentResolver().unregisterContentObserver(observer);
-        if (service != null && unlockReceiver != null) service.unregisterReceiver(unlockReceiver);
-        observerRegistered = false; unlockReceiver = null;
+        if(remotePreferences!=null)remotePreferences.unregisterOnSharedPreferenceChangeListener(remoteChanges);
+        else if (configurationContext != null && observerRegistered)
+            configurationContext.getContentResolver().unregisterContentObserver(observer);
+        remotePreferences=null;
+        if (configurationContext != null && unlockReceiver != null) configurationContext.unregisterReceiver(unlockReceiver);
+        observerRegistered = false; unlockReceiver = null;configurationContext=null;
         main.removeCallbacks(configRetry);
         engineUpdates.incrementAndGet();
         if (semicolonKeys != null) semicolonKeys.restore();
+        inlineArmed=false;inlineComposing=false;primaryModeKnown=false;primarySchemeKnown=false;
         service = null; visible = false; pinyinActive = false; chineseActive = false; compositionState.reset();
         render();
         for (KeyState key : keys.values()) { key.labels.restore(); key.letterSize.restore(); }
         main.removeCallbacks(renderTask); scheduled = false;
     }
     void start(EditorInfo info) {
+        StartupDiagnostics.record("ime.input_view.start","controller",System.identityHashCode(this));
         engineUpdates.incrementAndGet();
-        inlineArmed = false; refreshConfiguration(true); visible = true; compositionState.reset();
+        inlineArmed = false;inlineComposing=false; refreshConfiguration(true,"input_view_start"); visible = true; compositionState.reset();
         password = isPassword(info == null ? 0 : info.inputType);
         refreshLater();
     }
@@ -105,34 +130,46 @@ final class HintController {
                 || variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 || variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD);
     }
-    void finish() { inlineArmed = false; engineUpdates.incrementAndGet(); visible = false; compositionState.reset(); refreshLater(); }
+    void finish() { StartupDiagnostics.record("ime.input_view.finish");inlineArmed = false;inlineComposing=false; engineUpdates.incrementAndGet(); visible = false; compositionState.reset(); refreshLater(); }
     void imeActivated() {
-        inlineArmed = false;
+        primaryModeKnown=false;primarySchemeKnown=false;
+        inlineArmed = false;inlineComposing=false;
         long revision = engineUpdates.incrementAndGet();
-        Runnable reset = () -> { pinyinActive = false; chineseActive = false;
-            if (revision == engineUpdates.get()) compositionState.reset(); refreshLater(); };
+        Runnable reset = () -> { if(!primaryModeKnown && revision == engineUpdates.get()) {
+            pinyinActive = false; chineseActive = false;compositionState.reset(); } refreshLater(); };
         if (Looper.myLooper() == main.getLooper()) reset.run(); else main.post(reset);
     }
     void decoderStarted(boolean pinyin) { decoderStarted(pinyin,pinyin); }
     void decoderStarted(boolean pinyin, boolean chinese) {
+        if(primaryModeKnown)return;
         long revision = engineUpdates.incrementAndGet();
-        main.post(() -> { pinyinActive = pinyin; chineseActive = chinese;
+        main.post(() -> { if(primaryModeKnown)return; pinyinActive = pinyin; chineseActive = chinese;
             if (revision == engineUpdates.get()) compositionState.reset(); refreshLater(); });
     }
+    void primaryDecoderObserved(boolean pinyin, boolean chinese, String nativeScheme) {
+        if(!primaryModeKnown || pinyinActive!=pinyin || chineseActive!=chinese)engineUpdates.incrementAndGet();
+        primaryModeKnown=true;pinyinActive=pinyin;chineseActive=chinese;
+        if(pinyin && nativeScheme!=null){primarySchemeKnown=true;automatic=HintEngine.scheme(nativeScheme);}
+        if(!chinese){inlineArmed=false;inlineComposing=false;}
+        StartupDiagnostics.changed("decoder.primary",pinyin+":"+chinese+":"+primarySchemeKnown+":"+automatic,"pinyin",pinyin,"Chinese",chinese,"schemeKnown",primarySchemeKnown,"mappedScheme",automatic);
+        HintsModule.event("primary mode; pinyin="+pinyin+", Chinese="+chinese+", schemeKnown="+primarySchemeKnown);
+        refreshLater();
+    }
     void subtypeChanged(InputMethodSubtype subtype) {
-        inlineArmed = false;
+        inlineArmed = false;inlineComposing=false;
         engineUpdates.incrementAndGet(); compositionState.reset(); refreshLater();
     }
     void schemeRead(String value) {
         final String scheme = HintEngine.scheme(value);
-        main.post(() -> { if (!Objects.equals(automatic, scheme)) { automatic = scheme; refreshLater(); } });
+        StartupDiagnostics.changed("scheme.shared_preferences",value==null?"<null>":value,"value",value,"mapped",scheme,"ignoredBecausePrimaryKnown",primarySchemeKnown);
+        main.post(() -> { if (!primarySchemeKnown && !Objects.equals(automatic, scheme)) { automatic = scheme; refreshLater(); } });
     }
     void composition(CharSequence text) {
         // Retain only a possible initial, never the composition or committed text.
         final String next = HintEngine.independentInitial(text,
                 automatic);
         final boolean composing = hasPreedit(text);
-        main.post(() -> { compositionState.clientInitial(next,composing); refreshLater(); });
+        main.post(() -> { compositionState.clientInitial(next,composing);inlineComposing=compositionState.composing(); if(!inlineComposing)inlineArmed=false; refreshLater(); });
     }
     void engineComposition(CharSequence text) {
         final String next = HintEngine.independentInitial(text,
@@ -153,18 +190,35 @@ final class HintController {
         return false;
     }
     private void applyEngineInitial(String next, boolean composing) {
+        inlineComposing=composing;if(!composing)inlineArmed=false;
         long revision = engineUpdates.incrementAndGet();
         Runnable update = () -> {
             if (revision != engineUpdates.get()) return;
-            compositionState.engineInitial(next,composing); refreshLater();
+            compositionState.engineInitial(next,composing); if(!composing)inlineArmed=false; refreshLater();
         };
         if (Looper.myLooper() == main.getLooper()) update.run(); else main.post(update);
+    }
+    void recoverKeys(Class<?> keyType, Field metadata) {
+        main.post(() -> {
+            if(service!=null && service.getWindow()!=null && service.getWindow().getWindow()!=null)
+                observeTree(service.getWindow().getWindow().getDecorView(),keyType,metadata);
+        });
+    }
+    void observeTree(View root, Class<?> keyType, Field metadata) {
+        if(keyType.isInstance(root))observe(root,metadata);
+        if(root instanceof android.view.ViewGroup) {
+            android.view.ViewGroup group=(android.view.ViewGroup)root;
+            for(int i=0;i<group.getChildCount();i++)observeTree(group.getChildAt(i),keyType,metadata);
+        }
     }
     void observe(View view, Field metadata) {
         if (keys.containsKey(view)) return;
         keys.put(view, new KeyState(metadata));
         android.view.ViewTreeObserver.OnPreDrawListener preDraw = () -> {
-            if (scheduled) { main.removeCallbacks(renderTask); scheduled = false; render(); }
+            KeyState state = keys.get(view);
+            if (scheduled || state != null && state.shown != view.isShown()) {
+                main.removeCallbacks(renderTask); scheduled = false; render();
+            }
             enforceKeyState(view);
             return true;
         };
@@ -191,17 +245,61 @@ final class HintController {
         if (Looper.myLooper() != main.getLooper()) { main.post(this::refreshLater); return; }
         if (!scheduled) { scheduled = true; main.post(renderTask); }
     }
-    private void refreshConfiguration(boolean reset) {
-        if (service == null) return;
+    private void refreshConfiguration(boolean reset,String reason) {
+        if (configurationContext == null) {StartupDiagnostics.record("config.skipped","reason",reason,"status","no_context");return;}
+        StartupDiagnostics.record("config.request","controller",System.identityHashCode(this),"reason",reason,
+                "attempt",startupAttempt,"observerRegistered",observerRegistered);
         if (reset) { startupAttempt = 0; main.removeCallbacks(configRetry); }
         if (!observerRegistered) try {
-            service.getContentResolver().registerContentObserver(ConfigProvider.URI, false, observer);
+            if(io.github.rikumi.gboardhints.bridge.XposedBridge.modern!=null
+                    && io.github.rikumi.gboardhints.bridge.XposedBridge.modern.supportsRemotePreferences()) {
+                remotePreferences=io.github.rikumi.gboardhints.bridge.XposedBridge.modern.getRemotePreferences("config");
+                remotePreferences.registerOnSharedPreferenceChangeListener(remoteChanges);
+            } else configurationContext.getContentResolver().registerContentObserver(ConfigProvider.URI, false, observer);
             observerRegistered = true;
         } catch (RuntimeException e) { HintsModule.logFailure("preferences observer", e); }
         boolean ready = loadConfig();
+        diagnosticConfiguration(ready);
+        StartupDiagnostics.record("config.result","controller",System.identityHashCode(this),"success",ready,"observerRegistered",observerRegistered);
         refreshLater();
-        if ((!ready || !observerRegistered) && startupAttempt < CONFIG_RETRY_DELAYS.length)
-            main.postDelayed(configRetry, CONFIG_RETRY_DELAYS[startupAttempt++]);
+        main.removeCallbacks(configRetry);
+        if (ready && !configAccessPersisted && remotePreferences==null) {
+            // Request once even if already visible, so visibility survives a cold boot.
+            requestConfigAccess();
+        }
+        if (!ready || !observerRegistered) {
+            if(remotePreferences==null)requestConfigAccess();
+            long delay=startupAttempt < CONFIG_RETRY_DELAYS.length ? CONFIG_RETRY_DELAYS[startupAttempt++] : 30000;
+            StartupDiagnostics.record("config.retry.scheduled","delayMs",delay,"attempt",startupAttempt);
+            main.postDelayed(configRetry,delay);
+        }
+    }
+    private void requestConfigAccess() {
+        long now = SystemClock.elapsedRealtime();
+        if (configAccessPending || now < nextConfigAccessRequest) return;
+        configAccessPending = true;
+        nextConfigAccessRequest = now + 10000;
+        Intent request = new Intent(ConfigAccessReceiver.ACTION)
+                .setComponent(new ComponentName(ConfigAccessReceiver.PACKAGE, ConfigAccessReceiver.class.getName()))
+                .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | Intent.FLAG_RECEIVER_FOREGROUND);
+        StartupDiagnostics.record("config.access.request");
+        try {
+            configurationContext.sendOrderedBroadcast(request,null,new BroadcastReceiver() {
+                @Override public void onReceive(Context context,Intent intent) {
+                    configAccessPending = false;
+                    boolean granted = getResultCode() == android.app.Activity.RESULT_OK;
+                    StartupDiagnostics.record("config.access.result","granted",granted);
+                    if (granted && configurationContext != null) {
+                        ConfigAccessReceiver.persist(configurationContext);
+                        configAccessPersisted = true;
+                        refreshConfiguration(true,"access_granted");
+                    }
+                }
+            },main,android.app.Activity.RESULT_CANCELED,null,null);
+        } catch (RuntimeException e) {
+            configAccessPending = false;
+            HintsModule.logFailure("request config access",e);
+        }
     }
     void enforceKeyState(View view) {
         KeyState state = keys.get(view);
@@ -210,10 +308,22 @@ final class HintController {
             state.labels.enforceHidden();
         }
     }
+    private Cursor configurationCursor() {
+        if(remotePreferences!=null) {
+            boolean ready=remotePreferences.getBoolean("_snapshot_ready",false);
+            StartupDiagnostics.record("config.transport","source","framework_remote_preferences","ready",ready);
+            return ready ? ConfigProvider.snapshot(remotePreferences) : null;
+        }
+        StartupDiagnostics.record("config.transport","source","content_provider");
+        return configurationContext.getContentResolver().query(ConfigProvider.URI,null,null,null,null);
+    }
     private boolean loadConfig() {
-        if (service == null) return false;
-        try (Cursor cursor = service.getContentResolver().query(ConfigProvider.URI, null, null, null, null)) {
+        if (configurationContext == null) return false;
+        try (Cursor cursor = configurationCursor()) {
             if (cursor != null && cursor.moveToFirst()) {
+                StartupDiagnostics.cursor(cursor);
+                if(BuildConfig.DIAGNOSTICS)diagnosticConfigGeneration++;
+                HintsModule.event("module configuration read; columns="+cursor.getColumnCount());
                 enabled = cursor.getInt(0) != 0;
                 size = Math.max(7, Math.min(17, cursor.getInt(2))); dynamic = cursor.getInt(3) != 0;
                 blankEnabled = cursor.getInt(4) != 0;
@@ -236,7 +346,7 @@ final class HintController {
                 if (!inlineUppercaseEnabled) inlineArmed = false;
                 int emoji = cursor.getColumnIndex("flexible_emoji");
                 flexibleEmoji = emoji >= 0 && cursor.getInt(emoji) != 0;
-                if(flexibleEmoji) EmojiLexicon.request(service,emojiScheme(),null);
+                if(flexibleEmoji) EmojiLexicon.request(configurationContext,emojiScheme(),null);
                 int defaultsMode = cursor.getColumnIndex("default_visibility");
                 defaultVisibilityConfigured = defaultsMode >= 0;
                 defaultVisibility = defaultsMode < 0 ? StateOptions.DEFAULT_ALL : Math.max(StateOptions.DEFAULT_ALL,
@@ -246,12 +356,24 @@ final class HintController {
                 keyLetterSizeEnabled = fontEnabled >= 0 && cursor.getInt(fontEnabled) != 0;
                 keyLetterSize = fontSize < 0 ? PrimaryLetterSize.DEFAULT_SP : Math.max(PrimaryLetterSize.MIN_SP,
                         Math.min(PrimaryLetterSize.MAX_SP, cursor.getInt(fontSize)));
-                if (cursor.getColumnCount() > 10) try { GboardLauncherIcon.setHidden(service, cursor.getInt(10) != 0); }
+                if (cursor.getColumnCount() > 10) try { GboardLauncherIcon.setHidden(configurationContext, cursor.getInt(10) != 0); }
                 catch (RuntimeException e) { HintsModule.logFailure("Gboard launcher visibility", e); return false; }
                 return true;
             }
+            StartupDiagnostics.record("config.unavailable","status",cursor==null ? "null_cursor" : "empty_cursor");
         } catch (RuntimeException e) { HintsModule.logFailure("preferences", e); }
         return false;
+    }
+    private void diagnosticConfiguration(boolean refreshSuccessful) {
+        if(!BuildConfig.DIAGNOSTICS)return;
+        StartupDiagnostics.record("config.effective","controller",System.identityHashCode(this),"refreshSuccessful",refreshSuccessful,"generation",diagnosticConfigGeneration,
+                "enabled",enabled,"hintSizeSp",size,"dynamic",dynamic,"blankEnabled",blankEnabled,
+                "initialsOnly",initialsOnly,"hideCompoundInitials",hideCompoundInitials,"singleVowels",singleVowels,
+                "hideNumberHints",hideNumberHints,"inlineUppercaseEnabled",inlineUppercaseEnabled,"inlineSupported",inlineReady,
+                "showSemicolon",showSemicolon,"flexibleEmoji",flexibleEmoji,"defaultLetters",defaultLetters,"finalsLetters",finalsLetters,
+                "initialsBelow",initialsBelow,"defaultVisibility",defaultVisibility,"stateOptionsConfigured",stateOptionsConfigured,
+                "defaultVisibilityConfigured",defaultVisibilityConfigured,"keyLetterSizeEnabled",keyLetterSizeEnabled,"keyLetterSizeSp",keyLetterSize,
+                "automaticScheme",automatic,"primaryModeKnown",primaryModeKnown,"primarySchemeKnown",primarySchemeKnown);
     }
     private void render() {
         String scheme = automatic;
@@ -263,8 +385,9 @@ final class HintController {
         for (Map.Entry<View, KeyState> entry : snapshot) {
             View view = entry.getKey();
             if (view == null) continue;
-            entry.getValue().letterSize.apply(view, keyLetterSizeEnabled && visible && view.isShown(), keyLetterSize);
-            if (!view.isShown()) continue;
+            entry.getValue().shown = view.isShown();
+            entry.getValue().letterSize.apply(view, keyLetterSizeEnabled && visible && entry.getValue().shown, keyLetterSize);
+            if (!entry.getValue().shown) continue;
             char key = AdaptiveKeyAdapter.key(view, entry.getValue().metadata);
             labels.put(view, key);
             if (key >= 'a' && key <= 'z') alphabet.add(key);
@@ -272,6 +395,16 @@ final class HintController {
         boolean alphabetPage = alphabet.size() >= 20;
         boolean shuangpin = visible && alphabetPage && !password && pinyinActive && automatic != null;
         boolean show = enabled && shuangpin && scheme != null;
+        if(BuildConfig.DIAGNOSTICS) {
+            String signature=diagnosticConfigGeneration+":"+visible+":"+password+":"+pinyinActive+":"+chineseActive+":"+automatic+":"+primaryModeKnown+":"+alphabetPage;
+            if(!signature.equals(diagnosticRenderSignature)) {
+                diagnosticRenderSignature=signature;
+                StartupDiagnostics.record("keyboard.render.state","controller",System.identityHashCode(this),"generation",diagnosticConfigGeneration,
+                        "observedKeys",keys.size(),"visibleKeyViews",labels.size(),"alphabetCount",alphabet.size(),"alphabetPage",alphabetPage,
+                        "visible",visible,"passwordEditor",password,"pinyinActive",pinyinActive,"chineseActive",chineseActive,"automaticScheme",automatic,
+                        "primaryModeKnown",primaryModeKnown,"primarySchemeKnown",primarySchemeKnown,"shuangpinEligible",shuangpin,"hintsAllowed",show);
+            }
+        }
         for (Map.Entry<View, KeyState> entry : snapshot) {
             View view = entry.getKey(); KeyState state = entry.getValue();
             if (view == null) continue;
@@ -321,7 +454,7 @@ final class HintController {
         final AdaptiveKeyAdapter.HintDrawable hint = new AdaptiveKeyAdapter.HintDrawable();
         final BlankKeyLabels labels = new BlankKeyLabels();
         final PrimaryLetterSize letterSize = new PrimaryLetterSize();
-        boolean added;
+        boolean added, shown;
         KeyState(Field metadata) { this.metadata = metadata; }
     }
 }

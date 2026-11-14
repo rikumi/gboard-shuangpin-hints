@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.KeyboardSelfTestTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:49.390Z" hostname="local-validation" time="0.101">
+<testsuite name="io.github.rikumi.gboardhints.KeyboardSelfTestTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:00.959Z" hostname="local-validation" time="0.116">
   <testcase name="selectsPinyinAheadOfOtherChineseLayoutsAndEnglish" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.005" />
   <testcase name="languageTagTakesPrecedenceAndTraditionalChineseIsExcluded" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.003" />
-  <testcase name="openingSelfTestNeverOpensAPickerForAnotherImeOrMissingGboardReceiver" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.084" />
-  <testcase name="legacySystemsUseLocaleWithoutNewerLanguageTagApi" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.004" />
-  </testsuite>
+  <testcase name="openingSelfTestNeverOpensAPickerForAnotherImeOrMissingGboardReceiver" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.097" />
+  <testcase name="legacySystemsUseLocaleWithoutNewerLanguageTagApi" classname="io.github.rikumi.gboardhints.KeyboardSelfTestTest" time="0.005" />
+</testsuite>

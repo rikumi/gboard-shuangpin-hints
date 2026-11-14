@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.ModernHooksTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:01.084Z" hostname="local-validation" time="0.001">
+  <testcase name="afterCallbackCanRecoverNativeFailure" classname="io.github.rikumi.gboardhints.ModernHooksTest" time="0.001" />
+  <testcase name="nativeFailureIsPreservedWithoutRetryingOriginal" classname="io.github.rikumi.gboardhints.ModernHooksTest" time="0.0" />
+  <testcase name="consumedKeyDoesNotInvokeNativeMethod" classname="io.github.rikumi.gboardhints.ModernHooksTest" time="0.0" />
+  <testcase name="changedArgumentsAndNativeResultReachAfterCallback" classname="io.github.rikumi.gboardhints.ModernHooksTest" time="0.0" />
+</testsuite>

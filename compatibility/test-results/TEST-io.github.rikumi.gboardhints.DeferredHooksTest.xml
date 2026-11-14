@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.DeferredHooksTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:00.027Z" hostname="local-validation" time="0.002">
+  <testcase name="missingKeyboardDoesNotPreventSettingsAndRecoversWhenSplitArrives" classname="io.github.rikumi.gboardhints.DeferredHooksTest" time="0.002" />
+  <testcase name="signatureDependencyAndTransientFailureCanRetryWithoutBlockingOtherGroup" classname="io.github.rikumi.gboardhints.DeferredHooksTest" time="0.0" />
+  <testcase name="recursiveClassResolutionCannotInstallTheSameGroupTwice" classname="io.github.rikumi.gboardhints.DeferredHooksTest" time="0.0" />
+  <testcase name="noNativeClassIsResolvedBeforeApplicationOnCreateCompletes" classname="io.github.rikumi.gboardhints.DeferredHooksTest" time="0.0" />
+</testsuite>

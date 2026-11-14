@@ -1,0 +1,59 @@
+{
+  "version": "18.6.3.1002251336-release-arm64-v8a",
+  "verification": "Static signature and decompiled-call inspection; not an on-device cold-start test",
+  "effectiveSchemeBackends": [
+    {
+      "field": {
+        "owner": "Lcom/google/android/libraries/inputmethod/ime/processor/core/BaseDecodeProcessor;",
+        "type": "Lqpn;",
+        "name": "y",
+        "access": 4
+      },
+      "effectiveStringReaders": [
+        {
+          "owner": "Lqpn;",
+          "name": "d",
+          "args": [
+            "Ljava/lang/String;",
+            "Ljava/lang/String;"
+          ],
+          "return": "Ljava/lang/String;",
+          "access": 17,
+          "code_offset": 3506500
+        }
+      ],
+      "backingPreferencesAccessors": [
+        {
+          "owner": "Lqpn;",
+          "name": "D",
+          "args": [],
+          "return": "Landroid/content/SharedPreferences;",
+          "access": 17,
+          "code_offset": 5399032
+        }
+      ]
+    }
+  ],
+  "settingsInflationBoundaries": [
+    {
+      "managerField": {
+        "owner": "Lceo;",
+        "type": "Lcet;",
+        "name": "b",
+        "access": 1
+      },
+      "inflation": {
+        "owner": "Lcet;",
+        "name": "e",
+        "args": [
+          "Landroid/content/Context;",
+          "I",
+          "Landroidx/preference/PreferenceScreen;"
+        ],
+        "return": "Landroidx/preference/PreferenceScreen;",
+        "access": 17,
+        "code_offset": 4463100
+      }
+    }
+  ]
+}

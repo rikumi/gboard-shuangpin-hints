@@ -424,4 +424,32 @@ public final class KeyboardScopeTest {
         controller.finish(); idle(); assertFalse(state.composing());
     }
 
+    @Test public void auxiliaryDecodersCannotOverrideAuthoritativePinyinModeOrClearPreedit() {
+        controller.primaryDecoderObserved(true,true,"shuangpin_flypy");
+        controller.engineComposition("n");controller.decoderStarted(false,false);idle();
+        assertTrue(hint('k'));assertEquals(0f,letters.get(0).getAlpha(),0f);
+        DynamicHintState state=ReflectionHelpers.getField(controller,"compositionState");assertTrue(state.composing());
+        controller.primaryDecoderObserved(false,false,null);controller.decoderStarted(true,true);idle();
+        assertFalse(hint('k'));assertEquals(1f,letters.get(0).getAlpha(),0f);
+    }
+    @Test public void queuedAuxiliaryActivationCannotOverwriteLaterPrimaryMode() {
+        controller.imeActivated();controller.decoderStarted(false,false);
+        controller.primaryDecoderObserved(true,true,"shuangpin_flypy");idle();assertTrue(hint('k'));
+        controller.schemeRead("pinyin");idle();assertTrue(hint('k'));
+        controller.primaryDecoderObserved(true,true,"pinyin");idle();assertFalse(hint('k'));
+    }
+
+    @Test public void firstVisiblePreDrawRefreshesPreviouslyHiddenKeyboardWithoutLayout() {
+        View root = (View) keys.get(0).getParent();
+        root.setVisibility(View.INVISIBLE);
+        controller.refreshLater(); idle();
+        assertFalse(hint('k'));
+        assertEquals(1f,letters.get(0).getAlpha(),0f);
+        root.setVisibility(View.VISIBLE);
+        // No layout callback, configuration refresh, or queued render is needed.
+        keys.get(0).getViewTreeObserver().dispatchOnPreDraw();
+        assertTrue(hint('k'));
+        assertEquals(0f,letters.get(0).getAlpha(),0f);
+    }
+
 }

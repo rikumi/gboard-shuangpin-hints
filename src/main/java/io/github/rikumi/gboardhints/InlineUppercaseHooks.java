@@ -4,7 +4,7 @@ package io.github.rikumi.gboardhints;
 import android.view.inputmethod.EditorInfo;
 import java.lang.reflect.*;
 import java.util.*;
-import de.robv.android.xposed.*;
+import io.github.rikumi.gboardhints.bridge.*;
 
 final class InlineUppercaseHooks {
     final InlineUppercaseAdapter adapter;
@@ -12,12 +12,15 @@ final class InlineUppercaseHooks {
     private final Set<Class<?>> watchedTypes = new HashSet<>();
     private final Set<String> observed = Collections.synchronizedSet(new HashSet<>());
     private final HintController controller;
-    private final Class<?> chinese;
+    private final Class<?> chinese, pinyin;
+    private volatile java.lang.ref.WeakReference<Object> currentIme=new java.lang.ref.WeakReference<>(null);
     private final InlineUppercaseDispatcher dispatcher;
     private boolean installed;
+    private final EnginePreeditAdapter preedit;
     boolean supported() { return installed; }
     InlineUppercaseHooks(ClassLoader loader, HintController controller, Class<?> chinese, Class<?> pinyin) {
-        this.controller = controller; this.chinese = chinese;
+        this.controller = controller; this.chinese = chinese;this.pinyin=pinyin;
+        preedit=EnginePreeditAdapter.discover(chinese);
         adapter = InlineUppercaseAdapter.discover(XposedHelpers.findClassIfExists(
                 "com.google.android.libraries.inputmethod.ime.processor.ProcessorBasedIme", loader));
         dispatcher = adapter == null ? null : new InlineUppercaseDispatcher(adapter, controller);
@@ -26,11 +29,12 @@ final class InlineUppercaseHooks {
             XposedBridge.hookMethod(adapter.dispatch, new XC_MethodHook() {
                 @Override protected void beforeHookedMethod(MethodHookParam p) {
                     try {
+                        currentIme=new java.lang.ref.WeakReference<>(p.thisObject);
                         Object decoder = adapter.currentDecoder(p.thisObject);
                         if (decoder == null) return;
                         boolean isChinese = chinese.isInstance(decoder);
-                        controller.inlineDecoderObserved(isChinese);
-                        if (isChinese) watchDecoder(decoder);
+                        observePrimary(decoder,isChinese);
+                        if (isChinese) { watchDecoder(decoder); syncComposition(decoder); }
                         if (dispatcher.handle(p.args[0], isChinese)) { p.setResult(true); status("inline separator consumed at IME dispatch"); }
                     } catch (ReflectiveOperationException | RuntimeException e) { HintsModule.logFailure("inline IME event", e); }
                 }
@@ -46,11 +50,12 @@ final class InlineUppercaseHooks {
                     @Override protected void afterHookedMethod(MethodHookParam p) {
                         if (p.hasThrowable()) return;
                         try {
+                            currentIme=new java.lang.ref.WeakReference<>(p.thisObject);
                             Object decoder = adapter.currentDecoder(p.thisObject);
                             if (decoder != null) {
                                 boolean isChinese = chinese.isInstance(decoder);
-                                controller.inlineDecoderObserved(isChinese);
-                                if (isChinese) watchDecoder(decoder);
+                                observePrimary(decoder,isChinese);
+                                if (isChinese) { watchDecoder(decoder); syncComposition(decoder); }
                                 status("inline primary decoder observed; Chinese=" + isChinese);
                             }
                         } catch (ReflectiveOperationException | RuntimeException e) { HintsModule.logFailure("inline primary decoder", e); }
@@ -76,6 +81,7 @@ final class InlineUppercaseHooks {
                         @Override protected void beforeHookedMethod(MethodHookParam p) {
                             if (!chinese.isInstance(p.thisObject)) return;
                             try {
+                                syncComposition(p.thisObject);
                                 if (admission) {
                                     if (dispatcher.acceptsUppercase(p.args[0], true)) { p.setResult(true); status("inline uppercase admitted to Chinese decoder"); }
                                 } else if (dispatcher.handle(p.args[0], true)) {
@@ -86,6 +92,26 @@ final class InlineUppercaseHooks {
                     });
                 } catch (RuntimeException e) { HintsModule.logFailure("inline decoder hook", e); }
             }
+    }
+    private void observePrimary(Object decoder,boolean isChinese) {
+        StartupDiagnostics.changed("decoder.primary.class",decoder.getClass().getName(),"class",decoder.getClass().getName());
+        boolean isPinyin=pinyin!=null && pinyin.isInstance(decoder);
+        String scheme=null;
+        if(isPinyin)try{scheme=NativeScheme.read(decoder);}
+        catch(ReflectiveOperationException | RuntimeException | LinkageError error){HintsModule.logFailure("native scheme backend",error);}
+        controller.primaryDecoderObserved(isPinyin,isChinese,scheme);
+    }
+    void refreshCurrent() {
+        Object ime=currentIme.get();if(ime==null)return;
+        try {
+            Object decoder=adapter.currentDecoder(ime);if(decoder==null)return;
+            boolean isChinese=chinese.isInstance(decoder);
+            observePrimary(decoder,isChinese);
+            if(isChinese){watchDecoder(decoder);syncComposition(decoder);}
+        }catch(ReflectiveOperationException | RuntimeException error){HintsModule.logFailure("primary mode refresh",error);}
+    }
+    private void syncComposition(Object decoder) throws ReflectiveOperationException {
+        if(preedit!=null && controller.inlineUppercaseConfigured())controller.engineComposition(preedit.read(decoder));
     }
     private void status(String message) { if (observed.add(message)) XposedBridge.log("GboardHints: " + message); }
 }

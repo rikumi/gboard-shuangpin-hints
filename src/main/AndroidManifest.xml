@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <uses-sdk tools:overrideLibrary="io.github.libxposed.service,io.github.libxposed.service.interfaces" />
     <permission android:name="io.github.rikumi.gboardhints.permission.CONTROL_GBOARD" android:protectionLevel="signature" />
     <uses-permission android:name="io.github.rikumi.gboardhints.permission.CONTROL_GBOARD" />
-    <application android:label="Gboard 双拼提示" android:theme="@style/Theme.GboardHints" android:allowBackup="false" android:supportsRtl="true">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <queries><package android:name="com.google.android.inputmethod.latin" /></queries>
+    <application android:name=".ModuleApplication" android:label="Gboard 双拼提示" android:theme="@style/Theme.GboardHints" android:allowBackup="false" android:supportsRtl="true">
+        <provider android:name="io.github.libxposed.service.XposedProvider"
+            android:authorities="${applicationId}.XposedService" android:exported="true"
+            android:enabled="@bool/modern_xposed_service" />
         <meta-data android:name="xposedmodule" android:value="true" />
         <meta-data android:name="xposeddescription" android:value="Gboard 双拼声韵母提示和无刻键帽" />
         <meta-data android:name="xposedminversion" android:value="82" />
@@ -20,6 +26,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-        <provider android:name=".ConfigProvider" android:directBootAware="true" android:authorities="io.github.rikumi.gboardhints.config" android:exported="true" android:grantUriPermissions="false" />
+        <provider android:name=".ConfigProvider" android:directBootAware="true" android:authorities="io.github.rikumi.gboardhints.config" android:exported="true" android:grantUriPermissions="false">
+            <grant-uri-permission android:path="/preferences" />
+            <grant-uri-permission android:pathPrefix="/emoji/" />
+        </provider>
+        <receiver android:name=".ConfigAccessReceiver" android:exported="true" android:directBootAware="true">
+            <intent-filter>
+                <action android:name="io.github.rikumi.gboardhints.CONFIG_ACCESS" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

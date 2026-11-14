@@ -56,6 +56,7 @@ public class ModernNativeKeysTest {
         org.robolectric.util.ReflectionHelpers.setField(controller,"inlineUppercaseEnabled",true);
         InlineUppercaseAdapter adapter=InlineUppercaseAdapter.discover(Ime.class);
         InlineUppercaseDispatcher dispatcher=new InlineUppercaseDispatcher(adapter,controller);
+        controller.engineComposition("n");org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
         Input separator=new Input(new Event(75,Intention.DECODE,"'",0));
         assertTrue(dispatcher.handle(separator,true));assertTrue(controller.inlineUppercaseArmed());
         Input letter=new Input(new Event(29,Intention.DECODE,"a",0));
@@ -66,6 +67,39 @@ public class ModernNativeKeysTest {
         assertFalse(dispatcher.handle(separator,false));assertFalse(dispatcher.acceptsUppercase(letter.events[0],false));
         org.robolectric.util.ReflectionHelpers.setField(controller,"password",true);
         assertFalse(dispatcher.handle(separator,true));assertFalse(dispatcher.acceptsUppercase(letter.events[0],true));
+    }
+
+    @Test public void emptyPreeditLeavesNativeShiftAndCapsLockEventsUntouched() throws Exception {
+        HintController controller=new HintController();controller.inlineSupported(true);
+        org.robolectric.util.ReflectionHelpers.setField(controller,"service",new android.inputmethodservice.InputMethodService());
+        org.robolectric.util.ReflectionHelpers.setField(controller,"visible",true);
+        org.robolectric.util.ReflectionHelpers.setField(controller,"inlineUppercaseEnabled",true);
+        InlineUppercaseAdapter adapter=InlineUppercaseAdapter.discover(Ime.class);
+        InlineUppercaseDispatcher dispatcher=new InlineUppercaseDispatcher(adapter,controller);
+        Input shift=new Input(new Event(75,Intention.DECODE,"'",0));
+        assertFalse(dispatcher.handle(shift,true));assertFalse(controller.inlineUppercaseArmed());
+        Input nativeUppercase=new Input(new Event(29,Intention.DECODE,"A",0));
+        assertFalse(dispatcher.acceptsUppercase(nativeUppercase.events[0],true));
+        controller.engineComposition("n");org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        assertTrue(dispatcher.handle(shift,true));assertTrue(controller.inlineUppercaseArmed());
+        controller.engineComposition("");org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        assertFalse(controller.inlineUppercaseArmed());assertFalse(dispatcher.handle(shift,true));
+        Input lower=new Input(new Event(29,Intention.DECODE,"a",0));
+        assertFalse(dispatcher.handle(lower,true));assertEquals("a",lower.events[0].data);
+    }
+
+    @Test public void decoderThreadPreeditChangesAffectCurrentShiftEventImmediately() throws Exception {
+        HintController controller=new HintController();controller.inlineSupported(true);
+        org.robolectric.util.ReflectionHelpers.setField(controller,"service",new android.inputmethodservice.InputMethodService());
+        org.robolectric.util.ReflectionHelpers.setField(controller,"visible",true);
+        org.robolectric.util.ReflectionHelpers.setField(controller,"inlineUppercaseEnabled",true);
+        InlineUppercaseAdapter adapter=InlineUppercaseAdapter.discover(Ime.class);
+        InlineUppercaseDispatcher dispatcher=new InlineUppercaseDispatcher(adapter,controller);
+        Thread composing=new Thread(()->controller.engineComposition("n"));composing.start();composing.join();
+        Input shift=new Input(new Event(75,Intention.DECODE,"'",0));
+        assertTrue(dispatcher.handle(shift,true));
+        Thread cleared=new Thread(()->controller.engineComposition(""));cleared.start();cleared.join();
+        assertFalse(dispatcher.handle(shift,true));assertFalse(controller.inlineUppercaseArmed());
     }
 
 }

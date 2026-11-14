@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-13T08:13:48.675Z" hostname="local-validation" time="0.004">
+<testsuite name="io.github.rikumi.gboardhints.HintOptionsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:00.201Z" hostname="local-validation" time="0.003">
   <testcase name="initialHintPositionIsIndependentOfInitialsOnly" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="zeroInitialPhaseUsesOnlyLastSeparatorSegment" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="initialPhaseOnlyKeepsCompoundInitialsAcrossSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="zeroInitialCentralLettersFollowLiteralSyllableContinuation" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="singleVowelsAreMatchedAndShownOnlyDuringFinalPhase" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
-  <testcase name="hideCompoundInitialsOverridesAllHintPhasesAndSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.004" />
+  <testcase name="hideCompoundInitialsOverridesAllHintPhasesAndSchemes" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.003" />
   <testcase name="zeroInitialVowelsKeepOnlyMatchingLongFinalHints" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
   <testcase name="separatorAndCompletedSyllableSelectCorrectPhase" classname="io.github.rikumi.gboardhints.HintOptionsTest" time="0.0" />
-  </testsuite>
+</testsuite>

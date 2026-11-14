@@ -4,7 +4,7 @@
 
 从 [最新 Release](https://github.com/rikumi/gboard-shuangpin-hints/releases/latest) 下载，选择一种方式安装：
 
-- **LSPosed**：安装模块 APK，在 LSPosed 中启用模块并勾选 Gboard，重启 Gboard。
+- **LSPosed（API 102 及以上）**：安装模块 APK，在 LSPosed 中启用模块并勾选 Gboard，首次打开一次模块设置同步配置，然后重启手机。
 - **LSPatch**：安装模块 APK，卸载原版 Gboard，再安装同一 Release 中以 `lspatch.apk` 结尾的 Gboard 修补 APK。
 
 在 Gboard 设置中选择双拼方案，点击“双拼方案”下方的“双拼提示”进入模块设置。更新模块后重启 Gboard。

@@ -51,6 +51,7 @@ class SettingsActivity : ComponentActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try { ConfigAccessReceiver.grant(this) } catch (_: RuntimeException) { }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         prefs = ConfigStore.prefs(this)
         prefs.edit().remove("scheme").apply()

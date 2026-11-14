@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.ConfigAccessTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:57:59.507Z" hostname="local-validation" time="0.022">
+  <testcase name="emojiLoadsDuringApplicationAttachWithoutApplicationContext" classname="io.github.rikumi.gboardhints.ConfigAccessTest" time="0.017" />
+  <testcase name="accessRequestCannotRedirectGrantOrObtainWriteAccess" classname="io.github.rikumi.gboardhints.ConfigAccessTest" time="0.004" />
+</testsuite>

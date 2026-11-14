@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.StartupDiagnosticsTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:02.699Z" hostname="local-validation" time="0.026">
+  <testcase name="eachStartupEmitsASeparateVersionedProcessRecord" classname="io.github.rikumi.gboardhints.StartupDiagnosticsTest" time="0.005" />
+  <testcase name="storedSettingsAreWhitelistedAndRepeatForEveryQuery" classname="io.github.rikumi.gboardhints.StartupDiagnosticsTest" time="0.005" />
+  <testcase name="composingTextIsNeverIncludedInControllerDiagnostics" classname="io.github.rikumi.gboardhints.StartupDiagnosticsTest" time="0.003" />
+  <testcase name="cursorSnapshotRetainsActualValuesWithoutUnknownColumnsOrFailureMessages" classname="io.github.rikumi.gboardhints.StartupDiagnosticsTest" time="0.004" />
+  <testcase name="unavailableConfigurationAndRecoveredEffectiveSnapshotAreBothLogged" classname="io.github.rikumi.gboardhints.StartupDiagnosticsTest" time="0.008" />
+</testsuite>

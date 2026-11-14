@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="io.github.rikumi.gboardhints.SettingsInflationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-14T13:58:02.696Z" hostname="local-validation" time="0.0">
+  <testcase name="findsInheritedManagerScreenInflationBeforeAdapterConstruction" classname="io.github.rikumi.gboardhints.SettingsInflationTest" time="0.0" />
+</testsuite>

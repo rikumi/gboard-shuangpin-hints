@@ -16,6 +16,7 @@ android {
         targetSdk 35
         versionCode moduleVersionCode
         versionName moduleVersionName
+        buildConfigField 'boolean', 'DIAGNOSTICS', (providers.gradleProperty('diagnostics').orNull == 'true').toString()
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -64,6 +65,9 @@ android {
 }
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
+    compileOnly 'io.github.libxposed:api:102.0.0'
+    implementation 'io.github.libxposed:service:102.0.0'
+    testImplementation 'io.github.libxposed:api:102.0.0'
     implementation 'androidx.activity:activity-compose:1.9.3'
     implementation 'androidx.navigationevent:navigationevent-compose:1.1.2'
     implementation 'io.github.suqi8.coui.kmp:coui-ui-android:1.1.0'

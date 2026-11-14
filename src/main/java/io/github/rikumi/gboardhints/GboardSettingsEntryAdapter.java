@@ -88,6 +88,7 @@ final class GboardSettingsEntryAdapter {
             // Let the group allocate its next order slot and advance its counter.
             // Reusing the anchor's order lets later adapter sorting move us above it.
             operation.invoke(owner, entry);
+            if(items.contains(entry))HintsModule.event("settings entry inserted");
         }
         reorder(owner);
     }
@@ -137,6 +138,7 @@ final class GboardSettingsEntryAdapter {
                         if(items.contains(entry)){confirmedAdd=operation;break;}
                     }
                     if(!items.contains(entry) && insertionFailure!=null)throw insertionFailure;
+                    if(items.contains(entry))HintsModule.event("settings entry inserted");
                 }
                 reorder(owner);
             } catch(ReflectiveOperationException error){failure=error;}
@@ -171,6 +173,21 @@ final class GboardSettingsEntryAdapter {
         orderField.setInt(entry,start+1);
     }
 
+    void diagnosticSummary(String boundary) {
+        if(!BuildConfig.DIAGNOSTICS)return;
+        int anchors=0,entries=0,rows=0;
+        try {
+            for(Object owner:new ArrayList<>(observed)) {
+                List<Object> items=children(owner);if(items==null)continue;rows+=items.size();
+                for(Object item:new ArrayList<>(items)) {
+                    if(listPreference.isInstance(item) && keyField(item,"pinyin_scheme")!=null)anchors++;
+                    if(keyField(item,KEY)!=null)entries++;
+                }
+            }
+            StartupDiagnostics.record("settings.screen","boundary",boundary,"observedGroups",observed.size(),
+                    "rows",rows,"schemeAnchors",anchors,"moduleEntries",entries);
+        } catch(ReflectiveOperationException | RuntimeException error){StartupDiagnostics.failure("settings.snapshot",error);}
+    }
     void reorder(Object owner) throws ReflectiveOperationException {
         List<Object> items = children(owner);
         Object anchor = null, entry = null;

@@ -12,10 +12,14 @@ import android.net.Uri;
 /** Only display preferences are public; all writes stay inside the module app. */
 public final class ConfigProvider extends ContentProvider {
     public static final Uri URI = Uri.parse("content://io.github.rikumi.gboardhints.config/preferences");
-    @Override public boolean onCreate() { return true; }
+    @Override public boolean onCreate() { StartupDiagnostics.context("provider.create",getContext());return true; }
     @Override public Cursor query(Uri uri, String[] projection, String selection, String[] args, String order) {
         if (!URI.equals(uri)) throw new IllegalArgumentException("Unknown URI");
         android.content.SharedPreferences p = ConfigStore.prefs(getContext());
+        StartupDiagnostics.stored(getContext(),p);
+        return snapshot(p);
+    }
+    static MatrixCursor snapshot(android.content.SharedPreferences p) {
         MatrixCursor result = new MatrixCursor(new String[]{"enabled", "scheme", "size", "dynamic", "blank", "initials_only", "single_vowels", "hide_compound_initials", "hide_number_hints", "inline_uppercase", "hide_gboard_launcher", "default_letters", "finals_letters", "initials_below", "key_letter_size_enabled", "key_letter_size", "default_visibility", "show_semicolon", "flexible_emoji"});
         result.addRow(new Object[]{p.getBoolean("enabled", true) ? 1 : 0,
                 "auto", p.getBoolean("hint_size_enabled",false) ? p.getInt("size",10) : 10, p.getBoolean("dynamic", true) ? 1 : 0,
